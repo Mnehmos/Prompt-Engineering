@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technique Relationships - Prompt Engineering Taxonomy</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <h1>Prompt Engineering Taxonomy</h1>
+            </div>
+            <nav>
+                <a href="../index.html">Dashboard</a>
+                <a href="taxonomy-overview.html">Taxonomy</a>
+                <a href="technique-relationships.html" class="active">Relationships</a>
+                <a href="../sources.html">Sources</a>
+                <a href="https://github.com/Background-Zombie869/prompt-engineering-taxonomy" target="_blank">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section-header">
+            <h2>Technique Relationships</h2>
+            <p>Explore how different prompt engineering techniques relate to each other through this interactive visualization.</p>
+        </section>
+
+        <section class="taxonomy-content">
+            <div class="controls-container">
+                <div class="category-buttons">
+                    <button class="category-button active" data-category="all">All Categories</button>
+                    <button class="category-button" data-category="basic-concepts">Basic Concepts</button>
+                    <button class="category-button" data-category="reasoning-frameworks">Reasoning Frameworks</button>
+                    <button class="category-button" data-category="agent-tool-use">Agent & Tool Use</button>
+                    <button class="category-button" data-category="self-improvement">Self-Improvement</button>
+                    <button class="category-button" data-category="retrieval-augmentation">Retrieval & Augmentation</button>
+                    <button class="category-button" data-category="prompt-optimization">Prompt Optimization</button>
+                    <button class="category-button" data-category="multimodal-techniques">Multimodal</button>
+                    <button class="category-button" data-category="specialized-application">Specialized Applications</button>
+                </div>
+                
+                <div class="visualization-controls">
+                    <div class="control-group">
+                        <label for="link-strength">Link Strength:</label>
+                        <input type="range" id="link-strength" min="1" max="10" value="5">
+                    </div>
+                    <div class="control-group">
+                        <label for="node-distance">Node Distance:</label>
+                        <input type="range" id="node-distance" min="50" max="300" value="150">
+                    </div>
+                    <button id="reset-layout" class="control-button">
+                        <i class="fas fa-redo"></i> Reset Layout
+                    </button>
+                </div>
+            </div>
+
+            <div class="visualization-container">
+                <svg id="relationship-visualization" width="100%" height="700"></svg>
+                <div class="visualization-loading">
+                    <p>Loading visualization...</p>
+                    <div class="spinner"></div>
+                </div>
+            </div>
+
+            <div class="technique-detail-panel">
+                <div class="panel-header">
+                    <h3 id="detail-panel-title">Select a technique to view details</h3>
+                    <button id="close-panel" class="close-button">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="panel-content">
+                    <div id="technique-details">
+                        <p class="empty-state">Click on any node in the visualization to view details about that technique.</p>
+                    </div>
+                    <div id="related-techniques">
+                        <h4>Related Techniques</h4>
+                        <div id="related-techniques-list" class="related-list"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="interpretation-guide">
+            <h3>How to Interpret This Visualization</h3>
+            <div class="guide-content">
+                <div class="guide-item">
+                    <div class="guide-icon"><i class="fas fa-circle"></i></div>
+                    <div class="guide-text">
+                        <h4>Nodes</h4>
+                        <p>Each circle represents a prompt engineering technique. Larger nodes indicate techniques with more connections.</p>
+                    </div>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-icon"><i class="fas fa-link"></i></div>
+                    <div class="guide-text">
+                        <h4>Links</h4>
+                        <p>Lines between nodes show relationships between techniques. Thicker lines indicate stronger connections.</p>
+                    </div>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-icon"><i class="fas fa-palette"></i></div>
+                    <div class="guide-text">
+                        <h4>Colors</h4>
+                        <p>Different colors represent different technique categories, as shown in the category filters above.</p>
+                    </div>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-icon"><i class="fas fa-hand-pointer"></i></div>
+                    <div class="guide-text">
+                        <h4>Interaction</h4>
+                        <p>Click on a node to view details about that technique. Drag nodes to reposition them. Scroll to zoom in and out.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Prompt Engineering Taxonomy</h3>
+                <p>A comprehensive collection of prompt engineering techniques organized by category and relationship.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="taxonomy-overview.html">Taxonomy</a></li>
+                    <li><a href="technique-relationships.html">Relationships</a></li>
+                    <li><a href="../sources.html">Sources</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="https://github.com/Background-Zombie869/prompt-engineering-taxonomy" target="_blank">GitHub Repository</a></li>
+                    <li><a href="https://www.reddit.com/r/ChatGPTPro/comments/1k4iykr/i_distilled_17_research_papers_into_a_taxonomy_of/" target="_blank">Original Reddit Post</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Prompt Engineering Taxonomy Project. Content based on research compilation by Background-Zombie869.</p>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/network-visualization.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+{
+  "categories": [
+    {
+      "id": "basic-concepts",
+      "name": "Basic Concepts",
+      "description": "Fundamental prompting structures and conceptual frameworks",
+      "techniques": [
+        "basic-prompting",
+        "few-shot-learning",
+        "zero-shot-learning",
+        "one-shot-learning",
+        "in-context-learning",
+        "cloze-prompts",
+        "prefix-prompts",
+        "template-prompting",
+        "instructed-prompting"
+      ]
+    },
+    {
+      "id": "reasoning-frameworks",
+      "name": "Reasoning Frameworks",
+      "description": "Techniques that guide the model through explicit reasoning steps",
+      "techniques": [
+        "chain-of-thought",
+        "zero-shot-cot",
+        "few-shot-cot",
+        "tree-of-thoughts",
+        "skeleton-of-thought",
+        "graph-of-thoughts",
+        "least-to-most-prompting",
+        "recursion-of-thought",
+        "plan-and-solve-prompting",
+        "step-back-prompting",
+        "program-of-thoughts",
+        "maieutic-prompting",
+        "chain-of-verification"
+      ]
+    },
+    {
+      "id": "agent-tool-use",
+      "name": "Agent & Tool Use",
+      "description": "Techniques that enable LLMs to interact with external tools and environments",
+      "techniques": [
+        "agent-based-prompting",
+        "react",
+        "mrkl-system",
+        "pal",
+        "critic",
+        "taskweaver",
+        "tool-use-agents",
+        "code-based-agents",
+        "gitm",
+        "reflexion",
+        "voyager",
+        "tora"
+      ]
+    },
+    {
+      "id": "self-improvement",
+      "name": "Self-Improvement Techniques",
+      "description": "Methods for the model to reflect on and improve its own outputs",
+      "techniques": [
+        "self-consistency",
+        "self-correction",
+        "self-refine",
+        "self-verification",
+        "self-calibration",
+        "reverse-chain-of-thought",
+        "self-ask",
+        "universal-self-consistency",
+        "metacognitive-prompting",
+        "self-generated-icl"
+      ]
+    },
+    {
+      "id": "retrieval-augmentation",
+      "name": "Retrieval & Augmentation",
+      "description": "Techniques that incorporate external knowledge into prompts",
+      "techniques": [
+        "rag",
+        "dsp",
+        "iterative-retrieval-augmentation",
+        "interleaved-retrieval-guided-cot",
+        "implicit-rag",
+        "verify-and-edit",
+        "cross-file-code-completion-prompting",
+        "retrieved-cross-file-context"
+      ]
+    },
+    {
+      "id": "prompt-optimization",
+      "name": "Prompt Optimization",
+      "description": "Techniques to automate and improve prompt engineering",
+      "techniques": [
+        "automated-prompt-optimization",
+        "ape",
+        "grips",
+        "continuous-prompt-optimization",
+        "discrete-prompt-optimization",
+        "hybrid-prompt-optimization",
+        "soft-prompt-tuning",
+        "rlprompt",
+        "fm-based-optimization",
+        "genetic-algorithm-optimization",
+        "gradient-based-optimization"
+      ]
+    },
+    {
+      "id": "multimodal-techniques",
+      "name": "Multimodal Techniques",
+      "description": "Techniques involving non-text modalities like images, audio, and video",
+      "techniques": [
+        "3d-prompting",
+        "audio-prompting",
+        "image-prompting",
+        "video-prompting",
+        "chain-of-images",
+        "multimodal-chain-of-thought",
+        "multimodal-graph-of-thought",
+        "multimodal-in-context-learning",
+        "image-as-text-prompting",
+        "negative-prompting-image",
+        "paired-image-prompting"
+      ]
+    },
+    {
+      "id": "specialized-application",
+      "name": "Specialized Application Techniques",
+      "description": "Techniques optimized for specific domains or applications",
+      "techniques": [
+        "alphacodium",
+        "code-generation-agents",
+        "scot",
+        "tab-cot",
+        "chain-of-table",
+        "dater",
+        "logicot",
+        "mathprompter",
+        "chain-of-code",
+        "modular-code-generation",
+        "flow-engineering",
+        "test-based-iterative-flow"
+      ]
+    }
+  ]
+}

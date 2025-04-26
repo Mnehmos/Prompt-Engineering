@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineering Taxonomy</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <h1>Prompt Engineering Taxonomy</h1>
+            </div>
+            <nav>
+                <a href="index.html" class="active">Dashboard</a>
+                <a href="reports/taxonomy-overview.html">Taxonomy</a>
+                <a href="reports/technique-relationships.html">Relationships</a>
+                <a href="prompt-builder.html">Prompt Builder</a>
+                <a href="sources.html">Sources</a>
+                <a href="https://github.com/Background-Zombie869/prompt-engineering-taxonomy" target="_blank">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>100+ Prompt Engineering Techniques</h2>
+                <p>A comprehensive taxonomy distilled from 17 research papers</p>
+                <div class="hero-buttons">
+                    <a href="reports/taxonomy-overview.html" class="button primary">Explore the Taxonomy</a>
+                    <a href="prompt-builder.html" class="button primary">Interactive Prompt Builder</a>
+                    <a href="#overview" class="button secondary">Learn More</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="overview" class="overview-section">
+            <h2>What is this project?</h2>
+            <p>This interactive resource organizes over 100 prompt engineering techniques from academic research into a structured, searchable taxonomy. Based on the original work by Reddit user <a href="https://www.reddit.com/user/Background-Zombie869" target="_blank">Background-Zombie869</a>, this site provides enhanced navigation, detailed descriptions, and visual organization to make these techniques more accessible.</p>
+
+            <div class="stat-cards">
+                <div class="stat-card">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Techniques</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">17</div>
+                    <div class="stat-label">Research Papers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Categories</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="categories-section">
+            <h2>Technique Categories</h2>
+            <div class="category-grid">
+                <a href="reports/taxonomy-overview.html#basic-concepts" class="category-card">
+                    <div class="category-icon"><i class="fas fa-cube"></i></div>
+                    <h3>Basic Concepts</h3>
+                    <p>Fundamental prompting structures and conceptual frameworks</p>
+                </a>
+                <a href="reports/taxonomy-overview.html#reasoning-frameworks" class="category-card">
+                    <div class="category-icon"><i class="fas fa-brain"></i></div>
+                    <h3>Reasoning Frameworks</h3>
+                    <p>Techniques that guide the model through explicit reasoning steps</p>
+                </a>
+                <a href="reports/taxonomy-overview.html#agent-tool-use" class="category-card">
+                    <div class="category-icon"><i class="fas fa-robot"></i></div>
+                    <h3>Agent & Tool Use</h3>
+                    <p>Techniques that enable LLMs to interact with external tools and environments</p>
+                </a>
+                <a href="reports/taxonomy-overview.html#self-improvement" class="category-card">
+                    <div class="category-icon"><i class="fas fa-sync-alt"></i></div>
+                    <h3>Self-Improvement</h3>
+                    <p>Methods for the model to reflect on and improve its own outputs</p>
+                </a>
+                <a href="reports/taxonomy-overview.html#retrieval-augmentation" class="category-card">
+                    <div class="category-icon"><i class="fas fa-database"></i></div>
+                    <h3>Retrieval & Augmentation</h3>
+                    <p>Techniques that incorporate external knowledge into prompts</p>
+                </a>
+                <a href="reports/taxonomy-overview.html#prompt-optimization" class="category-card">
+                    <div class="category-icon"><i class="fas fa-sliders-h"></i></div>
+                    <h3>Prompt Optimization</h3>
+                    <p>Techniques to automate and improve prompt engineering</p>
+                </a>
+                <a href="reports/taxonomy-overview.html#multimodal-techniques" class="category-card">
+                    <div class="category-icon"><i class="fas fa-image"></i></div>
+                    <h3>Multimodal Techniques</h3>
+                    <p>Techniques involving non-text modalities like images, audio, and video</p>
+                </a>
+                <a href="reports/taxonomy-overview.html#specialized-application" class="category-card">
+                    <div class="category-icon"><i class="fas fa-code"></i></div>
+                    <h3>Specialized Applications</h3>
+                    <p>Techniques optimized for specific domains or applications</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="getting-started-section">
+            <h2>Getting Started</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Browse the Categories</h3>
+                    <p>Explore the 8 major categories of prompt engineering techniques.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Search for Specific Techniques</h3>
+                    <p>Use the search functionality to find techniques by name, description, or use case.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Explore Relationships</h3>
+                    <p>Discover how different techniques relate to and build upon each other.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Build Custom Prompts</h3>
+                    <p>Use the <a href="prompt-builder.html">interactive prompt builder</a> to create effective prompts by combining multiple techniques.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Prompt Engineering Taxonomy</h3>
+                <p>A comprehensive collection of prompt engineering techniques organized by category and relationship.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="reports/taxonomy-overview.html">Taxonomy</a></li>
+                    <li><a href="reports/technique-relationships.html">Relationships</a></li>
+                    <li><a href="prompt-builder.html">Prompt Builder</a></li>
+                    <li><a href="sources.html">Sources</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="https://github.com/Background-Zombie869/prompt-engineering-taxonomy" target="_blank">GitHub Repository</a></li>
+                    <li><a href="https://www.reddit.com/r/ChatGPTPro/comments/1k4iykr/i_distilled_17_research_papers_into_a_taxonomy_of/" target="_blank">Original Reddit Post</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Prompt Engineering Taxonomy Project. Content based on research compilation by Background-Zombie869.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

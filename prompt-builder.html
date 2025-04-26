@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Prompt Builder - Prompt Engineering Taxonomy</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Prompt Builder specific styles */
+        .prompt-builder-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 992px) {
+            .prompt-builder-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .technique-selector-container {
+            background: #f5f9ff;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .technique-category-section {
+            margin-bottom: 24px;
+        }
+
+        .technique-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .technique-selector-item {
+            display: flex;
+            align-items: center;
+            padding: 6px 8px;
+            border-radius: 4px;
+            background: #fff;
+            border: 1px solid #e1e4e8;
+        }
+
+        .technique-selector-item:hover {
+            background: #f0f5ff;
+        }
+
+        .technique-selector-item label {
+            margin-left: 8px;
+            flex-grow: 1;
+            cursor: pointer;
+        }
+
+        .technique-info-icon {
+            color: #4a6cf7;
+            cursor: pointer;
+            margin-left: 6px;
+        }
+
+        .technique-info-icon:hover {
+            color: #3451b2;
+        }
+
+        .prompt-inputs-container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            resize: vertical;
+        }
+
+        .skill-level-selector {
+            display: flex;
+            margin-bottom: 16px;
+        }
+
+        .skill-level-selector label {
+            margin-right: 10px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .skill-level-selector select {
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fff;
+        }
+
+        .prompt-preview-container {
+            grid-column: 1 / -1;
+            padding: 20px;
+            background: #f0f5ff;
+            border-radius: 8px;
+        }
+
+        .prompt-preview-container h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        #prompt-preview {
+            padding: 20px;
+            background: #fff;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: pre-wrap;
+            min-height: 150px;
+            border: 1px solid #ddd;
+        }
+
+        .prompt-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 16px;
+            gap: 10px;
+        }
+
+        .selected-techniques-panel {
+            grid-column: 1 / -1;
+            padding: 20px;
+            background: #f0f7ff;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .selected-techniques-panel h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        .selected-techniques-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .selected-technique-item {
+            display: flex;
+            align-items: center;
+            padding: 6px 12px;
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .remove-technique-button {
+            background: none;
+            border: none;
+            color: #f56565;
+            padding: 0;
+            margin-right: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+        }
+
+        .selected-technique-category {
+            font-size: 0.75rem;
+            background: #e2ecff;
+            border-radius: 12px;
+            padding: 2px 8px;
+            margin-left: 8px;
+        }
+
+        .empty-state {
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10vh auto;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            width: 80%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .technique-detail-section {
+            margin-top: 20px;
+        }
+
+        .technique-detail-section h4 {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .example-code {
+            background: #f6f8fa;
+            padding: 12px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        .related-techniques {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .related-technique {
+            background: #e1e7ff;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .related-technique:hover {
+            background: #ccd6ff;
+        }
+
+        .add-to-prompt-button {
+            margin-top: 20px;
+        }
+
+        /* Tab navigation for the prompt builder */
+        .tab-navigation {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 10px 16px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .tab-button.active {
+            border-bottom-color: #4a6cf7;
+            color: #4a6cf7;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Example gallery styles */
+        .example-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .example-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .example-card-header {
+            background: #f0f5ff;
+            padding: 12px 16px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .example-card-header h4 {
+            margin: 0;
+        }
+
+        .example-card-body {
+            padding: 16px;
+        }
+
+        .example-techniques {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .example-technique {
+            background: #e1e7ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .use-example-button {
+            margin-top: 12px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <h1>Prompt Engineering Taxonomy</h1>
+            </div>
+            <nav>
+                <a href="index.html">Dashboard</a>
+                <a href="reports/taxonomy-overview.html">Taxonomy</a>
+                <a href="reports/technique-relationships.html">Relationships</a>
+                <a href="prompt-builder.html" class="active">Prompt Builder</a>
+                <a href="sources.html">Sources</a>
+                <a href="https://github.com/Background-Zombie869/prompt-engineering-taxonomy" target="_blank">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section-header">
+            <h2>Interactive Prompt Builder</h2>
+            <p>Create effective prompts by combining techniques from the taxonomy. Select techniques, add your task details, and generate a prompt optimized for your needs.</p>
+        </section>
+
+        <section class="tab-navigation">
+            <button class="tab-button active" data-tab="builder">Prompt Builder</button>
+            <button class="tab-button" data-tab="examples">Example Prompts</button>
+            <button class="tab-button" data-tab="guide">Quick Start Guide</button>
+        </section>
+
+        <section class="tab-content active" id="builder-tab">
+            <div class="selected-techniques-panel">
+                <h3>Selected Techniques</h3>
+                <div id="selected-techniques">
+                    <p class="empty-state">No techniques selected. Select techniques from the list below to build your prompt.</p>
+                </div>
+            </div>
+
+            <div class="prompt-builder-container">
+                <div class="technique-selector-container">
+                    <h3>Select Techniques</h3>
+                    
+                    <div class="skill-level-selector">
+                        <label for="skill-level-selector">Skill Level:</label>
+                        <select id="skill-level-selector">
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate" selected>Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+
+                    <div id="technique-selector">
+                        <!-- Technique selectors will be populated by JavaScript -->
+                        <div class="loading">
+                            <p>Loading techniques...</p>
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="prompt-inputs-container">
+                    <h3>Prompt Details</h3>
+                    
+                    <div class="input-group">
+                        <label for="base-prompt">Base Prompt (optional):</label>
+                        <textarea id="base-prompt" placeholder="E.g., You are an expert copywriter with 20 years of experience..."></textarea>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="task-description">Task Description:</label>
+                        <textarea id="task-description" placeholder="Describe the task you want the AI to perform..."></textarea>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="output-format">Output Format (optional):</label>
+                        <textarea id="output-format" placeholder="Specify the desired format for the response..."></textarea>
+                    </div>
+                </div>
+
+                <div class="prompt-preview-container">
+                    <h3>Generated Prompt</h3>
+                    <div id="prompt-preview">
+                        Your prompt will appear here. Select techniques and fill in the input fields to build your prompt.
+                    </div>
+                    <div class="prompt-actions">
+                        <button id="clear-prompt-button" class="button secondary">Clear</button>
+                        <button id="copy-prompt-button" class="button primary" disabled>Copy to Clipboard</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tab-content" id="examples-tab">
+            <h3>Example Prompts</h3>
+            <p>Here are some example prompts that demonstrate effective use of different techniques from the taxonomy. Click "Use This Template" to load an example into the prompt builder.</p>
+            
+            <div class="example-gallery">
+                <div class="example-card">
+                    <div class="example-card-header">
+                        <h4>Complex Problem Solving</h4>
+                    </div>
+                    <div class="example-card-body">
+                        <p>A prompt that uses Chain-of-Thought and Self-Consistency for solving complex reasoning problems.</p>
+                        <div class="example-techniques">
+                            <span class="example-technique">Chain-of-Thought</span>
+                            <span class="example-technique">Self-Consistency</span>
+                        </div>
+                        <button class="button primary use-example-button" data-example="complex-reasoning">Use This Template</button>
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-card-header">
+                        <h4>Creative Content Generation</h4>
+                    </div>
+                    <div class="example-card-body">
+                        <p>Generate creative content with specific constraints and using expert personas.</p>
+                        <div class="example-techniques">
+                            <span class="example-technique">Role Prompting</span>
+                            <span class="example-technique">Few-Shot Examples</span>
+                            <span class="example-technique">Output Constraints</span>
+                        </div>
+                        <button class="button primary use-example-button" data-example="creative-content">Use This Template</button>
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-card-header">
+                        <h4>Code Generation</h4>
+                    </div>
+                    <div class="example-card-body">
+                        <p>Generate high-quality code with test cases and explanations.</p>
+                        <div class="example-techniques">
+                            <span class="example-technique">Self-Correction</span>
+                            <span class="example-technique">Structured Chain-of-Thought</span>
+                        </div>
+                        <button class="button primary use-example-button" data-example="code-generation">Use This Template</button>
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-card-header">
+                        <h4>Research Analysis</h4>
+                    </div>
+                    <div class="example-card-body">
+                        <p>Analyze and synthesize information from multiple sources.</p>
+                        <div class="example-techniques">
+                            <span class="example-technique">ReAct</span>
+                            <span class="example-technique">Tree of Thoughts</span>
+                        </div>
+                        <button class="button primary use-example-button" data-example="research-analysis">Use This Template</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tab-content" id="guide-tab">
+            <h3>Quick Start Guide</h3>
+            
+            <div class="guide-content">
+                <h4>How to Use the Prompt Builder</h4>
+                <ol>
+                    <li><strong>Select Techniques</strong> - Browse and select techniques from the taxonomy that are relevant to your task.</li>
+                    <li><strong>Add Prompt Details</strong> - Fill in the base prompt, task description, and desired output format.</li>
+                    <li><strong>Review and Copy</strong> - Review the generated prompt and copy it to use with your preferred AI system.</li>
+                </ol>
+
+                <h4>Tips for Effective Prompts</h4>
+                <ul>
+                    <li><strong>Be Specific</strong> - Clearly state what you want the AI to do.</li>
+                    <li><strong>Provide Context</strong> - Include relevant background information.</li>
+                    <li><strong>Use Examples</strong> - Show the AI what good responses look like.</li>
+                    <li><strong>Specify Output Format</strong> - Indicate how you want the information presented.</li>
+                    <li><strong>Combine Techniques</strong> - Different techniques work well together.</li>
+                </ul>
+
+                <h4>Recommended Technique Combinations</h4>
+                <div class="recommendations">
+                    <div class="recommendation">
+                        <h5>For Problem Solving:</h5>
+                        <p>Chain-of-Thought + Self-Consistency</p>
+                    </div>
+                    <div class="recommendation">
+                        <h5>For Creative Tasks:</h5>
+                        <p>Role Prompting + Few-Shot Learning</p>
+                    </div>
+                    <div class="recommendation">
+                        <h5>For Code Generation:</h5>
+                        <p>Structured Chain-of-Thought + Self-Correction</p>
+                    </div>
+                    <div class="recommendation">
+                        <h5>For Research Tasks:</h5>
+                        <p>ReAct + Tree of Thoughts</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Prompt Engineering Taxonomy</h3>
+                <p>A comprehensive collection of prompt engineering techniques organized by category and relationship.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="reports/taxonomy-overview.html">Taxonomy</a></li>
+                    <li><a href="reports/technique-relationships.html">Relationships</a></li>
+                    <li><a href="prompt-builder.html">Prompt Builder</a></li>
+                    <li><a href="sources.html">Sources</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="https://github.com/Background-Zombie869/prompt-engineering-taxonomy" target="_blank">GitHub Repository</a></li>
+                    <li><a href="https://www.reddit.com/r/ChatGPTPro/comments/1k4iykr/i_distilled_17_research_papers_into_a_taxonomy_of/" target="_blank">Original Reddit Post</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Prompt Engineering Taxonomy Project. Content based on research compilation by Background-Zombie869.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="js/prompt-builder.js"></script>
+    <script>
+        // Tab navigation
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Add active class to selected tab
+                button.classList.add('active');
+                document.getElementById(`${button.dataset.tab}-tab`).classList.add('active');
+            });
+        });
+
+        // Example templates
+        const exampleTemplates = {
+            'complex-reasoning': {
+                techniques: ['chain-of-thought', 'self-consistency'],
+                basePrompt: "I want you to think through this problem step by step and show your reasoning. Generate multiple different reasoning paths, then select the most consistent answer.",
+                taskDescription: "A bat and a ball cost $1.10 in total. The bat costs $1.00 more than the ball. How much does the ball cost?",
+                outputFormat: "Show your step-by-step reasoning process and provide the final answer in cents."
+            },
+            'creative-content': {
+                techniques: ['role-prompting', 'few-shot-learning', 'output-constraints'],
+                basePrompt: "You are an award-winning creative writer with expertise in crafting compelling short stories.",
+                taskDescription: "Write a 250-word short story that includes a surprise twist. The story should involve a mysterious object and take place in an everyday setting.",
+                outputFormat: "Provide the story in prose format with a clear beginning, middle, and end. Include a brief explanation of your creative process after the story."
+            },
+            'code-generation': {
+                techniques: ['self-correction', 'structured-chain-of-thought'],
+                basePrompt: "You are an expert software developer with deep knowledge of best practices and design patterns.",
+                taskDescription: "Create a function that takes an array of numbers and returns the two numbers that add up to a specified target. If no such pair exists, return an empty array.",
+                outputFormat: "Provide the solution in JavaScript. Include:\n1. The function implementation\n2. An explanation of your approach\n3. Time and space complexity analysis\n4. A few test cases to verify correctness"
+            },
+            'research-analysis': {
+                techniques: ['react', 'tree-of-thoughts'],
+                basePrompt: "You are a research assistant tasked with analyzing complex information.",
+                taskDescription: "Analyze the potential impacts of artificial intelligence on employment in the healthcare sector over the next decade. Consider both positive and negative effects, and identify the roles most likely to be affected.",
+                outputFormat: "Structure your analysis with the following sections:\n1. Key trends and drivers\n2. Likely impacts by healthcare role\n3. Potential mitigations for negative impacts\n4. Research gaps and uncertainties"
+            }
+        };
+
+        // Add event listeners for example templates
+        document.querySelectorAll('.use-example-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const exampleKey = button.dataset.example;
+                const example = exampleTemplates[exampleKey];
+                
+                if (example) {
+                    // Switch to builder tab
+                    document.querySelectorAll('.tab-button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    document.querySelector('.tab-button[data-tab="builder"]').classList.add('active');
+                    document.getElementById('builder-tab').classList.add('active');
+                    
+                    // Set values
+                    document.getElementById('base-prompt').value = example.basePrompt;
+                    document.getElementById('task-description').value = example.taskDescription;
+                    document.getElementById('output-format').value = example.outputFormat;
+                    
+                    // Trigger change event on inputs to update preview
+                    const event = new Event('input', { bubbles: true });
+                    document.getElementById('base-prompt').dispatchEvent(event);
+                    document.getElementById('task-description').dispatchEvent(event);
+                    document.getElementById('output-format').dispatchEvent(event);
+                    
+                    // Clear existing techniques
+                    document.querySelectorAll('#technique-selector input[type="checkbox"]').forEach(checkbox => {
+                        if (checkbox.checked) {
+                            checkbox.checked = false;
+                            checkbox.dispatchEvent(new Event('change'));
+                        }
+                    });
+                    
+                    // Select new techniques
+                    setTimeout(() => {
+                        example.techniques.forEach(techniqueId => {
+                            const checkbox = document.getElementById(`technique-${techniqueId}`);
+                            if (checkbox) {
+                                checkbox.checked = true;
+                                checkbox.dispatchEvent(new Event('change'));
+                            }
+                        });
+                    }, 100);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

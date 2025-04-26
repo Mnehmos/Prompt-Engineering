@@ -1,0 +1,382 @@
+{
+  "metadata": {
+    "title": "Prompt Engineering Techniques Taxonomy",
+    "source": "Reddit user Background-Zombie869",
+    "paperCount": 17,
+    "techniqueCount": 100,
+    "compiledDate": "2025-04-26"
+  },
+  "categories": [
+    {
+      "id": "basic",
+      "name": "Basic Concepts",
+      "description": "Fundamental prompting structures and conceptual frameworks",
+      "techniques": [
+        {
+          "id": "basic-prompting",
+          "name": "Basic Prompting / Standard Prompting / Vanilla Prompting",
+          "description": "The simplest form, usually instruction + input, without exemplars or complex reasoning steps.",
+          "sources": ["Vatsal & Dubey", "Schulhoff et al.", "Wei et al."],
+          "relatedTechniques": ["zero-shot-learning", "one-shot-learning", "few-shot-learning"]
+        },
+        {
+          "id": "zero-shot-learning",
+          "name": "Zero-Shot (0S) Learning / Prompting",
+          "description": "Prompting with instruction only, no demonstrations.",
+          "sources": ["Brown et al.", "Vatsal & Dubey", "Schulhoff et al."],
+          "relatedTechniques": ["basic-prompting", "zero-shot-cot"]
+        },
+        {
+          "id": "one-shot-learning",
+          "name": "One-Shot (1S) Learning / Prompting",
+          "description": "Providing exactly one demonstration.",
+          "sources": ["Brown et al.", "Schulhoff et al."],
+          "relatedTechniques": ["basic-prompting", "zero-shot-learning", "few-shot-learning"]
+        },
+        {
+          "id": "few-shot-learning",
+          "name": "Few-Shot (FS) Learning / Prompting",
+          "description": "Providing K > 1 demonstrations in the prompt.",
+          "sources": ["Brown et al.", "Wei et al.", "Schulhoff et al."],
+          "relatedTechniques": ["basic-prompting", "zero-shot-learning", "one-shot-learning"]
+        },
+        {
+          "id": "in-context-learning",
+          "name": "In-Context Learning (ICL)",
+          "description": "LLM ability to learn from demonstrations/instructions within the prompt at inference time.",
+          "sources": ["Brown et al.", "Schulhoff et al."],
+          "relatedTechniques": ["few-shot-learning", "exemplar-selection"]
+        }
+      ]
+    },
+    {
+      "id": "reasoning",
+      "name": "Reasoning Frameworks",
+      "description": "Techniques that guide the model through explicit reasoning steps",
+      "techniques": [
+        {
+          "id": "cot",
+          "name": "Chain-of-Thought (CoT) Prompting",
+          "description": "Eliciting step-by-step reasoning before the final answer, usually via few-shot exemplars.",
+          "sources": ["Wei et al.", "Schulhoff et al.", "Vatsal & Dubey", "Wang et al. - Self-Consistency"],
+          "relatedTechniques": ["zero-shot-cot", "few-shot-cot", "self-consistency"]
+        },
+        {
+          "id": "zero-shot-cot",
+          "name": "Zero-Shot CoT",
+          "description": "Appending a thought-inducing phrase without CoT exemplars.",
+          "sources": ["Schulhoff et al.", "Vatsal & Dubey"],
+          "relatedTechniques": ["cot", "zero-shot-learning"]
+        },
+        {
+          "id": "few-shot-cot",
+          "name": "Few-Shot CoT",
+          "description": "CoT prompting using multiple CoT exemplars.",
+          "sources": ["Schulhoff et al.", "Vatsal & Dubey"],
+          "relatedTechniques": ["cot", "few-shot-learning"]
+        },
+        {
+          "id": "self-consistency",
+          "name": "Self-Consistency",
+          "description": "Sample multiple reasoning paths -> majority vote on final answers.",
+          "sources": ["Wang et al.", "Vatsal & Dubey", "Schulhoff et al."],
+          "relatedTechniques": ["cot", "sampling"]
+        },
+        {
+          "id": "tot",
+          "name": "ToT (Tree-of-Thoughts)",
+          "description": "Exploring multiple reasoning paths in a tree structure using generate, evaluate, search.",
+          "sources": ["Yao et al.", "Vatsal & Dubey", "Schulhoff et al."],
+          "relatedTechniques": ["cot", "self-consistency"]
+        },
+        {
+          "id": "least-to-most",
+          "name": "Least-to-Most Prompting",
+          "description": "Decompose problem -> sequentially solve subproblems.",
+          "sources": ["Zhou et al.", "Schulhoff et al.", "Vatsal & Dubey"],
+          "relatedTechniques": ["cot", "decomp"]
+        },
+        {
+          "id": "react",
+          "name": "ReAct (Reason + Act)",
+          "description": "Agent interleaving reasoning, action, and observation.",
+          "sources": ["Vatsal & Dubey", "Schulhoff et al."],
+          "relatedTechniques": ["cot", "agent-based-prompting"]
+        },
+        {
+          "id": "plan-and-solve",
+          "name": "Plan-and-Solve (PS / PS+) Prompting",
+          "description": "Zero-shot CoT: Plan -> Execute Plan. PS+ adds detail.",
+          "sources": ["Vatsal & Dubey", "Schulhoff et al."],
+          "relatedTechniques": ["cot", "zero-shot-cot"]
+        },
+        {
+          "id": "pot",
+          "name": "Program-of-Thoughts (PoT)",
+          "description": "Using code generation/execution as reasoning steps.",
+          "sources": ["Vatsal & Dubey", "Schulhoff et al."],
+          "relatedTechniques": ["cot", "program-prompting"]
+        },
+        {
+          "id": "sot",
+          "name": "Skeleton-of-Thought (SoT)",
+          "description": "Generate skeleton -> expand points in parallel.",
+          "sources": ["Ning et al.", "Schulhoff et al."],
+          "relatedTechniques": ["cot", "point-expanding-stage", "skeleton-stage"]
+        }
+      ]
+    },
+    {
+      "id": "agents",
+      "name": "Agent & Tool Use",
+      "description": "Techniques that enable LLMs to interact with external tools and environments",
+      "techniques": [
+        {
+          "id": "agent-based-prompting",
+          "name": "Agent / Agent-based Prompting",
+          "description": "Using GenAI systems that employ external tools, environments, memory, or planning via prompts.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["react", "tool-use-agents", "code-based-agents"]
+        },
+        {
+          "id": "pal",
+          "name": "PAL (Program-Aided Language Model)",
+          "description": "Generate code -> execute -> get answer.",
+          "sources": ["Vatsal & Dubey", "Schulhoff et al."],
+          "relatedTechniques": ["pot", "program-prompting"]
+        },
+        {
+          "id": "tool-use-agents",
+          "name": "Tool Use Agents",
+          "description": "Agents using external tools.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["agent-based-prompting", "react"]
+        },
+        {
+          "id": "code-based-agents",
+          "name": "Code-Based Agents",
+          "description": "Agents primarily using code generation/execution.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["agent-based-prompting", "program-prompting"]
+        },
+        {
+          "id": "mrkl",
+          "name": "Modular Reasoning, Knowledge, and Language (MRKL) System",
+          "description": "Agent routing requests to external tools.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["agent-based-prompting", "tool-use-agents"]
+        }
+      ]
+    },
+    {
+      "id": "self-improvement",
+      "name": "Self-Improvement Techniques",
+      "description": "Methods for the model to reflect on and improve its own outputs",
+      "techniques": [
+        {
+          "id": "self-correction",
+          "name": "Self-Correction / Self-Critique / Self-Reflection",
+          "description": "LLM evaluating/improving its own output.",
+          "sources": ["Schulhoff et al.", "Ridnik et al."],
+          "relatedTechniques": ["self-consistency", "self-verification", "self-refine"]
+        },
+        {
+          "id": "self-verification",
+          "name": "Self-Verification",
+          "description": "Ensembling: generate multiple CoT solutions -> score by masking parts of question.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["self-correction", "self-consistency"]
+        },
+        {
+          "id": "self-refine",
+          "name": "Self-Refine",
+          "description": "Iterative: generate -> feedback -> improve.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["self-correction", "iterative-prompting"]
+        },
+        {
+          "id": "cove",
+          "name": "Chain-of-Verification (CoVe)",
+          "description": "Generate response -> generate verification questions -> answer questions -> revise response.",
+          "sources": ["Vatsal & Dubey", "Schulhoff et al."],
+          "relatedTechniques": ["cot", "self-correction"]
+        },
+        {
+          "id": "critic",
+          "name": "CRITIC (Self-Correcting with Tool-Interactive Critiquing)",
+          "description": "Agent generates response -> criticizes -> uses tools to verify/amend.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["self-correction", "tool-use-agents"]
+        }
+      ]
+    },
+    {
+      "id": "rag",
+      "name": "Retrieval & Augmentation",
+      "description": "Techniques that incorporate external knowledge into prompts",
+      "techniques": [
+        {
+          "id": "rag",
+          "name": "RAG (Retrieval Augmented Generation)",
+          "description": "Retrieving external info and adding to prompt context.",
+          "sources": ["Lewis et al.", "Schulhoff et al."],
+          "relatedTechniques": ["iterative-retrieval-augmentation", "implicit-rag", "dsp"]
+        },
+        {
+          "id": "dsp",
+          "name": "DSP (Demonstrate-Search-Predict)",
+          "description": "RAG framework: generate demonstrations -> search -> predict using combined info.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["rag", "few-shot-learning"]
+        },
+        {
+          "id": "iterative-retrieval-augmentation",
+          "name": "Iterative Retrieval Augmentation (FLARE, IRP)",
+          "description": "RAG performing multiple retrievals during generation.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["rag"]
+        },
+        {
+          "id": "implicit-rag",
+          "name": "Implicit RAG",
+          "description": "Asking the LLM to identify and use relevant parts of provided context.",
+          "sources": ["Vatsal & Dubey"],
+          "relatedTechniques": ["rag"]
+        },
+        {
+          "id": "ircot",
+          "name": "Interleaved Retrieval guided by CoT (IRCoT)",
+          "description": "RAG technique interleaving CoT and retrieval.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["rag", "cot"]
+        }
+      ]
+    },
+    {
+      "id": "optimization",
+      "name": "Prompt Optimization",
+      "description": "Techniques to automate and improve prompt engineering",
+      "techniques": [
+        {
+          "id": "automated-prompt-optimization",
+          "name": "Automated Prompt Optimization (APO)",
+          "description": "Field of using automated techniques to find optimal prompts.",
+          "sources": ["Ramnath et al.", "Li et al. - Optimization Survey"],
+          "relatedTechniques": ["ape", "discrete-prompt-optimization", "continuous-prompt-optimization"]
+        },
+        {
+          "id": "ape",
+          "name": "APE (Automatic Prompt Engineer)",
+          "description": "Framework using an LLM to automatically generate and select effective instructions based on demonstrations and scoring.",
+          "sources": ["Zhou et al. - APE"],
+          "relatedTechniques": ["automated-prompt-optimization", "meta-prompting"]
+        },
+        {
+          "id": "discrete-prompt-optimization",
+          "name": "Discrete Prompt Optimization (DPO)",
+          "description": "APO focusing on optimizing hard prompts.",
+          "sources": ["Ramnath et al."],
+          "relatedTechniques": ["automated-prompt-optimization", "discrete-prompt"]
+        },
+        {
+          "id": "continuous-prompt-optimization",
+          "name": "Continuous Prompt Optimization (CPO)",
+          "description": "APO focused on optimizing soft prompts.",
+          "sources": ["Ramnath et al."],
+          "relatedTechniques": ["automated-prompt-optimization", "continuous-prompt"]
+        },
+        {
+          "id": "meta-prompting",
+          "name": "Meta Prompting (for APO)",
+          "description": "Prompting LLMs to generate/improve prompts.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["automated-prompt-optimization", "ape"]
+        }
+      ]
+    },
+    {
+      "id": "multimodal",
+      "name": "Multimodal Techniques",
+      "description": "Techniques involving non-text modalities like images, audio, and video",
+      "techniques": [
+        {
+          "id": "image-prompting",
+          "name": "Image Prompting",
+          "description": "Prompting techniques involving image input or output.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["multimodal-cot", "multimodal-icl", "image-as-text-prompting"]
+        },
+        {
+          "id": "audio-prompting",
+          "name": "Audio Prompting",
+          "description": "Prompting techniques for or involving audio data.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["multimodal-cot", "multimodal-icl"]
+        },
+        {
+          "id": "video-prompting",
+          "name": "Video Prompting",
+          "description": "Prompting techniques for or involving video data.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["multimodal-cot", "multimodal-icl", "video-generation-prompting"]
+        },
+        {
+          "id": "multimodal-cot",
+          "name": "Multimodal Chain-of-Thought",
+          "description": "CoT involving non-text modalities.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["cot", "image-prompting", "audio-prompting", "video-prompting"]
+        },
+        {
+          "id": "multimodal-icl",
+          "name": "Multimodal In-Context Learning",
+          "description": "ICL involving non-text modalities.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["in-context-learning", "image-prompting", "audio-prompting", "video-prompting"]
+        }
+      ]
+    },
+    {
+      "id": "specialized",
+      "name": "Specialized Application Techniques",
+      "description": "Techniques optimized for specific domains or applications",
+      "techniques": [
+        {
+          "id": "code-generation",
+          "name": "Code-Generation Agents",
+          "description": "Agents specialized in code generation.",
+          "sources": ["Schulhoff et al."],
+          "relatedTechniques": ["code-based-agents", "program-prompting", "scot"]
+        },
+        {
+          "id": "alphacodium",
+          "name": "AlphaCodium",
+          "description": "A test-based, multi-stage, code-oriented iterative flow for code generation involving pre-processing (reflection, test reasoning, AI test generation) and code iterations (generate, run, fix against tests).",
+          "sources": ["Ridnik et al."],
+          "relatedTechniques": ["code-generation", "test-based-iterative-flow", "flow-engineering"]
+        },
+        {
+          "id": "scot",
+          "name": "SCoT (Structured Chain-of-Thought)",
+          "description": "Using program structures for intermediate reasoning in code generation.",
+          "sources": ["Li et al. - SCoT"],
+          "relatedTechniques": ["cot", "pot", "program-prompting"]
+        },
+        {
+          "id": "cross-file-code-completion",
+          "name": "Cross-File Code Completion Prompting",
+          "description": "Including context from other repository files in the prompt.",
+          "sources": ["Ding et al."],
+          "relatedTechniques": ["code-generation", "retrieved-cross-file-context"]
+        },
+        {
+          "id": "flow-engineering",
+          "name": "Flow Engineering",
+          "description": "Concept of designing multi-stage, iterative LLM workflows, contrasted with single prompt engineering.",
+          "sources": ["Ridnik et al."],
+          "relatedTechniques": ["alphacodium", "test-based-iterative-flow"]
+        }
+      ]
+    }
+  ]
+}
