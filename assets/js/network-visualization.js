@@ -51,11 +51,13 @@ class TechniqueNetworkVisualization {
     async loadData() {
         try {
             // Load categories first
-            const categoriesResponse = await fetch('/data/processed/technique_categories.json');
+            // Use relative path for compatibility with subdirectory deployments (GitHub Pages, local folders)
+            const categoriesResponse = await fetch('data/processed/technique_categories.json');
             this.categoriesData = await categoriesResponse.json();
             
             // Load techniques
-            const techniquesResponse = await fetch('/data/processed/techniques.json');
+            // Use relative path for compatibility with subdirectory deployments (GitHub Pages, local folders)
+            const techniquesResponse = await fetch('data/processed/techniques.json');
             this.techniquesData = await techniquesResponse.json();
             
             // Process data into nodes and links

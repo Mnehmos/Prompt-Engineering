@@ -6,7 +6,88 @@
 class PromptBuilder {
     constructor() {
         this.selectedTechniques = [];
-        this.techniqueData = {};
+        /**
+         * Hardcoded technique data for offline/local use.
+         * This replaces all fetch/dynamic loading logic.
+         * Format: { [techniqueId]: { ...technique, categoryId, categoryName } }
+         */
+        this.techniqueData = {
+            // Category: Reasoning
+            "chain-of-thought": {
+                id: "chain-of-thought",
+                name: "Chain-of-Thought",
+                description: "Encourages the model to reason step by step before answering.",
+                aliases: ["CoT"],
+                useCase: "Complex reasoning tasks, math, logic.",
+                example: "Let's solve this step by step.",
+                sources: ["Wei et al., 2022"],
+                relatedTechniques: ["zero-shot-cot"],
+                categoryId: "reasoning",
+                categoryName: "Reasoning"
+            },
+            "zero-shot-cot": {
+                id: "zero-shot-cot",
+                name: "Zero-Shot CoT",
+                description: "Triggers step-by-step reasoning in zero-shot settings.",
+                aliases: [],
+                useCase: "General reasoning without examples.",
+                example: "Let's think about this step by step.",
+                sources: ["Kojima et al., 2022"],
+                relatedTechniques: ["chain-of-thought"],
+                categoryId: "reasoning",
+                categoryName: "Reasoning"
+            },
+            "self-consistency": {
+                id: "self-consistency",
+                name: "Self-Consistency",
+                description: "Generates multiple reasoning paths and selects the most consistent answer.",
+                aliases: [],
+                useCase: "Improving answer reliability.",
+                example: "Generate several solutions, then pick the most consistent one.",
+                sources: ["Wang et al., 2022"],
+                relatedTechniques: [],
+                categoryId: "reasoning",
+                categoryName: "Reasoning"
+            },
+            // Category: Self-Improvement
+            "self-correction": {
+                id: "self-correction",
+                name: "Self-Correction",
+                description: "Model reviews and revises its own output.",
+                aliases: [],
+                useCase: "Error reduction, iterative improvement.",
+                example: "After your answer, review and correct any mistakes.",
+                sources: ["Madaan et al., 2023"],
+                relatedTechniques: [],
+                categoryId: "self-improvement",
+                categoryName: "Self-Improvement"
+            },
+            // Category: Planning
+            "tree-of-thoughts": {
+                id: "tree-of-thoughts",
+                name: "Tree-of-Thoughts",
+                description: "Explores multiple solution paths in a tree structure.",
+                aliases: ["ToT"],
+                useCase: "Complex planning, multi-step reasoning.",
+                example: "For this problem, explore several possible approaches and evaluate each.",
+                sources: ["Yao et al., 2023"],
+                relatedTechniques: [],
+                categoryId: "planning",
+                categoryName: "Planning"
+            },
+            "react": {
+                id: "react",
+                name: "ReAct",
+                description: "Combines reasoning and acting in an iterative loop.",
+                aliases: [],
+                useCase: "Tool use, interactive tasks.",
+                example: "Thought: ... Action: ... Observation: ...",
+                sources: ["Yao et al., 2022"],
+                relatedTechniques: [],
+                categoryId: "planning",
+                categoryName: "Planning"
+            }
+        };
         this.basePrompt = "";
         this.taskDescription = "";
         this.outputFormat = "";
@@ -14,63 +95,14 @@ class PromptBuilder {
     }
 
     /**
-     * Initialize the prompt builder
+     * Initialize the prompt builder (no fetch, uses hardcoded data)
      */
-    async init() {
-        try {
-            // Load technique data
-            await this.loadTechniqueData();
-            
-            // Initialize UI components
-            this.initUI();
-            
-            // Add event listeners
-            this.addEventListeners();
-        } catch (error) {
-            console.error('Error initializing prompt builder:', error);
-            this.showError('Failed to load technique data. Please try refreshing the page.');
-        }
-    }
+    init() {
+        // Initialize UI components
+        this.initUI();
 
-    /**
-     * Load technique data from JSON
-     */
-    async loadTechniqueData() {
-        try {
-            // Load categories first
-            const categoriesResponse = await fetch('/data/processed/technique_categories.json');
-            const categoriesData = await categoriesResponse.json();
-            
-            // Load techniques
-            const techniquesResponse = await fetch('/data/processed/techniques.json');
-            const techniquesData = await techniquesResponse.json();
-            
-            // Process and store data
-            this.processTechniqueData(categoriesData, techniquesData);
-        } catch (error) {
-            console.error('Error loading technique data:', error);
-            throw new Error('Failed to load taxonomy data');
-        }
-    }
-
-    /**
-     * Process and organize technique data
-     */
-    processTechniqueData(categoriesData, techniquesData) {
-        // Create a map of techniques by ID for easy lookup
-        this.techniqueData = {};
-        
-        techniquesData.categories.forEach(category => {
-            const categoryInfo = categoriesData.categories.find(c => c.id === category.id);
-            
-            category.techniques.forEach(technique => {
-                this.techniqueData[technique.id] = {
-                    ...technique,
-                    categoryId: category.id,
-                    categoryName: categoryInfo ? categoryInfo.name : category.id
-                };
-            });
-        });
+        // Add event listeners
+        this.addEventListeners();
     }
 
     /**
