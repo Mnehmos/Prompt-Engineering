@@ -3,10 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prompt Engineering Taxonomy</title>
+    <meta name="description" content="A comprehensive, interactive taxonomy of 100+ prompt engineering techniques derived from academic research. Explore categories, relationships, and build effective prompts.">
+    <meta name="keywords" content="prompt engineering, taxonomy, AI prompts, LLM, ChatGPT, techniques, research">
+    <meta name="author" content="Based on research by Background-Zombie869">
+    <meta property="og:title" content="Prompt Engineering Taxonomy">
+    <meta property="og:description" content="Explore 100+ prompt engineering techniques organized by category, relationship, and practical application">
+    <meta property="og:type" content="website">
+    <title>Prompt Engineering Taxonomy | 100+ Techniques from Academic Research</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Additional styles for the landing page */
+        .feature-section {
+            margin: 3rem 0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .taxonomy-diagram {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 2rem 0;
+        }
+        
+        .diagram-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .diagram-category {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .diagram-techniques {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .diagram-technique {
+            background-color: var(--gray-200);
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            font-size: 0.85rem;
+        }
+        
+        .quick-start-box {
+            background-color: var(--primary);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            color: white;
+            margin: 3rem 0;
+            text-align: center;
+        }
+        
+        .quick-start-box h2 {
+            margin-top: 0;
+        }
+        
+        .quick-start-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .quick-start-button {
+            background-color: white;
+            color: var(--primary);
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        
+        .quick-start-button:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-3px);
+            text-decoration: none;
+        }
+        
+        .featured-techniques {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .featured-technique-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            height: 100%;
+        }
+        
+        .featured-technique-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .featured-technique-category {
+            display: inline-block;
+            background-color: var(--gray-200);
+            color: var(--gray-700);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .visual-divider {
+            display: flex;
+            align-items: center;
+            margin: 2rem 0;
+        }
+        
+        .divider-line {
+            flex-grow: 1;
+            height: 1px;
+            background-color: var(--gray-300);
+        }
+        
+        .divider-icon {
+            margin: 0 1rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        
+        .about-section {
+            background-color: var(--gray-100);
+            padding: 3rem 2rem;
+            margin: 3rem -2rem;
+            border-top: 1px solid var(--gray-200);
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .two-columns {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .quick-start-buttons {
+                flex-direction: column;
+            }
+            
+            .diagram-container {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -15,7 +208,7 @@
                 <h1>Prompt Engineering Taxonomy</h1>
             </div>
             <nav>
-                <a href="index.html" class="active">Dashboard</a>
+                <a href="index.html" class="active">Home</a>
                 <a href="reports/taxonomy-overview.html">Taxonomy</a>
                 <a href="reports/technique-relationships.html">Relationships</a>
                 <a href="prompt-builder.html">Prompt Builder</a>
@@ -28,19 +221,19 @@
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h2>100+ Prompt Engineering Techniques</h2>
-                <p>A comprehensive taxonomy distilled from 17 research papers</p>
+                <h2>Master the Art of Prompt Engineering</h2>
+                <p>Explore 100+ academically-sourced techniques organized into a comprehensive, interactive taxonomy</p>
                 <div class="hero-buttons">
                     <a href="reports/taxonomy-overview.html" class="button primary">Explore the Taxonomy</a>
-                    <a href="prompt-builder.html" class="button primary">Interactive Prompt Builder</a>
+                    <a href="prompt-builder.html" class="button primary">Build Custom Prompts</a>
                     <a href="#overview" class="button secondary">Learn More</a>
                 </div>
             </div>
         </section>
 
         <section id="overview" class="overview-section">
-            <h2>What is this project?</h2>
-            <p>This interactive resource organizes over 100 prompt engineering techniques from academic research into a structured, searchable taxonomy. Based on the original work by Reddit user <a href="https://www.reddit.com/user/Background-Zombie869" target="_blank">Background-Zombie869</a>, this site provides enhanced navigation, detailed descriptions, and visual organization to make these techniques more accessible.</p>
+            <h2>What is the Prompt Engineering Taxonomy?</h2>
+            <p>This interactive resource transforms research from 17 academic papers into a structured, searchable knowledge base of prompt engineering techniques. Originally compiled by Reddit user <a href="https://www.reddit.com/user/Background-Zombie689/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button" target="_blank">Background-Zombie689</a>, this enhanced version provides detailed descriptions, interactive visualizations, and practical tools to help you implement these techniques in your own AI interactions.</p>
 
             <div class="stat-cards">
                 <div class="stat-card">
@@ -55,11 +248,71 @@
                     <div class="stat-number">8</div>
                     <div class="stat-label">Categories</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Interactive Tools</div>
+                </div>
             </div>
         </section>
 
+        <div class="quick-start-box">
+            <h2>Ready to Improve Your AI Prompts?</h2>
+            <p>Jump right in with our interactive tools to explore techniques and create better prompts</p>
+            <div class="quick-start-buttons">
+                <a href="reports/taxonomy-overview.html" class="quick-start-button">
+                    <i class="fas fa-list-ul"></i> Browse Techniques
+                </a>
+                <a href="reports/technique-relationships.html" class="quick-start-button">
+                    <i class="fas fa-network-wired"></i> Explore Relationships
+                </a>
+                <a href="prompt-builder.html" class="quick-start-button">
+                    <i class="fas fa-tools"></i> Build Prompts
+                </a>
+            </div>
+        </div>
+
+        <section class="feature-section">
+            <h2>Key Features</h2>
+            <p>Discover the tools and resources available to help you master prompt engineering techniques</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-search"></i></div>
+                    <h3>Interactive Taxonomy Browser</h3>
+                    <p>Filter by category, search by keyword, and toggle between card and list views to find exactly what you need.</p>
+                    <p><a href="reports/taxonomy-overview.html">Browse Techniques →</a></p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-project-diagram"></i></div>
+                    <h3>Relationship Visualization</h3>
+                    <p>Explore how different techniques connect and build upon each other through an interactive network graph.</p>
+                    <p><a href="reports/technique-relationships.html">View Relationships →</a></p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-edit"></i></div>
+                    <h3>Interactive Prompt Builder</h3>
+                    <p>Combine multiple techniques to create effective, purpose-built prompts for your specific needs.</p>
+                    <p><a href="prompt-builder.html">Build Prompts →</a></p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-book"></i></div>
+                    <h3>Detailed Technique Information</h3>
+                    <p>Access comprehensive descriptions, examples, use cases, and implementation guidelines for each technique.</p>
+                    <p><a href="reports/taxonomy-overview.html">Explore Techniques →</a></p>
+                </div>
+            </div>
+        </section>
+
+        <div class="visual-divider">
+            <div class="divider-line"></div>
+            <div class="divider-icon"><i class="fas fa-sitemap"></i></div>
+            <div class="divider-line"></div>
+        </div>
+
         <section class="categories-section">
-            <h2>Technique Categories</h2>
+            <h2>Taxonomy Structure</h2>
+            <p>The techniques are organized into 8 logical categories based on function and purpose</p>
+            
             <div class="category-grid">
                 <a href="reports/taxonomy-overview.html#basic-concepts" class="category-card">
                     <div class="category-icon"><i class="fas fa-cube"></i></div>
@@ -104,29 +357,99 @@
             </div>
         </section>
 
+        <section class="featured-technique-section">
+            <h2>Featured Techniques</h2>
+            <p>Discover some of the most powerful and widely-used prompt engineering approaches</p>
+            
+            <div class="featured-techniques">
+                <div class="featured-technique-card">
+                    <span class="featured-technique-category">Reasoning Frameworks</span>
+                    <h3>Chain-of-Thought (CoT)</h3>
+                    <p>Prompts the model to break down complex problems into a series of intermediate reasoning steps before arriving at the final answer.</p>
+                    <p>Shown to significantly improve performance on complex reasoning tasks like math problems and logical puzzles.</p>
+                    <p><a href="reports/taxonomy-overview.html">Learn more →</a></p>
+                </div>
+                <div class="featured-technique-card">
+                    <span class="featured-technique-category">Self-Improvement</span>
+                    <h3>Self-Reflection</h3>
+                    <p>Guides the model to evaluate its own outputs, identify errors or limitations, and then improve its responses.</p>
+                    <p>Particularly effective for complex tasks requiring verification and refinement of initial solutions.</p>
+                    <p><a href="reports/taxonomy-overview.html">Learn more →</a></p>
+                </div>
+                <div class="featured-technique-card">
+                    <span class="featured-technique-category">Basic Concepts</span>
+                    <h3>Role Prompting</h3>
+                    <p>Assigns a specific role, expertise, or perspective to the model to frame its responses from that viewpoint.</p>
+                    <p>Helps provide specialized knowledge and appropriate tone for domain-specific tasks.</p>
+                    <p><a href="reports/taxonomy-overview.html">Learn more →</a></p>
+                </div>
+                <div class="featured-technique-card">
+                    <span class="featured-technique-category">Agent & Tool Use</span>
+                    <h3>ReAct</h3>
+                    <p>Combining reasoning and acting, this framework enables models to interact with external environments while thinking through their decisions.</p>
+                    <p>Creates more capable AI agents that can use tools and APIs to accomplish complex tasks.</p>
+                    <p><a href="reports/taxonomy-overview.html">Learn more →</a></p>
+                </div>
+            </div>
+        </section>
+
         <section class="getting-started-section">
             <h2>Getting Started</h2>
+            <p>Follow these steps to make the most of the Prompt Engineering Taxonomy</p>
+            
             <div class="steps">
                 <div class="step">
                     <div class="step-number">1</div>
-                    <h3>Browse the Categories</h3>
-                    <p>Explore the 8 major categories of prompt engineering techniques.</p>
+                    <h3>Explore the Categories</h3>
+                    <p>Browse the 8 major categories to understand the different types of prompt engineering techniques available.</p>
+                    <p><a href="reports/taxonomy-overview.html">View Categories →</a></p>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
-                    <h3>Search for Specific Techniques</h3>
-                    <p>Use the search functionality to find techniques by name, description, or use case.</p>
+                    <h3>Understand Relationships</h3>
+                    <p>Use the relationship visualization to see how different techniques connect and can be combined effectively.</p>
+                    <p><a href="reports/technique-relationships.html">View Relationships →</a></p>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
-                    <h3>Explore Relationships</h3>
-                    <p>Discover how different techniques relate to and build upon each other.</p>
+                    <h3>Study Techniques</h3>
+                    <p>Dive into detailed information about specific techniques, including examples, use cases, and implementation tips.</p>
+                    <p><a href="reports/taxonomy-overview.html">Browse Techniques →</a></p>
                 </div>
                 <div class="step">
                     <div class="step-number">4</div>
                     <h3>Build Custom Prompts</h3>
-                    <p>Use the <a href="prompt-builder.html">interactive prompt builder</a> to create effective prompts by combining multiple techniques.</p>
+                    <p>Use the <a href="prompt-builder.html">interactive prompt builder</a> to create effective prompts by combining multiple techniques for your specific needs.</p>
+                    <p><a href="prompt-builder.html">Open Prompt Builder →</a></p>
                 </div>
+            </div>
+        </section>
+        
+        <section class="about-section">
+            <div class="about-content">
+                <h2>About This Project</h2>
+                <p>The Prompt Engineering Taxonomy is a comprehensive effort to organize and make accessible the rapidly growing field of prompt engineering techniques.</p>
+                
+                <div class="two-columns">
+                    <div>
+                        <h3>Origin</h3>
+                        <p>Based on the original research compilation by Reddit user u/Background-Zombie869, who distilled information from 17 academic papers on prompt engineering techniques.</p>
+                        <p>The <a href="https://www.reddit.com/r/ChatGPTPro/comments/1k4iykr/i_distilled_17_research_papers_into_a_taxonomy_of/" target="_blank">original Reddit post</a> provided an alphabetical list of techniques that has been enhanced and structured in this project.</p>
+                    </div>
+                    <div>
+                        <h3>Enhancements</h3>
+                        <p>This project extends the original compilation with:</p>
+                        <ul>
+                            <li>Logical categorization of techniques</li>
+                            <li>Enhanced descriptions and examples</li>
+                            <li>Interactive visualizations of relationships</li>
+                            <li>Practical tools for prompt building</li>
+                            <li>Structured, searchable interface</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <p>For more information about the source materials and research papers referenced in this taxonomy, visit the <a href="sources.html">Sources page</a>.</p>
             </div>
         </section>
     </main>
@@ -161,5 +484,6 @@
     </footer>
 
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/header-footer.js"></script>
 </body>
 </html>

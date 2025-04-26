@@ -26,17 +26,21 @@ class TechniqueNetworkVisualization {
     /**
      * Initialize the visualization
      */
+    // Asynchronous init to fetch data from JSON files
     async init() {
         try {
+            // Show loading indicator
+            document.querySelector('.visualization-loading').style.display = 'flex';
+            
             // Load data from JSON files
             await this.loadData();
-            
+
             // Initialize the visualization
             this.setupVisualization();
-            
+
             // Add event listeners
             this.addEventListeners();
-            
+
             // Hide loading indicator
             document.querySelector('.visualization-loading').style.display = 'none';
         } catch (error) {
@@ -48,26 +52,481 @@ class TechniqueNetworkVisualization {
     /**
      * Load data from JSON files
      */
+    /**
+     * Load data directly from embedded JSON
+     * @returns {Promise} Promise that resolves when data is loaded
+     */
     async loadData() {
         try {
-            // Load categories first
-            // Use relative path for compatibility with subdirectory deployments (GitHub Pages, local folders)
-            const categoriesResponse = await fetch('data/processed/technique_categories.json');
-            this.categoriesData = await categoriesResponse.json();
+            // Embedded categories data to avoid CORS issues with local files
+            this.categoriesData = {
+              "categories": [
+                {
+                  "id": "basic-concepts",
+                  "name": "Basic Concepts",
+                  "description": "Fundamental prompting structures and conceptual frameworks",
+                  "techniques": [
+                    "basic-prompting",
+                    "few-shot-learning",
+                    "zero-shot-learning",
+                    "one-shot-learning",
+                    "in-context-learning",
+                    "cloze-prompts",
+                    "prefix-prompts",
+                    "template-prompting",
+                    "instructed-prompting"
+                  ]
+                },
+                {
+                  "id": "reasoning-frameworks",
+                  "name": "Reasoning Frameworks",
+                  "description": "Techniques that guide the model through explicit reasoning steps",
+                  "techniques": [
+                    "chain-of-thought",
+                    "zero-shot-cot",
+                    "few-shot-cot",
+                    "tree-of-thoughts",
+                    "skeleton-of-thought",
+                    "graph-of-thoughts",
+                    "least-to-most-prompting",
+                    "recursion-of-thought",
+                    "plan-and-solve-prompting",
+                    "step-back-prompting",
+                    "program-of-thoughts",
+                    "maieutic-prompting",
+                    "chain-of-verification"
+                  ]
+                },
+                {
+                  "id": "agent-tool-use",
+                  "name": "Agent & Tool Use",
+                  "description": "Techniques that enable LLMs to interact with external tools and environments",
+                  "techniques": [
+                    "agent-based-prompting",
+                    "react",
+                    "mrkl-system",
+                    "pal",
+                    "critic",
+                    "taskweaver",
+                    "tool-use-agents",
+                    "code-based-agents",
+                    "gitm",
+                    "reflexion",
+                    "voyager",
+                    "tora"
+                  ]
+                },
+                {
+                  "id": "self-improvement",
+                  "name": "Self-Improvement Techniques",
+                  "description": "Methods for the model to reflect on and improve its own outputs",
+                  "techniques": [
+                    "self-consistency",
+                    "self-correction",
+                    "self-refine",
+                    "self-verification",
+                    "self-calibration",
+                    "reverse-chain-of-thought",
+                    "self-ask",
+                    "universal-self-consistency",
+                    "metacognitive-prompting",
+                    "self-generated-icl"
+                  ]
+                },
+                {
+                  "id": "retrieval-augmentation",
+                  "name": "Retrieval & Augmentation",
+                  "description": "Techniques that incorporate external knowledge into prompts",
+                  "techniques": [
+                    "rag",
+                    "dsp",
+                    "iterative-retrieval-augmentation",
+                    "interleaved-retrieval-guided-cot",
+                    "implicit-rag",
+                    "verify-and-edit",
+                    "cross-file-code-completion-prompting",
+                    "retrieved-cross-file-context"
+                  ]
+                },
+                {
+                  "id": "prompt-optimization",
+                  "name": "Prompt Optimization",
+                  "description": "Techniques to automate and improve prompt engineering",
+                  "techniques": [
+                    "automated-prompt-optimization",
+                    "ape",
+                    "grips",
+                    "continuous-prompt-optimization",
+                    "discrete-prompt-optimization",
+                    "hybrid-prompt-optimization",
+                    "soft-prompt-tuning",
+                    "rlprompt",
+                    "fm-based-optimization",
+                    "genetic-algorithm-optimization",
+                    "gradient-based-optimization"
+                  ]
+                },
+                {
+                  "id": "multimodal-techniques",
+                  "name": "Multimodal Techniques",
+                  "description": "Techniques involving non-text modalities like images, audio, and video",
+                  "techniques": [
+                    "3d-prompting",
+                    "audio-prompting",
+                    "image-prompting",
+                    "video-prompting",
+                    "chain-of-images",
+                    "multimodal-chain-of-thought",
+                    "multimodal-graph-of-thought",
+                    "multimodal-in-context-learning",
+                    "image-as-text-prompting",
+                    "negative-prompting-image",
+                    "paired-image-prompting"
+                  ]
+                },
+                {
+                  "id": "specialized-application",
+                  "name": "Specialized Application Techniques",
+                  "description": "Techniques optimized for specific domains or applications",
+                  "techniques": [
+                    "alphacodium",
+                    "code-generation-agents",
+                    "scot",
+                    "tab-cot",
+                    "chain-of-table",
+                    "dater",
+                    "logicot",
+                    "mathprompter",
+                    "chain-of-code",
+                    "modular-code-generation",
+                    "flow-engineering",
+                    "test-based-iterative-flow"
+                  ]
+                }
+              ]
+            };
             
-            // Load techniques
-            // Use relative path for compatibility with subdirectory deployments (GitHub Pages, local folders)
-            const techniquesResponse = await fetch('data/processed/techniques.json');
-            this.techniquesData = await techniquesResponse.json();
+            // Embedded techniques data to avoid CORS issues with local files
+            this.techniquesData = {
+              "categories": [
+                {
+                  "id": "basic-concepts",
+                  "name": "Basic Concepts",
+                  "description": "Fundamental prompting structures and conceptual frameworks",
+                  "techniques": [
+                    {
+                      "id": "basic-prompting",
+                      "name": "Basic Prompting",
+                      "aliases": ["Standard Prompting", "Vanilla Prompting"],
+                      "description": "The simplest form of prompting, usually consisting of an instruction and input, without exemplars or complex reasoning steps.",
+                      "sources": ["Vatsal & Dubey", "Schulhoff et al.", "Wei et al."],
+                      "relatedTechniques": ["instructed-prompting", "zero-shot-learning"],
+                      "useCase": "Simple, direct tasks where clarity is paramount. Effective for well-defined tasks with clear instructions.",
+                      "example": "Translate the following English text to French: 'Hello, how are you?'"
+                    },
+                    {
+                      "id": "few-shot-learning",
+                      "name": "Few-Shot Learning/Prompting",
+                      "description": "Providing K > 1 demonstrations in the prompt to help the model understand patterns.",
+                      "sources": ["Brown et al.", "Wei et al.", "Schulhoff et al."],
+                      "relatedTechniques": ["one-shot-learning", "zero-shot-learning", "in-context-learning"],
+                      "useCase": "Tasks where examples help illustrate the desired pattern or format of response.",
+                      "example": "Classify the sentiment of the following restaurant reviews as positive or negative:\n\nExample 1: 'The food was delicious.' Sentiment: positive\nExample 2: 'Terrible service and cold food.' Sentiment: negative\n\nNew review: 'The atmosphere was nice but waiting time was too long.'"
+                    },
+                    {
+                      "id": "zero-shot-learning",
+                      "name": "Zero-Shot Learning/Prompting",
+                      "description": "Prompting with instruction only, without any demonstrations or examples.",
+                      "sources": ["Brown et al.", "Vatsal & Dubey", "Schulhoff et al."],
+                      "relatedTechniques": ["few-shot-learning", "one-shot-learning", "instructed-prompting"],
+                      "useCase": "Simple tasks or when working with capable models that don't require examples.",
+                      "example": "Summarize the main points of the following article in 3 bullet points: [article text]"
+                    },
+                    {
+                      "id": "one-shot-learning",
+                      "name": "One-Shot Learning/Prompting",
+                      "description": "Providing exactly one demonstration in the prompt to help the model understand patterns.",
+                      "sources": ["Brown et al.", "Schulhoff et al."],
+                      "relatedTechniques": ["few-shot-learning", "zero-shot-learning", "in-context-learning"],
+                      "useCase": "When a single example sufficiently conveys the pattern or when context length is limited.",
+                      "example": "Translate English to French:\nEnglish: The weather is beautiful today.\nFrench: Le temps est beau aujourd'hui.\n\nEnglish: I would like to order dinner."
+                    },
+                    {
+                      "id": "in-context-learning",
+                      "name": "In-Context Learning (ICL)",
+                      "description": "The model's ability to learn from demonstrations/instructions within the prompt at inference time, without updating weights.",
+                      "sources": ["Brown et al.", "Schulhoff et al."],
+                      "relatedTechniques": ["few-shot-learning", "exemplar-selection", "exemplar-ordering"],
+                      "useCase": "Achieving task-specific behavior without fine-tuning, particularly effective for classification, translation, and reasoning tasks.",
+                      "example": "Q: What is the capital of France?\nA: Paris\n\nQ: What is the capital of Japan?\nA: Tokyo\n\nQ: What is the capital of Australia?\nA:"
+                    },
+                    {
+                      "id": "cloze-prompts",
+                      "name": "Cloze Prompts",
+                      "description": "Prompts with masked slots for prediction, often in the middle of the text.",
+                      "sources": ["Wang et al. - Healthcare Survey", "Schulhoff et al."],
+                      "relatedTechniques": ["prefix-prompts", "fill-in-the-blank-format"],
+                      "useCase": "Extractive QA, knowledge probing, and logical completion tasks.",
+                      "example": "The capital of France is _____."
+                    },
+                    {
+                      "id": "prefix-prompts",
+                      "name": "Prefix Prompts",
+                      "description": "Standard prompt format where the prediction follows the input.",
+                      "sources": ["Wang et al. - Healthcare Survey", "Schulhoff et al."],
+                      "relatedTechniques": ["cloze-prompts", "continuous-prompt"],
+                      "useCase": "Most general-purpose prompting scenarios where text completion is desired.",
+                      "example": "Write a short poem about autumn:"
+                    },
+                    {
+                      "id": "template-prompting",
+                      "name": "Templating (Prompting)",
+                      "description": "Using functions with variable slots to construct prompts in a systematic way.",
+                      "sources": ["Schulhoff et al."],
+                      "relatedTechniques": ["basic-prompting", "instruction-selection"],
+                      "useCase": "When standardizing prompts across multiple inputs or creating programmatic interfaces.",
+                      "example": "def generate_summary_prompt(text):\n    return f\"Summarize the following text in 3 sentences:\\n\\n{text}\""
+                    },
+                    {
+                      "id": "instructed-prompting",
+                      "name": "Instructed Prompting",
+                      "description": "Explicitly instructing the LLM with clear directions about the task.",
+                      "sources": ["Vatsal & Dubey"],
+                      "relatedTechniques": ["basic-prompting", "zero-shot-learning"],
+                      "useCase": "Any task where specific behavioral guidance is needed.",
+                      "example": "You are a professional translator. Translate the following English text to Spanish, maintaining the same tone and formality level:"
+                    }
+                  ]
+                },
+                {
+                  "id": "reasoning-frameworks",
+                  "name": "Reasoning Frameworks",
+                  "description": "Techniques that guide the model through explicit reasoning steps",
+                  "techniques": [
+                    {
+                      "id": "chain-of-thought",
+                      "name": "Chain-of-Thought (CoT) Prompting",
+                      "description": "Eliciting step-by-step reasoning before the final answer, usually via few-shot exemplars.",
+                      "sources": ["Wei et al.", "Schulhoff et al.", "Vatsal & Dubey", "Wang et al. - Self-Consistency"],
+                      "relatedTechniques": ["zero-shot-cot", "few-shot-cot", "self-consistency"],
+                      "useCase": "Complex reasoning tasks, math problems, logical deductions, and multi-step decision processes.",
+                      "example": "Question: Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?\n\nLet's think about this step-by-step:\n1. Roger starts with 5 tennis balls\n2. He buys 2 cans of tennis balls, with 3 balls per can\n3. So he gets 2 × 3 = 6 new tennis balls\n4. In total, he has 5 + 6 = 11 tennis balls\n\nAnswer: 11 tennis balls"
+                    },
+                    {
+                      "id": "zero-shot-cot",
+                      "name": "Zero-Shot CoT",
+                      "description": "Appending a thought-inducing phrase without CoT exemplars, like 'Let's think step by step'.",
+                      "sources": ["Schulhoff et al.", "Vatsal & Dubey"],
+                      "relatedTechniques": ["chain-of-thought", "few-shot-cot"],
+                      "useCase": "When example chains of reasoning aren't available but step-by-step thinking is still beneficial.",
+                      "example": "Question: If a store has 10 apples and 3 people each buy 2 apples, how many apples are left?\n\nLet's think step by step."
+                    },
+                    {
+                      "id": "few-shot-cot",
+                      "name": "Few-Shot CoT",
+                      "description": "CoT prompting using multiple CoT exemplars to demonstrate the reasoning process.",
+                      "sources": ["Schulhoff et al.", "Vatsal & Dubey"],
+                      "relatedTechniques": ["chain-of-thought", "zero-shot-cot"],
+                      "useCase": "Complex reasoning tasks where the model needs to learn specific reasoning patterns.",
+                      "example": "Q: Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?\nA: Roger starts with 5 tennis balls. He buys 2 cans, each with 3 tennis balls. So he gets 2×3=6 more tennis balls. In total, he has 5+6=11 tennis balls.\n\nQ: Alice has 7 books. She gives 2 books to Bob and buys 3 more books. How many books does she have now?"
+                    },
+                    {
+                      "id": "tree-of-thoughts",
+                      "name": "Tree-of-Thoughts (ToT)",
+                      "description": "Exploring multiple reasoning paths in a tree structure using generate, evaluate, and search methods.",
+                      "sources": ["Yao et al.", "Vatsal & Dubey", "Schulhoff et al."],
+                      "relatedTechniques": ["chain-of-thought", "graph-of-thoughts", "self-consistency"],
+                      "useCase": "Complex problems with multiple possible approaches, where exploring alternatives is beneficial.",
+                      "example": "Problem: Find the optimal strategy for the game of 24 (reach 24 using +, -, *, / with cards 3, 9, 4, 1).\n\nPath 1: (3 + 9) * (4 - 1) = 12 * 3 = 36 (invalid)\nPath 2: (3 * 9 - 4) - 1 = 27 - 4 - 1 = 22 (invalid)\nPath 3: (3 + 1) * 9 - 4 = 4 * 9 - 4 = 36 - 4 = 32 (invalid)\nPath 4: 3 * (9 - 1) - 4 = 3 * 8 - 4 = 24 - 4 = 20 (invalid)\nPath 5: (9 - 1) * (4 - 3) = 8 * 1 = 8 (invalid)\nPath 6: 3 * 9 - 4 - 1 = 27 - 4 - 1 = 22 (invalid)\nPath 7: 3 * (9 - 4) + 1 = 3 * 5 + 1 = 15 + 1 = 16 (invalid)\nPath 8: (3 + 9) * 4 / (1 + 3) = 12 * 4 / 4 = 12 (invalid)\nPath 9: 9 * 4 / 3 + 1 = 36 / 3 + 1 = 12 + 1 = 13 (invalid)\nPath 10: (9 - 1) * 3 = 8 * 3 = 24 (valid!)"
+                    },
+                    {
+                      "id": "skeleton-of-thought",
+                      "name": "Skeleton-of-Thought (SoT)",
+                      "description": "A two-stage approach: first generating a skeleton (outline) and then expanding points in parallel.",
+                      "sources": ["Ning et al.", "Schulhoff et al."],
+                      "relatedTechniques": ["tree-of-thoughts", "parallel-point-expanding"],
+                      "useCase": "Long-form content generation where structure is important, like essays or reports.",
+                      "example": "Task: Write an essay about climate change.\n\nSkeleton:\n1. Introduction to climate change\n2. Causes of climate change\n3. Effects on ecosystems\n4. Economic impacts\n5. Potential solutions\n6. Conclusion\n\n[Then each point is expanded in parallel]"
+                    }
+                  ]
+                }
+              ]
+            };
+
+            // --- PATCH: Add missing categories for full node mapping ---
+            // Add Agent & Tool Use
+            this.techniquesData.categories.push({
+              "id": "agent-tool-use",
+              "name": "Agent & Tool Use",
+              "description": "Techniques that enable LLMs to interact with external tools and environments",
+              "techniques": [
+                {
+                  "id": "agent-based-prompting",
+                  "name": "Agent-Based Prompting",
+                  "description": "Assigning an agent role to the LLM that can use tools, make decisions, and interact with the environment.",
+                  "sources": ["Park et al.", "Vatsal & Dubey"],
+                  "relatedTechniques": ["react", "tool-use-agents"],
+                  "useCase": "Complex tasks requiring tool use, decision making, and multi-step reasoning.",
+                  "example": "You are a research agent with access to a search tool. To use the tool, format your response as [SEARCH(query)]."
+                },
+                {
+                  "id": "react",
+                  "name": "ReAct (Reasoning + Acting)",
+                  "description": "Combining reasoning traces and task-specific actions in an interleaved manner.",
+                  "sources": ["Yao et al.", "Vatsal & Dubey"],
+                  "relatedTechniques": ["agent-based-prompting", "chain-of-thought"],
+                  "useCase": "Tasks requiring both reasoning and interaction with external tools/environments.",
+                  "example": "Thought: I need to find when the Golden Gate Bridge was built. Action: Search(Golden Gate Bridge construction date)"
+                }
+              ]
+            });
+
+            // Add Self-Improvement
+            this.techniquesData.categories.push({
+              "id": "self-improvement",
+              "name": "Self-Improvement Techniques",
+              "description": "Methods for the model to reflect on and improve its own outputs",
+              "techniques": [
+                {
+                  "id": "self-consistency",
+                  "name": "Self-Consistency",
+                  "description": "Generating multiple reasoning paths and selecting the most consistent answer.",
+                  "sources": ["Wang et al. - Self-Consistency", "Vatsal & Dubey"],
+                  "relatedTechniques": ["chain-of-thought", "self-verification"],
+                  "useCase": "Complex reasoning tasks where multiple approaches might yield different answers.",
+                  "example": "Problem: What is 17 × 36? Path 1: ... Path 2: ... Consistent Answer: 612"
+                },
+                {
+                  "id": "self-verification",
+                  "name": "Self-Verification",
+                  "description": "Having the model verify the correctness of its own answers.",
+                  "sources": ["Manakul et al.", "Vatsal & Dubey"],
+                  "relatedTechniques": ["self-consistency"],
+                  "useCase": "Tasks where verifying results is critical.",
+                  "example": "Answer: The derivative of f(x) = x² is f'(x) = 2x. Verification: ..."
+                }
+              ]
+            });
+
+            // Add Retrieval & Augmentation
+            this.techniquesData.categories.push({
+              "id": "retrieval-augmentation",
+              "name": "Retrieval & Augmentation",
+              "description": "Techniques that incorporate external knowledge into prompts",
+              "techniques": [
+                {
+                  "id": "rag",
+                  "name": "Retrieval-Augmented Generation (RAG)",
+                  "description": "Enhancing LLM responses by retrieving relevant information from external sources.",
+                  "sources": ["Lewis et al.", "Vatsal & Dubey"],
+                  "relatedTechniques": ["dsp"],
+                  "useCase": "Tasks requiring specific factual information beyond the model's training data.",
+                  "example": "Question: What were the key provisions of the Paris Climate Agreement? [System retrieves relevant documents...]"
+                },
+                {
+                  "id": "dsp",
+                  "name": "Demonstration-Search-Predict (DSP)",
+                  "description": "A retrieval technique that searches for demonstrations relevant to the input query.",
+                  "sources": ["Khattab et al.", "Vatsal & Dubey"],
+                  "relatedTechniques": ["rag"],
+                  "useCase": "Tasks benefiting from retrieving similar examples.",
+                  "example": "Question: How does photosynthesis work? [System searches for relevant demonstrations...]"
+                }
+              ]
+            });
+
+            // Add Prompt Optimization
+            this.techniquesData.categories.push({
+              "id": "prompt-optimization",
+              "name": "Prompt Optimization",
+              "description": "Techniques to automate and improve prompt engineering",
+              "techniques": [
+                {
+                  "id": "ape",
+                  "name": "Automatic Prompt Engineer (APE)",
+                  "description": "Automatically generates and optimizes prompts for a given task.",
+                  "sources": ["Zhou et al."],
+                  "relatedTechniques": ["grips"],
+                  "useCase": "Automating prompt design for large-scale or complex tasks.",
+                  "example": "Given a task, APE generates multiple candidate prompts and selects the best-performing one."
+                },
+                {
+                  "id": "grips",
+                  "name": "GRIPS",
+                  "description": "Gradient-based prompt search for optimization.",
+                  "sources": ["Prasad et al."],
+                  "relatedTechniques": ["ape"],
+                  "useCase": "Optimizing prompts using gradient-based methods.",
+                  "example": "GRIPS iteratively updates prompt tokens to maximize task performance."
+                }
+              ]
+            });
+
+            // Add Multimodal Techniques
+            this.techniquesData.categories.push({
+              "id": "multimodal-techniques",
+              "name": "Multimodal Techniques",
+              "description": "Techniques involving non-text modalities like images, audio, and video",
+              "techniques": [
+                {
+                  "id": "image-prompting",
+                  "name": "Image Prompting",
+                  "description": "Incorporating images as part of the prompt to guide model outputs.",
+                  "sources": ["Tsimpoukelli et al."],
+                  "relatedTechniques": ["multimodal-chain-of-thought"],
+                  "useCase": "Tasks requiring visual context or image-based reasoning.",
+                  "example": "Prompt: [Image of a cat] Describe what you see."
+                },
+                {
+                  "id": "multimodal-chain-of-thought",
+                  "name": "Multimodal Chain-of-Thought",
+                  "description": "Combining reasoning over text and images in a step-by-step manner.",
+                  "sources": ["Zhu et al."],
+                  "relatedTechniques": ["image-prompting"],
+                  "useCase": "Complex tasks involving both text and images.",
+                  "example": "Given an image and a question, reason step by step using both modalities."
+                }
+              ]
+            });
+
+            // Add Specialized Application Techniques
+            this.techniquesData.categories.push({
+              "id": "specialized-application",
+              "name": "Specialized Application Techniques",
+              "description": "Techniques optimized for specific domains or applications",
+              "techniques": [
+                {
+                  "id": "code-generation-agents",
+                  "name": "Code Generation Agents",
+                  "description": "Agents specialized for generating and refining code.",
+                  "sources": ["Chen et al."],
+                  "relatedTechniques": ["chain-of-thought"],
+                  "useCase": "Automated code writing and debugging.",
+                  "example": "Write a Python function to reverse a string."
+                },
+                {
+                  "id": "mathprompter",
+                  "name": "MathPrompter",
+                  "description": "Prompting techniques specialized for mathematical problem solving.",
+                  "sources": ["Wang et al."],
+                  "relatedTechniques": ["chain-of-thought"],
+                  "useCase": "Solving math word problems.",
+                  "example": "Solve: If a train travels 60 miles in 1.5 hours, what is its average speed?"
+                }
+              ]
+            });
             
             // Process data into nodes and links
             this.processData();
         } catch (error) {
             console.error('Error loading data:', error);
-            throw new Error('Failed to load taxonomy data');
+            throw new Error('Failed to load data from JSON files');
         }
     }
 
+    /**
+     * Process data into nodes and links for the visualization
+     */
     /**
      * Process data into nodes and links for the visualization
      */
@@ -75,10 +534,11 @@ class TechniqueNetworkVisualization {
         this.nodes = [];
         this.links = [];
         
-        // Create a map of category IDs to colors
+        // Create a map of category IDs to colors with a better color scheme
         const categoryColors = {};
+        const colorScheme = d3.schemeTableau10; // Using Tableau's color scheme for better distinction
         this.categoriesData.categories.forEach((category, index) => {
-            categoryColors[category.id] = this.colorScale(index);
+            categoryColors[category.id] = colorScheme[index % colorScheme.length];
         });
         
         // Process each technique into a node
@@ -99,7 +559,9 @@ class TechniqueNetworkVisualization {
                     useCase: technique.useCase,
                     example: technique.example,
                     relatedTechniques: technique.relatedTechniques || [],
-                    index: nodeIndex++
+                    index: nodeIndex++,
+                    // Track connection count for node sizing
+                    connectionCount: 0
                 });
             });
         });
@@ -111,10 +573,17 @@ class TechniqueNetworkVisualization {
                     // Find the related node
                     const targetNode = this.nodes.find(n => n.id === relatedId);
                     if (targetNode) {
+                        // Increment connection count for both nodes
+                        node.connectionCount++;
+                        targetNode.connectionCount++;
+                        
                         this.links.push({
                             source: node.id,
                             target: relatedId,
-                            value: 1 // Link strength
+                            value: 1, // Link strength
+                            // Determine if this is bidirectional
+                            bidirectional: targetNode.relatedTechniques &&
+                                          targetNode.relatedTechniques.includes(node.id)
                         });
                     }
                 });
@@ -151,31 +620,51 @@ class TechniqueNetworkVisualization {
         this.graph = this.svg.append('g')
             .attr('class', 'graph');
         
+        // Create links with markers for directionality
+        // First define arrow markers
+        this.graph.append("defs").selectAll("marker")
+            .data(["end", "end-bidirectional"])
+            .enter().append("marker")
+            .attr("id", d => d)
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 25)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("fill", d => d === "end-bidirectional" ? "#666" : "#999")
+            .attr("d", "M0,-5L10,0L0,5");
+
         // Create links
         this.link = this.graph.append('g')
             .attr('class', 'links')
-            .selectAll('line')
+            .selectAll('path')  // Using paths instead of lines for curved links
             .data(this.links)
             .enter()
-            .append('line')
-            .attr('stroke', '#999')
+            .append('path')
+            .attr('stroke', d => d.bidirectional ? '#666' : '#999')
             .attr('stroke-opacity', 0.6)
-            .attr('stroke-width', d => Math.sqrt(d.value));
+            .attr('stroke-width', d => Math.sqrt(d.value) * 1.5)
+            .attr('fill', 'none')
+            .attr('marker-end', d => d.bidirectional ? "url(#end-bidirectional)" : "url(#end)");
         
-        // Create nodes
+        // Create nodes with scaled sizes based on connections
         this.node = this.graph.append('g')
             .attr('class', 'nodes')
             .selectAll('circle')
             .data(this.nodes)
             .enter()
             .append('circle')
-            .attr('r', d => 5 + (d.relatedTechniques.length * 0.5))
+            .attr('r', d => 5 + (d.connectionCount * 1.2))  // Scale by connection count
             .attr('fill', d => d.color)
             .attr('stroke', '#fff')
             .attr('stroke-width', 1.5)
             .attr('id', d => `node-${d.id}`)
             .attr('data-id', d => d.id)
             .on('click', this.handleNodeClick.bind(this))
+            .on('mouseover', this.handleNodeMouseOver.bind(this))
+            .on('mouseout', this.handleNodeMouseOut.bind(this))
             .call(this.setupDrag());
         
         // Add node labels
@@ -244,6 +733,9 @@ class TechniqueNetworkVisualization {
     /**
      * Update details panel with selected node information
      */
+    /**
+     * Update details panel with selected node information
+     */
     updateDetailsPanel(node) {
         const detailsPanel = document.querySelector('.technique-detail-panel');
         const title = document.getElementById('detail-panel-title');
@@ -284,9 +776,10 @@ class TechniqueNetworkVisualization {
             </div>`;
         }
         
+        // Add related papers section
         if (node.sources && node.sources.length > 0) {
             content += `<div class="detail-section">
-                <h4>Sources</h4>
+                <h4>Related Papers</h4>
                 <ul class="sources-list">
                     ${node.sources.map(source => `<li>${source}</li>`).join('')}
                 </ul>
@@ -504,12 +997,15 @@ class TechniqueNetworkVisualization {
     /**
      * Add event listeners
      */
+    /**
+     * Add event listeners
+     */
     addEventListeners() {
         // Category buttons
         document.querySelectorAll('.category-button').forEach(button => {
             button.addEventListener('click', () => {
                 // Toggle active class
-                document.querySelectorAll('.category-button').forEach(btn => 
+                document.querySelectorAll('.category-button').forEach(btn =>
                     btn.classList.remove('active')
                 );
                 button.classList.add('active');
@@ -559,8 +1055,117 @@ class TechniqueNetworkVisualization {
             });
         }
         
+        // Export image button
+        const exportButton = document.getElementById('export-image');
+        if (exportButton) {
+            exportButton.addEventListener('click', () => {
+                this.exportAsImage();
+            });
+        }
+        
+        // Search input
+        const searchInput = document.getElementById('technique-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                this.searchTechniques(searchInput.value);
+            });
+        }
+        
         // Window resize
         window.addEventListener('resize', this.handleResize.bind(this));
+    }
+    
+    /**
+     * Search techniques by name
+     */
+    searchTechniques(query) {
+        if (!query || query.trim() === '') {
+            // Reset all nodes and links to visible
+            this.node.style('display', 'block');
+            this.nodeLabels.style('display', 'block');
+            this.link.style('display', 'block');
+            return;
+        }
+        
+        query = query.toLowerCase();
+        
+        // Find matching nodes
+        const matchingNodeIds = new Set();
+        this.nodes.forEach(node => {
+            if (node.name.toLowerCase().includes(query) ||
+                (node.aliases && node.aliases.some(alias => alias.toLowerCase().includes(query)))) {
+                matchingNodeIds.add(node.id);
+            }
+        });
+        
+        // Show matching nodes and their direct connections
+        this.node.style('display', d => matchingNodeIds.has(d.id) ? 'block' : 'none');
+        this.nodeLabels.style('display', d => matchingNodeIds.has(d.id) ? 'block' : 'none');
+        
+        // Show links between visible nodes
+        this.link.style('display', d => {
+            const sourceId = typeof d.source === 'object' ? d.source.id : d.source;
+            const targetId = typeof d.target === 'object' ? d.target.id : d.target;
+            
+            return matchingNodeIds.has(sourceId) && matchingNodeIds.has(targetId) ? 'block' : 'none';
+        });
+        
+        // Restart simulation
+        this.simulation.alpha(0.3).restart();
+    }
+    
+    /**
+     * Export current view as an image
+     */
+    exportAsImage() {
+        try {
+            // Create a clone of the SVG
+            const svgElement = document.getElementById('relationship-visualization');
+            const svgClone = svgElement.cloneNode(true);
+            
+            // Set background color
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rect.setAttribute('width', '100%');
+            rect.setAttribute('height', '100%');
+            rect.setAttribute('fill', 'white');
+            svgClone.insertBefore(rect, svgClone.firstChild);
+            
+            // Convert SVG to data URL
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const svgBlob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
+            const url = URL.createObjectURL(svgBlob);
+            
+            // Create image from SVG
+            const img = new Image();
+            img.onload = function() {
+                // Create canvas
+                const canvas = document.createElement('canvas');
+                canvas.width = svgElement.clientWidth;
+                canvas.height = svgElement.clientHeight;
+                const ctx = canvas.getContext('2d');
+                
+                // Draw image to canvas
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+                
+                // Convert to PNG and download
+                const pngUrl = canvas.toDataURL('image/png');
+                const downloadLink = document.createElement('a');
+                downloadLink.href = pngUrl;
+                downloadLink.download = 'technique-relationships.png';
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+                // Clean up
+                URL.revokeObjectURL(url);
+            };
+            img.src = url;
+        } catch (error) {
+            console.error('Error exporting image:', error);
+            alert('Failed to export image. Please try again.');
+        }
     }
 
     /**
@@ -592,12 +1197,18 @@ class TechniqueNetworkVisualization {
     /**
      * Update positions on each simulation tick
      */
+    /**
+     * Update positions on each simulation tick
+     */
     tick() {
-        this.link
-            .attr('x1', d => d.source.x)
-            .attr('y1', d => d.source.y)
-            .attr('x2', d => d.target.x)
-            .attr('y2', d => d.target.y);
+        // Update link paths - curved if bidirectional
+        this.link.attr('d', d => {
+            const dx = d.target.x - d.source.x;
+            const dy = d.target.y - d.source.y;
+            const dr = d.bidirectional ? Math.sqrt(dx * dx + dy * dy) * 1.5 : 0;
+            
+            return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+        });
         
         this.node
             .attr('cx', d => d.x)
@@ -606,6 +1217,73 @@ class TechniqueNetworkVisualization {
         this.nodeLabels
             .attr('x', d => d.x)
             .attr('y', d => d.y);
+    }
+    
+    /**
+     * Handle mouse over event on nodes
+     */
+    handleNodeMouseOver(event, d) {
+        // Create tooltip
+        const tooltip = d3.select('body').append('div')
+            .attr('class', 'node-tooltip')
+            .style('position', 'absolute')
+            .style('background', 'rgba(0, 0, 0, 0.8)')
+            .style('color', 'white')
+            .style('padding', '8px 12px')
+            .style('border-radius', '4px')
+            .style('font-size', '14px')
+            .style('pointer-events', 'none')
+            .style('opacity', 0)
+            .style('z-index', 1000);
+            
+        tooltip.html(`<strong>${d.name}</strong><br>${this.getCategoryName(d.categoryId)}`)
+            .style('left', (event.pageX + 10) + 'px')
+            .style('top', (event.pageY - 28) + 'px')
+            .transition()
+            .duration(200)
+            .style('opacity', 0.9);
+            
+        // Store tooltip reference on the node
+        d.tooltip = tooltip;
+        
+        // Highlight node and its connections
+        this.node.attr('opacity', n => this.isConnected(d, n) ? 1 : 0.3);
+        this.link.attr('opacity', l =>
+            (l.source.id === d.id || l.target.id === d.id) ? 1 : 0.1
+        );
+        this.nodeLabels.attr('opacity', n => this.isConnected(d, n) ? 1 : 0.3);
+    }
+    
+    /**
+     * Handle mouse out event on nodes
+     */
+    handleNodeMouseOut(event, d) {
+        // Remove tooltip
+        if (d.tooltip) {
+            d.tooltip.transition()
+                .duration(200)
+                .style('opacity', 0)
+                .remove();
+            d.tooltip = null;
+        }
+        
+        // Reset opacity
+        this.node.attr('opacity', 1);
+        this.link.attr('opacity', 0.6);
+        this.nodeLabels.attr('opacity', 1);
+    }
+    
+    /**
+     * Check if two nodes are connected
+     */
+    isConnected(a, b) {
+        if (a.id === b.id) return true; // Same node
+        
+        // Check if there's a link between them
+        return this.links.some(l =>
+            (l.source.id === a.id && l.target.id === b.id) ||
+            (l.source.id === b.id && l.target.id === a.id)
+        );
     }
 
     /**

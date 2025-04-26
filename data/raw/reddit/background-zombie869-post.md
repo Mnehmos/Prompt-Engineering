@@ -1,6 +1,6 @@
 # I Distilled 17 Research Papers into a Taxonomy of 100+ Prompt Engineering Techniques – Here's the List
 
-Posted by u/Background-Zombie869 (Top 1% Poster)
+Posted by u/Background-Zombie689 (Top 1% Poster)
 
 My goal was to capture every distinct technique, strategy, framework, concept, method, stage, component, or variation related to prompting mentioned.
 
@@ -872,7 +872,7 @@ Appending a thought-inducing phrase without CoT exemplars. (Schulhoff et al., Va
 
 ---
 
-## Comment from Background-Zombie869 (4 days ago):
+## Comment from Background-Zombie689 (4 days ago):
 
 Thanks everyone for the incredible engagement on this post since yesterday. So glad you found the taxonomy useful.
 

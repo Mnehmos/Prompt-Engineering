@@ -45,6 +45,13 @@
                     <button class="category-button" data-category="specialized-application">Specialized Applications</button>
                 </div>
                 
+                <div class="search-container">
+                    <div class="search-input-group">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="technique-search" placeholder="Search techniques...">
+                    </div>
+                </div>
+                
                 <div class="visualization-controls">
                     <div class="control-group">
                         <label for="link-strength">Link Strength:</label>
@@ -54,9 +61,14 @@
                         <label for="node-distance">Node Distance:</label>
                         <input type="range" id="node-distance" min="50" max="300" value="150">
                     </div>
-                    <button id="reset-layout" class="control-button">
-                        <i class="fas fa-redo"></i> Reset Layout
-                    </button>
+                    <div class="control-buttons">
+                        <button id="reset-layout" class="control-button">
+                            <i class="fas fa-redo"></i> Reset Layout
+                        </button>
+                        <button id="export-image" class="control-button">
+                            <i class="fas fa-download"></i> Export Image
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -152,5 +164,6 @@
 
     <script src="../assets/js/main.js"></script>
     <script src="../assets/js/network-visualization.js"></script>
+    <script src="../assets/js/header-footer.js"></script>
 </body>
 </html>

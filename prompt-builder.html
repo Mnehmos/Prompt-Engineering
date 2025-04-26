@@ -93,6 +93,35 @@
             resize: vertical;
         }
 
+        .input-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fff;
+        }
+
+        .template-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .template-fields-container {
+            border-top: 1px solid #e1e4e8;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
         .skill-level-selector {
             display: flex;
             margin-bottom: 16px;
@@ -132,13 +161,39 @@
             white-space: pre-wrap;
             min-height: 150px;
             border: 1px solid #ddd;
+            overflow-x: auto;
         }
 
         .prompt-actions {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             margin-top: 16px;
+        }
+
+        .prompt-actions-right {
+            display: flex;
             gap: 10px;
+        }
+
+        .token-counter {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .token-count-warning {
+            color: #e53e3e;
+        }
+
+        .saved-prompts-select {
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fff;
+            margin-right: 10px;
         }
 
         .selected-techniques-panel {
@@ -194,6 +249,78 @@
         .empty-state {
             color: #666;
             font-style: italic;
+        }
+
+        /* Suggestions section */
+        .suggestions-container {
+            background: #fff8e1;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .suggestions-container h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #775700;
+        }
+
+        .suggestions-list {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .suggestions-list li {
+            margin-bottom: 6px;
+        }
+
+        /* Message section */
+        .message {
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            animation: fadeOut 0.5s ease-in 2.5s forwards;
+        }
+
+        .message-success {
+            background-color: #e6f7e6;
+            border-left: 4px solid #38a169;
+            color: #276749;
+        }
+
+        .message-info {
+            background-color: #e6f0ff;
+            border-left: 4px solid #4299e1;
+            color: #2b6cb0;
+        }
+
+        .message-error {
+            background-color: #fde8e8;
+            border-left: 4px solid #e53e3e;
+            color: #c53030;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        /* Highlight syntax */
+        .highlight-directive {
+            color: #8250df;
+            font-weight: 600;
+        }
+
+        .highlight-format {
+            color: #0550ae;
+            font-weight: 600;
+        }
+
+        .highlight-technique {
+            background-color: #dbedff;
+            border-radius: 2px;
+            padding: 0 3px;
         }
 
         /* Modal styles */
@@ -349,19 +476,7 @@
 </head>
 <body>
     <header>
-        <div class="header-container">
-            <div class="logo">
-                <h1>Prompt Engineering Taxonomy</h1>
-            </div>
-            <nav>
-                <a href="index.html">Dashboard</a>
-                <a href="reports/taxonomy-overview.html">Taxonomy</a>
-                <a href="reports/technique-relationships.html">Relationships</a>
-                <a href="prompt-builder.html" class="active">Prompt Builder</a>
-                <a href="sources.html">Sources</a>
-                <a href="https://github.com/Mnehmos?tab=repositories" target="_blank">GitHub</a>
-            </nav>
-        </div>
+        <!-- Header content will be injected by header-footer.js -->
     </header>
 
     <main>
@@ -407,7 +522,19 @@
                 </div>
 
                 <div class="prompt-inputs-container">
-                    <h3>Prompt Details</h3>
+                    <h3>Build Your Prompt</h3>
+                    
+                    <div class="input-group">
+                        <label for="template-selector">Prompt Template:</label>
+                        <select id="template-selector">
+                            <option value="">-- Select a template --</option>
+                            <!-- Template options will be populated by JavaScript -->
+                        </select>
+                        <p class="template-description" id="template-description"></p>
+                    </div>
+                    
+                    <!-- Template-specific fields will be inserted here -->
+                    <div id="template-fields-container" class="template-fields-container"></div>
                     
                     <div class="input-group">
                         <label for="base-prompt">Base Prompt (optional):</label>
@@ -431,8 +558,13 @@
                         Your prompt will appear here. Select techniques and fill in the input fields to build your prompt.
                     </div>
                     <div class="prompt-actions">
-                        <button id="clear-prompt-button" class="button secondary">Clear</button>
-                        <button id="copy-prompt-button" class="button primary" disabled>Copy to Clipboard</button>
+                        <div id="token-count" class="token-counter">0 tokens (0 characters)</div>
+                        <div class="prompt-actions-right">
+                            <button id="clear-prompt-button" class="button secondary">Clear</button>
+                            <button id="save-prompt-button" class="button secondary">Save Prompt</button>
+                            <button id="export-prompt-button" class="button secondary">Export</button>
+                            <button id="copy-prompt-button" class="button primary" disabled>Copy to Clipboard</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -546,34 +678,10 @@
     </main>
 
     <footer>
-        <div class="footer-container">
-            <div class="footer-column">
-                <h3>Prompt Engineering Taxonomy</h3>
-                <p>A comprehensive collection of prompt engineering techniques organized by category and relationship.</p>
-            </div>
-            <div class="footer-column">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="reports/taxonomy-overview.html">Taxonomy</a></li>
-                    <li><a href="reports/technique-relationships.html">Relationships</a></li>
-                    <li><a href="prompt-builder.html">Prompt Builder</a></li>
-                    <li><a href="sources.html">Sources</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h3>Resources</h3>
-                <ul>
-                    <li><a href="https://github.com/Mnehmos?tab=repositories" target="_blank">GitHub Repository</a></li>
-                    <li><a href="https://www.reddit.com/r/ChatGPTPro/comments/1k4iykr/i_distilled_17_research_papers_into_a_taxonomy_of/" target="_blank">Original Reddit Post</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 Prompt Engineering Taxonomy Project. Content based on research compilation by Background-Zombie869.</p>
-        </div>
+        <!-- Footer content will be injected by header-footer.js -->
     </footer>
 
+    <script src="assets/js/header-footer.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="js/prompt-builder.js"></script>
     <script>
