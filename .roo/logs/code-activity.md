@@ -80,3 +80,52 @@ The relationship visualization page (`reports/technique-relationships.html`) now
 
 #### Result
 The sources page now has a more polished, visually appealing design that matches the style of other pages in the site. The content is better organized with clear visual hierarchy, making it easier to scan and navigate.
+### 🧩 Patch: Fix Prompt Builder Copy Functionality
+🔗 task_id: prompt-builder-copy-fix-001
+🗂️ Files: js/prompt-builder.js
+
+#### Changes Made
+- Added a `rawPromptText` property to the `PromptBuilder` class to store the plain text version of the prompt without HTML formatting
+- Modified the `updatePromptPreview()` function to store the raw text version of the prompt before applying syntax highlighting
+- Updated the `copyPromptToClipboard()` function to use the raw text version instead of getting the text content from the DOM
+
+#### Result
+The "Copy to Clipboard" button now correctly copies the plain text version of the prompt without any HTML formatting tags. This ensures that users get clean, properly formatted text when pasting the prompt into other applications.
+
+#### Technical Notes
+- This approach maintains the visual formatting in the preview while ensuring clean text for clipboard operations
+- The solution is minimal and maintains backward compatibility with existing functionality
+- No changes to the HTML structure were required
+### 🧩 Patch: Redesign Prompt Builder Interface for Improved Usability
+🔗 task_id: prompt-builder-redesign-001
+🗂️ Files: prompt-builder.html, js/prompt-builder.js
+
+#### Action Summary
+Redesigned the prompt builder interface to provide a more intuitive, step-by-step user experience with the following improvements:
+
+1. **Implemented a Wizard-Style Interface**:
+   - Created a 4-step process: "Select Techniques", "Choose Template", "Fill Details", and "Review & Copy"
+   - Added visual progress indicators and numbered steps
+   - Implemented navigation between steps with back/next buttons
+
+2. **Enhanced Visual Design**:
+   - Improved spacing and visual hierarchy
+   - Added visual feedback for selected techniques
+   - Enhanced the preview section with better formatting
+   - Added icons for better visual cues
+
+3. **Improved User Experience**:
+   - Added technique count badge
+   - Made selected techniques more visually distinct
+   - Implemented conditional button enabling/disabling based on user progress
+   - Added clear visual separation between sections
+
+#### File Paths Affected
+- `prompt-builder.html`: Updated HTML structure to implement the wizard interface
+- `js/prompt-builder.js`: Added JavaScript functionality to handle wizard navigation
+
+#### Schema or Pattern Impact
+No schema changes were made. The redesign maintains all existing functionality while improving the user interface.
+
+#### Related Task or Feature
+This redesign addresses user feedback that the prompt builder interface was cluttered and confusing, making it difficult to use effectively.

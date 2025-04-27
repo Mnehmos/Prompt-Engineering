@@ -11,6 +11,11 @@ class PromptBuilder {
          * Format: { [techniqueId]: { ...technique, categoryId, categoryName } }
          */
         this.techniqueData = {};
+        /**
+         * Store the raw text version of the prompt (without HTML formatting)
+         * This is used for copying to clipboard
+         */
+        this.rawPromptText = "";
         this.templateBlocks = {
             "basic": {
                 id: "basic",
@@ -85,6 +90,101 @@ class PromptBuilder {
         
         // Load saved prompts if any
         this.loadSavedPrompts();
+        
+        // Initialize wizard navigation
+        this.initWizardNavigation();
+        
+        // Update technique count badge
+        this.updateTechniqueCount();
+    }
+    
+    /**
+     * Initialize wizard navigation
+     */
+    initWizardNavigation() {
+        // Add click event to wizard steps
+        document.querySelectorAll('.wizard-step').forEach(step => {
+            step.addEventListener('click', () => {
+                const stepNumber = parseInt(step.dataset.step);
+                this.goToStep(stepNumber);
+            });
+        });
+        
+        // Add click event to next/prev buttons
+        document.getElementById('next-step-1')?.addEventListener('click', () => this.goToStep(2));
+        document.getElementById('next-step-2')?.addEventListener('click', () => this.goToStep(3));
+        document.getElementById('next-step-3')?.addEventListener('click', () => this.goToStep(4));
+        document.getElementById('prev-step-2')?.addEventListener('click', () => this.goToStep(1));
+        document.getElementById('prev-step-3')?.addEventListener('click', () => this.goToStep(2));
+        document.getElementById('prev-step-4')?.addEventListener('click', () => this.goToStep(3));
+        
+        // Start over button
+        document.getElementById('start-over-button')?.addEventListener('click', () => {
+            if (confirm('Are you sure you want to start over? This will clear all your current selections.')) {
+                this.clearPrompt();
+                this.goToStep(1);
+            }
+        });
+    }
+    
+    /**
+     * Go to a specific step in the wizard
+     * @param {number} stepNumber - The step number to go to
+     */
+    goToStep(stepNumber) {
+        // Hide all steps
+        document.querySelectorAll('.wizard-content').forEach(content => {
+            content.style.display = 'none';
+        });
+        
+        // Show the selected step
+        const stepContent = document.getElementById(`step-${stepNumber}-content`);
+        if (stepContent) {
+            stepContent.style.display = 'block';
+        }
+        
+        // Update step indicators
+        document.querySelectorAll('.wizard-step').forEach(step => {
+            const currentStep = parseInt(step.dataset.step);
+            step.classList.remove('active', 'completed');
+            
+            if (currentStep === stepNumber) {
+                step.classList.add('active');
+            } else if (currentStep < stepNumber) {
+                step.classList.add('completed');
+            }
+        });
+        
+        // Update progress bar
+        const progressBar = document.querySelector('.progress-bar');
+        if (progressBar) {
+            progressBar.style.width = `${(stepNumber / 4) * 100}%`;
+        }
+        
+        // Enable/disable next buttons based on content
+        if (stepNumber === 1) {
+            const nextButton = document.getElementById('next-step-1');
+            if (nextButton) {
+                nextButton.disabled = this.selectedTechniques.length === 0;
+            }
+        }
+        
+        if (stepNumber === 3) {
+            const nextButton = document.getElementById('next-step-3');
+            if (nextButton) {
+                nextButton.disabled = !this.taskDescription;
+            }
+        }
+    }
+    
+    /**
+     * Update the technique count badge
+     */
+    updateTechniqueCount() {
+        const countBadge = document.getElementById('technique-count');
+        if (countBadge) {
+            countBadge.textContent = this.selectedTechniques.length;
+        }
     }
 
     /**
@@ -423,6 +523,12 @@ class PromptBuilder {
             this.selectedTechniques.push(techniqueId);
             this.updateSelectedTechniques();
             this.updatePromptPreview();
+            
+            // Enable next button in step 1 if there are selected techniques
+            const nextButton = document.getElementById('next-step-1');
+            if (nextButton) {
+                nextButton.disabled = this.selectedTechniques.length === 0;
+            }
         }
     }
 
@@ -433,6 +539,12 @@ class PromptBuilder {
         this.selectedTechniques = this.selectedTechniques.filter(id => id !== techniqueId);
         this.updateSelectedTechniques();
         this.updatePromptPreview();
+        
+        // Disable next button in step 1 if there are no selected techniques
+        const nextButton = document.getElementById('next-step-1');
+        if (nextButton) {
+            nextButton.disabled = this.selectedTechniques.length === 0;
+        }
     }
 
     /**
@@ -564,6 +676,12 @@ class PromptBuilder {
         
         if (!this.selectedTemplate) return;
         
+        // Enable next button in step 2
+        const nextButton = document.getElementById('next-step-2');
+        if (nextButton) {
+            nextButton.disabled = false;
+        }
+        
         // Extract template field placeholders
         const placeholderRegex = /{([^}]+)}/g;
         let match;
@@ -686,8 +804,11 @@ class PromptBuilder {
             finalPrompt = "Your prompt will appear here. Select techniques and fill in the input fields to build your prompt.";
         }
         
+        // Store the raw text version for clipboard copying
+        this.rawPromptText = finalPrompt.trim();
+        
         // Set the preview with syntax highlighting
-        this.renderHighlightedPrompt(previewContainer, finalPrompt.trim());
+        this.renderHighlightedPrompt(previewContainer, this.rawPromptText);
         
         // Update token count
         this.updateTokenCount(finalPrompt);
@@ -1345,8 +1466,16 @@ class PromptBuilder {
         
         inputFields.forEach(field => {
             if (field) {
-                field.addEventListener('input', () => {
+                field.addEventListener('input', (e) => {
                     this.updatePromptPreview();
+                    
+                    // Enable/disable next button in step 3 based on task description
+                    if (field.id === 'task-description') {
+                        const nextButton = document.getElementById('next-step-3');
+                        if (nextButton) {
+                            nextButton.disabled = !e.target.value.trim();
+                        }
+                    }
                 });
             }
         });
@@ -1511,7 +1640,9 @@ class PromptBuilder {
      * Copy the generated prompt to clipboard
      */
     copyPromptToClipboard() {
-        const promptText = document.getElementById('prompt-preview')?.textContent;
+        // Use the stored raw text version instead of getting textContent from the DOM
+        // This ensures we don't copy any HTML formatting tags
+        const promptText = this.rawPromptText;
         
         if (promptText && !promptText.includes("Your prompt will appear here")) {
             navigator.clipboard.writeText(promptText)
@@ -1576,6 +1707,13 @@ class PromptBuilder {
         
         // Remove suggestions
         document.getElementById('suggestions-container')?.remove();
+        
+        // Go to step 1
+        this.goToStep(1);
+        
+        // Disable next buttons
+        document.getElementById('next-step-1')?.setAttribute('disabled', 'disabled');
+        document.getElementById('next-step-3')?.setAttribute('disabled', 'disabled');
     }
 
     /**
