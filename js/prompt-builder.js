@@ -272,42 +272,99 @@ class PromptBuilder {
     }
 
     buildTechniqueInstructions() {
+        if (this.selectedTechniques.size === 0) {
+            return '';
+        }
+
         const instructions = [];
         
-        // Check for specific techniques and add appropriate instructions
-        if (this.selectedTechniques.has('chain-of-thought')) {
-            instructions.push('Think through this step-by-step and show your reasoning.');
+        // Add instructions based on selected technique IDs from the actual data
+        for (const techniqueId of this.selectedTechniques) {
+            const technique = this.techniqueData.get(techniqueId);
+            if (technique) {
+                // Use exact technique IDs for precise matching
+                switch (techniqueId) {
+                    case 'chain-of-thought':
+                        instructions.push('Think through this step-by-step and show your reasoning.');
+                        break;
+                    case 'zero-shot-cot':
+                        instructions.push("Let's think step by step.");
+                        break;
+                    case 'few-shot-cot':
+                        instructions.push('Follow the reasoning pattern shown in the examples.');
+                        break;
+                    case 'self-consistency':
+                        instructions.push('Generate multiple reasoning paths and select the most consistent answer.');
+                        break;
+                    case 'universal-self-consistency':
+                        instructions.push('Apply self-consistency across different reasoning approaches and formats.');
+                        break;
+                    case 'tree-of-thoughts':
+                        instructions.push('Explore multiple approaches and evaluate each one systematically.');
+                        break;
+                    case 'self-correction':
+                        instructions.push('After your initial response, review it for errors and provide a corrected version.');
+                        break;
+                    case 'self-refine':
+                        instructions.push('Generate your response, then iteratively refine it based on self-feedback.');
+                        break;
+                    case 'self-verification':
+                        instructions.push('Verify the correctness of your answer by checking your work.');
+                        break;
+                    case 'role-prompting':
+                        if (!this.promptData.basePrompt.trim()) {
+                            instructions.push('Approach this task with appropriate domain expertise and professional insight.');
+                        }
+                        break;
+                    case 'few-shot-learning':
+                        instructions.push('Learn from the examples provided and apply similar patterns to solve this task.');
+                        break;
+                    case 'in-context-learning':
+                        instructions.push('Use the demonstrations provided in context to understand the task pattern.');
+                        break;
+                    case 'react':
+                        instructions.push('Use reasoning and acting in an interleaved manner: think, then act, then observe.');
+                        break;
+                    case 'metacognitive-prompting':
+                        instructions.push('Reflect on your thinking process and reasoning strategies before and during problem-solving.');
+                        break;
+                    case 'self-generated-icl':
+                        instructions.push('Generate your own relevant examples to guide the reasoning process.');
+                        break;
+                    case 'self-ask':
+                        instructions.push('Ask yourself follow-up questions to clarify and improve your reasoning.');
+                        break;
+                    case 'chain-of-verification':
+                        instructions.push('After your initial response, create verification questions and answer them to improve accuracy.');
+                        break;
+                    case 'least-to-most-prompting':
+                        instructions.push('Break down this complex problem into simpler subproblems and solve them sequentially.');
+                        break;
+                    case 'step-back-prompting':
+                        instructions.push('Step back and consider the broader principles before solving the specific problem.');
+                        break;
+                    case 'plan-and-solve-prompting':
+                        instructions.push('First devise a clear plan to solve this problem, then execute the plan step by step.');
+                        break;
+                    case 'program-of-thoughts':
+                        instructions.push('Express your reasoning as executable steps or pseudo-code when appropriate.');
+                        break;
+                    case 'scot':
+                        instructions.push('Apply structured, step-by-step reasoning appropriate for this domain.');
+                        break;
+                    case 'mathprompter':
+                        instructions.push('Solve this mathematical problem using clear, systematic steps.');
+                        break;
+                    default:
+                        // For techniques without specific instructions, use a generic approach
+                        instructions.push(`Apply the ${technique.name} technique to enhance your response.`);
+                }
+            }
         }
         
-        if (this.selectedTechniques.has('self-consistency')) {
-            instructions.push('Generate multiple reasoning paths and select the most consistent answer.');
-        }
-        
-        if (this.selectedTechniques.has('zero-shot-cot')) {
-            instructions.push("Let's think about this step by step.");
-        }
-        
-        if (this.selectedTechniques.has('tree-of-thoughts')) {
-            instructions.push('Explore multiple approaches and evaluate each one.');
-        }
-        
-        if (this.selectedTechniques.has('self-correction')) {
-            instructions.push('After your initial response, review it for errors and provide a corrected version.');
-        }
-        
-        if (this.selectedTechniques.has('role-prompting') && !this.promptData.basePrompt.trim()) {
-            instructions.push('Approach this task with expert knowledge and professional insight.');
-        }
-        
-        if (this.selectedTechniques.has('few-shot-learning')) {
-            instructions.push('Learn from the examples provided and apply similar patterns.');
-        }
-        
-        if (this.selectedTechniques.has('react')) {
-            instructions.push('Use reasoning and acting in an interleaved manner.');
-        }
-        
-        return instructions.join(' ');
+        // Remove duplicates and return
+        const uniqueInstructions = [...new Set(instructions)];
+        return uniqueInstructions.join(' ');
     }
 
     updateTokenCount(text) {
