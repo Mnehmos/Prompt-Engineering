@@ -29,8 +29,11 @@ class TechniqueNetworkVisualization {
     // Asynchronous init to fetch data from JSON files
     async init() {
         try {
-            // Show loading indicator
-            document.querySelector('.visualization-loading').style.display = 'flex';
+            // Show loading indicator if it exists
+            const loadingElement = document.querySelector('.visualization-loading');
+            if (loadingElement) {
+                loadingElement.style.display = 'flex';
+            }
             
             // Load data from JSON files
             await this.loadData();
@@ -41,8 +44,10 @@ class TechniqueNetworkVisualization {
             // Add event listeners
             this.addEventListeners();
 
-            // Hide loading indicator
-            document.querySelector('.visualization-loading').style.display = 'none';
+            // Hide loading indicator if it exists
+            if (loadingElement) {
+                loadingElement.style.display = 'none';
+            }
         } catch (error) {
             console.error('Error initializing network visualization:', error);
             this.showError('Failed to load visualization data. Please try refreshing the page.');
