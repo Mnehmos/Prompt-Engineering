@@ -136,13 +136,21 @@ class TaxonomyDataUtils {
     /**
      * Universal data loader that tries multiple methods
      */
-    static async loadDataUniversal() {
+    static async loadDataUniversal(basePath = './') {
+        // Ensure basePath ends with a slash
+        if (!basePath.endsWith('/')) {
+            basePath += '/';
+        }
+        
+        const categoriesPath = `${basePath}data/processed/technique_categories.json`;
+        const techniquesPath = `${basePath}data/processed/techniques.json`;
+        
         const methods = [
             // Method 1: Standard fetch
             async () => {
                 const [categoriesResponse, techniquesResponse] = await Promise.all([
-                    fetch('data/processed/technique_categories.json'),
-                    fetch('data/processed/techniques.json')
+                    fetch(categoriesPath),
+                    fetch(techniquesPath)
                 ]);
                 return {
                     categoriesData: await categoriesResponse.json(),
@@ -153,8 +161,8 @@ class TaxonomyDataUtils {
             // Method 2: XMLHttpRequest (better for file:// protocol)
             async () => {
                 const [categoriesData, techniquesData] = await Promise.all([
-                    this.loadJSONDirectly('data/processed/technique_categories.json'),
-                    this.loadJSONDirectly('data/processed/techniques.json')
+                    this.loadJSONDirectly(categoriesPath),
+                    this.loadJSONDirectly(techniquesPath)
                 ]);
                 return { categoriesData, techniquesData };
             }

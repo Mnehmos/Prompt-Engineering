@@ -75,7 +75,8 @@ class PromptBuilder {
     }
 
     async loadTechniqueData() {
-        const result = await TaxonomyDataUtils.loadDataUniversal();
+        const basePath = window.APP_CONFIG?.dataBasePath || './';
+        const result = await TaxonomyDataUtils.loadDataUniversal(basePath);
         const { techniquesData } = result;
         
         // Convert to Map for easier access
