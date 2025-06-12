@@ -5,7 +5,6 @@
 
 class PromptBuilder {
     constructor() {
-        this.selectedTechniques = new Set();
         this.techniqueData = new Map();
         this.promptData = {
             basePrompt: '',
@@ -57,9 +56,6 @@ class PromptBuilder {
         
         // Initialize prompt preview
         this.updatePromptPreview();
-        
-        // Update selected techniques display
-        this.updateSelectedTechniquesDisplay();
     }
 
     renderTechniqueSelector() {
@@ -89,12 +85,8 @@ class PromptBuilder {
                 <h3>${category.name}</h3>
                 <div class="technique-list" data-category="${categoryId}">
                     ${category.techniques.map(technique => `
-                        <div class="technique-selector-item" data-technique-id="${technique.id}">
-                            <input type="checkbox"
-                                   id="technique-${technique.id}"
-                                   value="${technique.id}"
-                                   ${this.selectedTechniques.has(technique.id) ? 'checked' : ''}>
-                            <label for="technique-${technique.id}">${technique.name}</label>
+                        <div class="technique-reference-item" data-technique-id="${technique.id}">
+                            <span class="technique-name">${technique.name}</span>
                             <i class="fas fa-info-circle technique-info-icon"
                                data-technique="${technique.id}"
                                title="View details"></i>
@@ -108,22 +100,20 @@ class PromptBuilder {
     }
 
     setupEventListeners() {
-        // Technique selection
-        document.addEventListener('change', (e) => {
-            if (e.target.matches('#technique-selector input[type="checkbox"]')) {
-                this.handleTechniqueToggle(e.target.value, e.target.checked);
-                // Update visual state of the selector item
-                const item = e.target.closest('.technique-selector-item');
-                if (item) {
-                    item.classList.toggle('selected', e.target.checked);
-                }
-            }
-        });
-        
-        // Technique info
+        // Technique reference - clicking anywhere on the item shows info
         document.addEventListener('click', (e) => {
+            // Check if clicked on technique item or info icon
+            const techniqueItem = e.target.closest('.technique-reference-item');
+            if (techniqueItem) {
+                const techniqueId = techniqueItem.dataset.techniqueId;
+                this.showTechniqueInfo(techniqueId);
+                return;
+            }
+            
+            // Direct click on info icon
             if (e.target.matches('.technique-info-icon')) {
                 this.showTechniqueInfo(e.target.dataset.technique);
+                return;
             }
         });
         
@@ -133,8 +123,8 @@ class PromptBuilder {
             if (input) {
                 input.addEventListener('input', (e) => {
                     const key = id.replace('-', '');
-                    this.promptData[key === 'baseprompt' ? 'basePrompt' : 
-                                    key === 'taskdescription' ? 'taskDescription' : 
+                    this.promptData[key === 'baseprompt' ? 'basePrompt' :
+                                    key === 'taskdescription' ? 'taskDescription' :
                                     'outputFormat'] = e.target.value;
                     this.updatePromptPreview();
                 });
@@ -159,88 +149,11 @@ class PromptBuilder {
         });
     }
 
-    handleTechniqueToggle(techniqueId, isChecked) {
-        if (isChecked) {
-            this.selectedTechniques.add(techniqueId);
-        } else {
-            this.selectedTechniques.delete(techniqueId);
-        }
-        
-        this.updateSelectedTechniquesDisplay();
-        this.updatePromptPreview();
-    }
-
-    updateSelectedTechniquesDisplay() {
-        const countBadge = document.getElementById('technique-count');
-        const summaryContainer = document.getElementById('selected-techniques-summary');
-        const listContainer = document.getElementById('selected-techniques-list');
-        
-        // Update count badge
-        if (countBadge) {
-            countBadge.textContent = this.selectedTechniques.size;
-        }
-        
-        // Show/hide summary section
-        if (summaryContainer) {
-            if (this.selectedTechniques.size === 0) {
-                summaryContainer.style.display = 'none';
-            } else {
-                summaryContainer.style.display = 'block';
-            }
-        }
-        
-        // Update selected techniques list
-        if (listContainer) {
-            if (this.selectedTechniques.size === 0) {
-                listContainer.innerHTML = '';
-            } else {
-                listContainer.innerHTML = Array.from(this.selectedTechniques).map(id => {
-                    const technique = this.techniqueData.get(id);
-                    return `
-                        <div class="selected-technique-tag">
-                            <span>${technique.name}</span>
-                            <button class="remove-technique" data-technique="${id}" title="Remove">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    `;
-                }).join('');
-                
-                // Add remove handlers
-                listContainer.querySelectorAll('.remove-technique').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const techniqueId = btn.dataset.technique;
-                        this.selectedTechniques.delete(techniqueId);
-                        const checkbox = document.getElementById(`technique-${techniqueId}`);
-                        if (checkbox) {
-                            checkbox.checked = false;
-                            // Update visual state
-                            const item = checkbox.closest('.technique-selector-item');
-                            if (item) {
-                                item.classList.remove('selected');
-                            }
-                        }
-                        this.updateSelectedTechniquesDisplay();
-                        this.updatePromptPreview();
-                    });
-                });
-            }
-        }
-    }
-
     updatePromptPreview() {
         const preview = document.getElementById('prompt-preview');
         if (!preview) return;
         
         let prompt = '';
-        
-        // Build technique instructions
-        if (this.selectedTechniques.size > 0) {
-            const techniqueInstructions = this.buildTechniqueInstructions();
-            if (techniqueInstructions) {
-                prompt += techniqueInstructions + '\n\n';
-            }
-        }
         
         // Add base prompt if present
         if (this.promptData.basePrompt.trim()) {
@@ -258,7 +171,7 @@ class PromptBuilder {
         }
         
         // Set the preview content
-        const finalPrompt = prompt.trim() || 'Select techniques and fill in the fields above to see your prompt here...';
+        const finalPrompt = prompt.trim() || 'Fill in the fields above to see your prompt here...';
         preview.textContent = finalPrompt;
         
         // Update token count
@@ -269,140 +182,6 @@ class PromptBuilder {
         if (copyBtn) {
             copyBtn.disabled = !prompt.trim();
         }
-    }
-
-    buildTechniqueInstructions() {
-        if (this.selectedTechniques.size === 0) {
-            return '';
-        }
-
-        const instructions = [];
-        
-        // Debug logging
-        console.log('🔍 Building instructions for techniques:', Array.from(this.selectedTechniques));
-        
-        // Add instructions based on selected technique IDs from the actual data
-        for (const techniqueId of this.selectedTechniques) {
-            const technique = this.techniqueData.get(techniqueId);
-            if (technique) {
-                console.log(`📝 Processing technique: ${techniqueId} (${technique.name})`);
-                
-                // Use exact technique IDs for precise matching
-                switch (techniqueId) {
-                    // Basic Concepts
-                    case 'basic-prompting':
-                        instructions.push('Provide clear, specific instructions for the task.');
-                        break;
-                    case 'few-shot-learning':
-                        instructions.push('Learn from the examples provided and apply similar patterns to solve this task.');
-                        break;
-                    case 'zero-shot-learning':
-                        instructions.push('Approach this task using your general knowledge without specific examples.');
-                        break;
-                    case 'one-shot-learning':
-                        instructions.push('Use the single example provided to understand the pattern and apply it.');
-                        break;
-                    case 'in-context-learning':
-                        instructions.push('Use the demonstrations provided in context to understand the task pattern.');
-                        break;
-                    case 'role-prompting':
-                        if (!this.promptData.basePrompt.trim()) {
-                            instructions.push('Approach this task with appropriate domain expertise and professional insight.');
-                        }
-                        break;
-                    case 'instructed-prompting':
-                        instructions.push('Follow the explicit instructions provided carefully.');
-                        break;
-
-                    // Reasoning Frameworks
-                    case 'chain-of-thought':
-                        instructions.push('Think through this step-by-step and show your reasoning.');
-                        break;
-                    case 'zero-shot-cot':
-                        instructions.push("Let's think step by step.");
-                        break;
-                    case 'few-shot-cot':
-                        instructions.push('Follow the reasoning pattern shown in the examples.');
-                        break;
-                    case 'tree-of-thoughts':
-                        instructions.push('Explore multiple approaches and evaluate each one systematically.');
-                        break;
-                    case 'least-to-most-prompting':
-                        instructions.push('Break down this complex problem into simpler subproblems and solve them sequentially.');
-                        break;
-                    case 'step-back-prompting':
-                        instructions.push('Step back and consider the broader principles before solving the specific problem.');
-                        break;
-                    case 'plan-and-solve-prompting':
-                        instructions.push('First devise a clear plan to solve this problem, then execute the plan step by step.');
-                        break;
-                    case 'program-of-thoughts':
-                        instructions.push('Express your reasoning as executable steps or pseudo-code when appropriate.');
-                        break;
-
-                    // Self-Improvement
-                    case 'self-consistency':
-                        instructions.push('Generate multiple reasoning paths and select the most consistent answer.');
-                        break;
-                    case 'universal-self-consistency':
-                        instructions.push('Apply self-consistency across different reasoning approaches and formats.');
-                        break;
-                    case 'self-correction':
-                        instructions.push('After your initial response, review it for errors and provide a corrected version.');
-                        break;
-                    case 'self-refine':
-                        instructions.push('Generate your response, then iteratively refine it based on self-feedback.');
-                        break;
-                    case 'self-verification':
-                        instructions.push('Verify the correctness of your answer by checking your work.');
-                        break;
-                    case 'metacognitive-prompting':
-                        instructions.push('Reflect on your thinking process and reasoning strategies before and during problem-solving.');
-                        break;
-                    case 'self-generated-icl':
-                        instructions.push('Generate your own relevant examples to guide the reasoning process.');
-                        break;
-                    case 'self-ask':
-                        instructions.push('Ask yourself follow-up questions to clarify and improve your reasoning.');
-                        break;
-                    case 'chain-of-verification':
-                        instructions.push('After your initial response, create verification questions and answer them to improve accuracy.');
-                        break;
-
-                    // Agent & Tool Use
-                    case 'react':
-                        instructions.push('Use reasoning and acting in an interleaved manner: think, then act, then observe.');
-                        break;
-                    case 'agent-based-prompting':
-                        instructions.push('Approach this as an autonomous agent that can make decisions and take actions.');
-                        break;
-
-                    // Specialized Applications
-                    case 'scot':
-                        instructions.push('Apply structured, step-by-step reasoning appropriate for this domain.');
-                        break;
-                    case 'mathprompter':
-                        instructions.push('Solve this mathematical problem using clear, systematic steps.');
-                        break;
-                    case 'chain-of-code':
-                        instructions.push('Combine natural language reasoning with code execution for problem solving.');
-                        break;
-
-                    default:
-                        // For techniques without specific instructions, use a generic approach
-                        console.log(`⚠️ No specific instruction for: ${techniqueId}`);
-                        instructions.push(`Apply the ${technique.name} technique to enhance your response.`);
-                }
-            } else {
-                console.error(`❌ Technique not found: ${techniqueId}`);
-            }
-        }
-        
-        console.log('📋 Generated instructions:', instructions);
-        
-        // Remove duplicates and return
-        const uniqueInstructions = [...new Set(instructions)];
-        return uniqueInstructions.join(' ');
     }
 
     updateTokenCount(text) {
@@ -485,30 +264,7 @@ class PromptBuilder {
                 </div>
             ` : ''}
             
-            <button class="button primary add-to-prompt-button" data-technique="${techniqueId}">
-                ${this.selectedTechniques.has(techniqueId) ? 'Remove from Prompt' : 'Add to Prompt'}
-            </button>
         `;
-        
-        // Add button handler
-        modalBody.querySelector('.add-to-prompt-button').addEventListener('click', (e) => {
-            const isSelected = this.selectedTechniques.has(techniqueId);
-            this.handleTechniqueToggle(techniqueId, !isSelected);
-            
-            // Update checkbox
-            const checkbox = document.getElementById(`technique-${techniqueId}`);
-            if (checkbox) {
-                checkbox.checked = !isSelected;
-                // Update visual state
-                const item = checkbox.closest('.technique-selector-item');
-                if (item) {
-                    item.classList.toggle('selected', !isSelected);
-                }
-            }
-            
-            // Update button text
-            e.target.textContent = isSelected ? 'Add to Prompt' : 'Remove from Prompt';
-        });
         
         modal.style.display = 'block';
     }
@@ -518,7 +274,7 @@ class PromptBuilder {
         if (!preview) return;
         
         const text = preview.textContent;
-        if (text && text !== 'Select techniques and fill in the fields above to see your prompt here...') {
+        if (text && text !== 'Fill in the fields above to see your prompt here...') {
             navigator.clipboard.writeText(text).then(() => {
                 const btn = document.getElementById('copy-prompt-button');
                 const originalHTML = btn.innerHTML;
@@ -536,30 +292,20 @@ class PromptBuilder {
     }
 
     clearAll() {
-        if (confirm('Clear all selections and inputs? This action cannot be undone.')) {
-            // Clear selections
-            this.selectedTechniques.clear();
+        if (confirm('Clear all inputs? This action cannot be undone.')) {
+            // Clear prompt data
             this.promptData = {
                 basePrompt: '',
                 taskDescription: '',
                 outputFormat: ''
             };
             
-            // Clear UI
-            document.querySelectorAll('#technique-selector input[type="checkbox"]').forEach(cb => {
-                cb.checked = false;
-                const item = cb.closest('.technique-selector-item');
-                if (item) {
-                    item.classList.remove('selected');
-                }
-            });
-            
+            // Clear UI inputs
             document.getElementById('base-prompt').value = '';
             document.getElementById('task-description').value = '';
             document.getElementById('output-format').value = '';
             
-            // Update displays
-            this.updateSelectedTechniquesDisplay();
+            // Update display
             this.updatePromptPreview();
             
             this.showMessage('All cleared successfully', 'info');
@@ -568,7 +314,7 @@ class PromptBuilder {
 
     savePrompt() {
         const preview = document.getElementById('prompt-preview');
-        if (!preview || preview.textContent === 'Select techniques and fill in the fields above to see your prompt here...') {
+        if (!preview || preview.textContent === 'Fill in the fields above to see your prompt here...') {
             this.showMessage('No prompt to save', 'error');
             return;
         }
@@ -580,7 +326,6 @@ class PromptBuilder {
         savedPrompts.push({
             name,
             prompt: preview.textContent,
-            techniques: Array.from(this.selectedTechniques),
             data: this.promptData,
             timestamp: new Date().toISOString()
         });
@@ -591,17 +336,13 @@ class PromptBuilder {
 
     exportPrompt() {
         const preview = document.getElementById('prompt-preview');
-        if (!preview || preview.textContent === 'Select techniques and fill in the fields above to see your prompt here...') {
+        if (!preview || preview.textContent === 'Fill in the fields above to see your prompt here...') {
             this.showMessage('No prompt to export', 'error');
             return;
         }
         
         const exportData = {
             prompt: preview.textContent,
-            techniques: Array.from(this.selectedTechniques).map(id => {
-                const technique = this.techniqueData.get(id);
-                return { id, name: technique.name };
-            }),
             configuration: this.promptData,
             metadata: {
                 exported: new Date().toISOString(),

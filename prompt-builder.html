@@ -329,9 +329,10 @@
             gap: 6px;
         }
 
-        .technique-selector-item {
+        .technique-reference-item {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             padding: 8px 12px;
             border-radius: 6px;
             background: #fff;
@@ -340,26 +341,17 @@
             cursor: pointer;
         }
 
-        .technique-selector-item:hover {
+        .technique-reference-item:hover {
             background: #f0f5ff;
             border-color: #4a6cf7;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(74, 108, 247, 0.1);
         }
 
-        .technique-selector-item.selected {
-            background: #e6f0ff;
-            border-color: #4a6cf7;
-            box-shadow: 0 2px 4px rgba(74, 108, 247, 0.1);
-        }
-
-        .technique-selector-item input[type="checkbox"] {
-            margin-right: 10px;
-        }
-
-        .technique-selector-item label {
+        .technique-name {
             flex: 1;
-            margin: 0;
-            cursor: pointer;
             font-weight: 500;
+            color: #333;
         }
 
         .technique-info-icon {
@@ -597,10 +589,9 @@
                     <!-- Left Panel: Technique Selection -->
                     <div class="left-panel">
                         <div class="panel-header">
-                            <h3><i class="fas fa-list-check"></i> Select Techniques</h3>
-                            <div class="selected-count">
-                                <span class="count-badge" id="technique-count">0</span>
-                                <span>selected</span>
+                            <h3><i class="fas fa-book"></i> Technique Reference</h3>
+                            <div class="reference-note">
+                                <span>Click for details</span>
                             </div>
                         </div>
                         
@@ -624,11 +615,6 @@
                             </div>
                         </div>
 
-                        <!-- Selected Techniques Summary -->
-                        <div class="selected-techniques-summary" id="selected-techniques-summary" style="display: none;">
-                            <h4>Active Techniques:</h4>
-                            <div id="selected-techniques-list"></div>
-                        </div>
 
                         <!-- Prompt Configuration -->
                         <div class="prompt-config">
