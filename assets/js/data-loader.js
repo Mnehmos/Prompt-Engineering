@@ -47,7 +47,8 @@ class TaxonomyDataLoader {
     async loadData() {
         try {
             // Use the utility function to load data with multiple fallback methods
-            const result = await TaxonomyDataUtils.loadDataUniversal();
+            const basePath = window.APP_CONFIG?.dataBasePath || './';
+            const result = await TaxonomyDataUtils.loadDataUniversal(basePath);
             this.categoriesData = result.categoriesData;
             this.techniquesData = result.techniquesData;
             
