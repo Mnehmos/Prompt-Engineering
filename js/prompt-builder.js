@@ -278,12 +278,43 @@ class PromptBuilder {
 
         const instructions = [];
         
+        // Debug logging
+        console.log('🔍 Building instructions for techniques:', Array.from(this.selectedTechniques));
+        
         // Add instructions based on selected technique IDs from the actual data
         for (const techniqueId of this.selectedTechniques) {
             const technique = this.techniqueData.get(techniqueId);
             if (technique) {
+                console.log(`📝 Processing technique: ${techniqueId} (${technique.name})`);
+                
                 // Use exact technique IDs for precise matching
                 switch (techniqueId) {
+                    // Basic Concepts
+                    case 'basic-prompting':
+                        instructions.push('Provide clear, specific instructions for the task.');
+                        break;
+                    case 'few-shot-learning':
+                        instructions.push('Learn from the examples provided and apply similar patterns to solve this task.');
+                        break;
+                    case 'zero-shot-learning':
+                        instructions.push('Approach this task using your general knowledge without specific examples.');
+                        break;
+                    case 'one-shot-learning':
+                        instructions.push('Use the single example provided to understand the pattern and apply it.');
+                        break;
+                    case 'in-context-learning':
+                        instructions.push('Use the demonstrations provided in context to understand the task pattern.');
+                        break;
+                    case 'role-prompting':
+                        if (!this.promptData.basePrompt.trim()) {
+                            instructions.push('Approach this task with appropriate domain expertise and professional insight.');
+                        }
+                        break;
+                    case 'instructed-prompting':
+                        instructions.push('Follow the explicit instructions provided carefully.');
+                        break;
+
+                    // Reasoning Frameworks
                     case 'chain-of-thought':
                         instructions.push('Think through this step-by-step and show your reasoning.');
                         break;
@@ -293,49 +324,8 @@ class PromptBuilder {
                     case 'few-shot-cot':
                         instructions.push('Follow the reasoning pattern shown in the examples.');
                         break;
-                    case 'self-consistency':
-                        instructions.push('Generate multiple reasoning paths and select the most consistent answer.');
-                        break;
-                    case 'universal-self-consistency':
-                        instructions.push('Apply self-consistency across different reasoning approaches and formats.');
-                        break;
                     case 'tree-of-thoughts':
                         instructions.push('Explore multiple approaches and evaluate each one systematically.');
-                        break;
-                    case 'self-correction':
-                        instructions.push('After your initial response, review it for errors and provide a corrected version.');
-                        break;
-                    case 'self-refine':
-                        instructions.push('Generate your response, then iteratively refine it based on self-feedback.');
-                        break;
-                    case 'self-verification':
-                        instructions.push('Verify the correctness of your answer by checking your work.');
-                        break;
-                    case 'role-prompting':
-                        if (!this.promptData.basePrompt.trim()) {
-                            instructions.push('Approach this task with appropriate domain expertise and professional insight.');
-                        }
-                        break;
-                    case 'few-shot-learning':
-                        instructions.push('Learn from the examples provided and apply similar patterns to solve this task.');
-                        break;
-                    case 'in-context-learning':
-                        instructions.push('Use the demonstrations provided in context to understand the task pattern.');
-                        break;
-                    case 'react':
-                        instructions.push('Use reasoning and acting in an interleaved manner: think, then act, then observe.');
-                        break;
-                    case 'metacognitive-prompting':
-                        instructions.push('Reflect on your thinking process and reasoning strategies before and during problem-solving.');
-                        break;
-                    case 'self-generated-icl':
-                        instructions.push('Generate your own relevant examples to guide the reasoning process.');
-                        break;
-                    case 'self-ask':
-                        instructions.push('Ask yourself follow-up questions to clarify and improve your reasoning.');
-                        break;
-                    case 'chain-of-verification':
-                        instructions.push('After your initial response, create verification questions and answer them to improve accuracy.');
                         break;
                     case 'least-to-most-prompting':
                         instructions.push('Break down this complex problem into simpler subproblems and solve them sequentially.');
@@ -349,18 +339,66 @@ class PromptBuilder {
                     case 'program-of-thoughts':
                         instructions.push('Express your reasoning as executable steps or pseudo-code when appropriate.');
                         break;
+
+                    // Self-Improvement
+                    case 'self-consistency':
+                        instructions.push('Generate multiple reasoning paths and select the most consistent answer.');
+                        break;
+                    case 'universal-self-consistency':
+                        instructions.push('Apply self-consistency across different reasoning approaches and formats.');
+                        break;
+                    case 'self-correction':
+                        instructions.push('After your initial response, review it for errors and provide a corrected version.');
+                        break;
+                    case 'self-refine':
+                        instructions.push('Generate your response, then iteratively refine it based on self-feedback.');
+                        break;
+                    case 'self-verification':
+                        instructions.push('Verify the correctness of your answer by checking your work.');
+                        break;
+                    case 'metacognitive-prompting':
+                        instructions.push('Reflect on your thinking process and reasoning strategies before and during problem-solving.');
+                        break;
+                    case 'self-generated-icl':
+                        instructions.push('Generate your own relevant examples to guide the reasoning process.');
+                        break;
+                    case 'self-ask':
+                        instructions.push('Ask yourself follow-up questions to clarify and improve your reasoning.');
+                        break;
+                    case 'chain-of-verification':
+                        instructions.push('After your initial response, create verification questions and answer them to improve accuracy.');
+                        break;
+
+                    // Agent & Tool Use
+                    case 'react':
+                        instructions.push('Use reasoning and acting in an interleaved manner: think, then act, then observe.');
+                        break;
+                    case 'agent-based-prompting':
+                        instructions.push('Approach this as an autonomous agent that can make decisions and take actions.');
+                        break;
+
+                    // Specialized Applications
                     case 'scot':
                         instructions.push('Apply structured, step-by-step reasoning appropriate for this domain.');
                         break;
                     case 'mathprompter':
                         instructions.push('Solve this mathematical problem using clear, systematic steps.');
                         break;
+                    case 'chain-of-code':
+                        instructions.push('Combine natural language reasoning with code execution for problem solving.');
+                        break;
+
                     default:
                         // For techniques without specific instructions, use a generic approach
+                        console.log(`⚠️ No specific instruction for: ${techniqueId}`);
                         instructions.push(`Apply the ${technique.name} technique to enhance your response.`);
                 }
+            } else {
+                console.error(`❌ Technique not found: ${techniqueId}`);
             }
         }
+        
+        console.log('📋 Generated instructions:', instructions);
         
         // Remove duplicates and return
         const uniqueInstructions = [...new Set(instructions)];
