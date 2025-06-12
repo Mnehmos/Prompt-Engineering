@@ -8,8 +8,8 @@ class TaxonomyDataUtils {
         try {
             // First, try to load via fetch (works with HTTP)
             const [categoriesResponse, techniquesResponse] = await Promise.all([
-                fetch('../data/processed/technique_categories.json'),
-                fetch('../data/processed/techniques.json')
+                fetch('data/processed/technique_categories.json'),
+                fetch('data/processed/techniques.json')
             ]);
 
             if (categoriesResponse.ok && techniquesResponse.ok) {
@@ -29,10 +29,10 @@ class TaxonomyDataUtils {
     static async loadViaScriptInjection() {
         try {
             // Load categories
-            const categoriesData = await this.loadJSONViaScript('../data/processed/technique_categories.json', 'taxonomyCategories');
+            const categoriesData = await this.loadJSONViaScript('data/processed/technique_categories.json', 'taxonomyCategories');
             
             // Load techniques
-            const techniquesData = await this.loadJSONViaScript('../data/processed/techniques.json', 'taxonomyTechniques');
+            const techniquesData = await this.loadJSONViaScript('data/processed/techniques.json', 'taxonomyTechniques');
             
             console.log(`✅ Loaded data via script injection: ${categoriesData.categories.length} categories, ${this.countTechniques(techniquesData)} techniques`);
             return { categoriesData, techniquesData };
@@ -141,8 +141,8 @@ class TaxonomyDataUtils {
             // Method 1: Standard fetch
             async () => {
                 const [categoriesResponse, techniquesResponse] = await Promise.all([
-                    fetch('../data/processed/technique_categories.json'),
-                    fetch('../data/processed/techniques.json')
+                    fetch('data/processed/technique_categories.json'),
+                    fetch('data/processed/techniques.json')
                 ]);
                 return {
                     categoriesData: await categoriesResponse.json(),
@@ -153,8 +153,8 @@ class TaxonomyDataUtils {
             // Method 2: XMLHttpRequest (better for file:// protocol)
             async () => {
                 const [categoriesData, techniquesData] = await Promise.all([
-                    this.loadJSONDirectly('../data/processed/technique_categories.json'),
-                    this.loadJSONDirectly('../data/processed/techniques.json')
+                    this.loadJSONDirectly('data/processed/technique_categories.json'),
+                    this.loadJSONDirectly('data/processed/techniques.json')
                 ]);
                 return { categoriesData, techniquesData };
             }
