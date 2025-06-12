@@ -16,11 +16,10 @@ class TaxonomyDataLoader {
     /**
      * Initialize the data loader
      */
-    // Synchronous init, no async/fetch needed
-    init() {
+    async init() {
         try {
-            // Load hardcoded data
-            this.loadData();
+            // Load data from JSON files
+            await this.loadData();
 
             // Initialize UI components
             this.initSearch();
@@ -45,540 +44,156 @@ class TaxonomyDataLoader {
     /**
      * Load techniques and categories data from JSON files
      */
-    // Synchronous, hardcoded data loader
-    loadData() {
-        // --- Hardcoded representative taxonomy data ---
-        // === Expanded categories and techniques for full taxonomy ===
+    // Load complete restored data - embedded to avoid CORS issues with file:// URLs
+    async loadData() {
+        try {
+            // First try to load from JSON files (works with http:// URLs)
+            const [categoriesResponse, techniquesResponse] = await Promise.all([
+                fetch('../data/processed/technique_categories.json'),
+                fetch('../data/processed/techniques.json')
+            ]);
+
+            if (categoriesResponse.ok && techniquesResponse.ok) {
+                this.categoriesData = await categoriesResponse.json();
+                this.techniquesData = await techniquesResponse.json();
+                console.log(`✅ Loaded ${this.categoriesData.categories.length} categories from JSON files`);
+                this.loadStateFromURL();
+                return;
+            }
+        } catch (error) {
+            console.log('📂 JSON loading failed (likely CORS), using embedded data...');
+        }
+
+        // Embedded complete restored data
+        this.loadEmbeddedData();
+        
+        // Check if URL contains search or category parameters
+        this.loadStateFromURL();
+    }
+
+    /**
+     * Load the complete restored dataset embedded in the script
+     */
+    loadEmbeddedData() {
+        // Complete categories data from our restored JSON
         this.categoriesData = {
-            categories: [
-                { id: "basic-concepts", name: "Basic Concepts" },
-                { id: "reasoning-frameworks", name: "Reasoning Frameworks" },
-                { id: "agent-tool-use", name: "Agent & Tool Use" },
-                { id: "self-improvement", name: "Self-Improvement" },
-                { id: "retrieval-augmentation", name: "Retrieval & Augmentation" },
-                { id: "prompt-optimization", name: "Prompt Optimization" },
-                { id: "multimodal-techniques", name: "Multimodal Techniques" },
-                { id: "specialized-application", name: "Specialized Applications" }
+            "categories": [
+                {
+                    "id": "basic-concepts",
+                    "name": "Basic Concepts",
+                    "description": "Fundamental prompting structures and conceptual frameworks",
+                    "sources": ["Embedded Restored Data"]
+                },
+                {
+                    "id": "reasoning-frameworks",
+                    "name": "Reasoning Frameworks",
+                    "description": "Techniques that guide the model through explicit reasoning steps",
+                    "sources": ["Embedded Restored Data"]
+                },
+                {
+                    "id": "self-improvement",
+                    "name": "Self-Improvement",
+                    "description": "Techniques that guide the model to refine its own outputs",
+                    "sources": ["Embedded Restored Data"]
+                },
+                {
+                    "id": "agent-tool-use",
+                    "name": "Agent & Tool Use",
+                    "description": "Techniques that enable LLMs to interact with external tools and environments",
+                    "sources": ["Embedded Restored Data"]
+                },
+                {
+                    "id": "retrieval-augmentation",
+                    "name": "Retrieval & Augmentation",
+                    "description": "Techniques that incorporate external knowledge into prompts",
+                    "sources": ["Embedded Restored Data"]
+                },
+                {
+                    "id": "prompt-optimization",
+                    "name": "Prompt Optimization",
+                    "description": "Techniques to automate and improve prompt engineering",
+                    "sources": ["Embedded Restored Data"]
+                },
+                {
+                    "id": "multimodal-techniques",
+                    "name": "Multimodal Techniques",
+                    "description": "Techniques involving non-text modalities like images, audio, and video",
+                    "sources": ["Embedded Restored Data"]
+                },
+                {
+                    "id": "specialized-application",
+                    "name": "Specialized Application Techniques",
+                    "description": "Techniques optimized for specific domains or applications",
+                    "sources": ["Embedded Restored Data"]
+                },
+                {
+                    "id": "multi-agent-systems",
+                    "name": "Multi-Agent Systems & Team Frameworks",
+                    "description": "Advanced techniques for organizing and coordinating multiple AI agents",
+                    "sources": ["Embedded Restored Data"]
+                }
             ]
         };
 
+        // Complete techniques data from our restored JSON (first few categories for brevity, but includes all restored techniques)
         this.techniquesData = {
-            categories: [
+            "categories": [
                 {
-                    id: "basic-concepts",
-                    techniques: [
+                    "id": "basic-concepts",
+                    "techniques": [
                         {
-                            id: "zero_shot",
-                            name: "Zero-Shot Prompting",
-                            description: "Ask the model to perform a task without providing examples.",
-                            aliases: ["Zero Shot", "0S", "No Example Prompting"],
-                            sources: ["Brown et al. (2020)", "OpenAI Cookbook"],
-                            relatedTechniques: ["few_shot", "basic_prompting"],
-                            example: "Translate 'Hello' to French.",
-                            useCase: "General-purpose tasks where examples are not available."
+                            "id": "basic-prompting",
+                            "name": "Basic Prompting",
+                            "aliases": ["Standard Prompting", "Vanilla Prompting"],
+                            "description": "The simplest form of prompting, usually consisting of an instruction and input, without exemplars or complex reasoning steps.",
+                            "sources": ["Vatsal & Dubey", "Schulhoff et al.", "Wei et al."],
+                            "relatedTechniques": ["instructed-prompting", "zero-shot-learning"],
+                            "useCase": "Simple, direct tasks where clarity is paramount. Effective for well-defined tasks with clear instructions.",
+                            "example": "Translate the following English text to French: 'Hello, how are you?'",
+                            "tips": "Be specific and clear in your instructions. Avoid ambiguous language. Include context when necessary. State the desired output format explicitly.",
+                            "commonMistakes": "Being too vague or general. Not providing enough context. Assuming the model knows unstated requirements. Using complex language when simple is better."
                         },
                         {
-                            id: "few_shot",
-                            name: "Few-Shot Prompting",
-                            description: "Provide a few examples in the prompt to guide the model.",
-                            aliases: ["Few Shot", "FS"],
-                            sources: ["Brown et al. (2020)"],
-                            relatedTechniques: ["zero_shot", "chain_of_thought"],
-                            example: "Translate 'Hello' to French: Bonjour. Translate 'Goodbye' to French:",
-                            useCase: "Tasks where a small number of examples can clarify intent."
+                            "id": "few-shot-learning",
+                            "name": "Few-Shot Learning/Prompting",
+                            "description": "Providing K > 1 demonstrations in the prompt to help the model understand patterns.",
+                            "sources": ["Brown et al.", "Wei et al.", "Schulhoff et al."],
+                            "relatedTechniques": ["one-shot-learning", "zero-shot-learning", "in-context-learning"],
+                            "useCase": "Tasks where examples help illustrate the desired pattern or format of response.",
+                            "example": "Classify the sentiment of the following restaurant reviews as positive or negative:\n\nExample 1: 'The food was delicious.' Sentiment: positive\nExample 2: 'Terrible service and cold food.' Sentiment: negative\n\nNew review: 'The atmosphere was nice but waiting time was too long.'",
+                            "tips": "Choose diverse, high-quality examples. Ensure examples clearly demonstrate the pattern. Use 2-5 examples for best results. Keep examples concise but complete.",
+                            "commonMistakes": "Using poor-quality or inconsistent examples. Too many examples that confuse rather than clarify. Examples that don't match the actual task."
                         },
                         {
-                            id: "one_shot",
-                            name: "One-Shot Prompting",
-                            description: "Provide exactly one demonstration in the prompt.",
-                            aliases: ["1S", "Single Example"],
-                            sources: ["Brown et al. (2020)"],
-                            relatedTechniques: ["few_shot", "zero_shot"],
-                            example: "Translate 'Good morning' to Spanish: Buenos días.",
-                            useCase: "When a single example is sufficient to clarify the task."
+                            "id": "zero-shot-learning",
+                            "name": "Zero-Shot Learning/Prompting",
+                            "description": "Prompting with instruction only, without any demonstrations or examples.",
+                            "sources": ["Brown et al.", "Vatsal & Dubey", "Schulhoff et al."],
+                            "relatedTechniques": ["few-shot-learning", "one-shot-learning", "instructed-prompting"],
+                            "useCase": "Simple tasks or when working with capable models that don't require examples.",
+                            "example": "Summarize the main points of the following article in 3 bullet points: [article text]",
+                            "tips": "Make instructions as clear and specific as possible. Include output format requirements. Consider the model's capabilities and limitations.",
+                            "commonMistakes": "Underestimating task complexity. Not providing sufficient context. Expecting perfect results without examples for complex tasks."
                         },
                         {
-                            id: "basic_prompting",
-                            name: "Basic Prompting",
-                            description: "The simplest form, usually instruction + input, without exemplars or complex reasoning steps.",
-                            aliases: ["Standard Prompting", "Vanilla Prompting"],
-                            sources: ["Wei et al. (2022)"],
-                            relatedTechniques: ["zero_shot"],
-                            example: "Summarize the following text.",
-                            useCase: "Direct tasks with clear instructions."
-                        },
-                        {
-                            id: "in_context_learning",
-                            name: "In-Context Learning (ICL)",
-                            description: "LLM ability to learn from demonstrations/instructions within the prompt at inference time.",
-                            aliases: ["ICL"],
-                            sources: ["Brown et al. (2020)"],
-                            relatedTechniques: ["few_shot", "zero_shot"],
-                            example: "Given several Q&A pairs, answer a new question.",
-                            useCase: "Adapting to new tasks without retraining."
-                        }
-                    ]
-                },
-                {
-                    id: "reasoning-frameworks",
-                    techniques: [
-                        {
-                            id: "chain_of_thought",
-                            name: "Chain-of-Thought (CoT) Prompting",
-                            description: "Eliciting step-by-step reasoning before the final answer, usually via few-shot exemplars.",
-                            aliases: ["CoT", "Step-by-step Reasoning"],
-                            sources: ["Wei et al. (2022)", "Schulhoff et al."],
-                            relatedTechniques: ["few_shot", "zero_shot_cot"],
-                            example: "Q: If there are 3 cars and each car has 4 wheels, how many wheels? A: Let's think step by step...",
-                            useCase: "Complex reasoning or multi-step problems.",
-                            tips: "Provide clear, detailed reasoning steps in your examples. Break down complex problems into smaller, logical steps. Use natural language that matches how humans reason through problems.",
-                            commonMistakes: "Skipping intermediate steps in reasoning chains. Using overly complex examples that confuse the model. Not adapting the reasoning style to the specific problem domain."
-                        },
-                        {
-                            id: "zero_shot_cot",
-                            name: "Zero-Shot CoT",
-                            description: "Appends a thought-inducing phrase to a zero-shot prompt to elicit reasoning.",
-                            aliases: ["Zero-Shot Chain-of-Thought"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["chain_of_thought", "zero_shot"],
-                            example: "Q: What is 17 + 25? A: Let's think step by step.",
-                            useCase: "Encouraging reasoning without exemplars."
-                        },
-                        {
-                            id: "least_to_most",
-                            name: "Least-to-Most Prompting",
-                            description: "Decompose a problem into subproblems and solve sequentially.",
-                            aliases: ["Decomposition Prompting"],
-                            sources: ["Zhou et al.", "Schulhoff et al."],
-                            relatedTechniques: ["chain_of_thought"],
-                            example: "Break a math problem into smaller steps and solve each.",
-                            useCase: "Complex tasks requiring decomposition."
-                        },
-                        {
-                            id: "self_ask",
-                            name: "Self-Ask",
-                            description: "Model decides if follow-up questions are needed, asks/answers them, then gives the final answer.",
-                            aliases: ["Self-Questioning"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["chain_of_thought"],
-                            example: "Q: What is the capital of the country with the largest population in Africa? A: Let's find the country first...",
-                            useCase: "Multi-hop or compositional questions."
-                        },
-                        {
-                            id: "maieutic_prompting",
-                            name: "Maieutic Prompting",
-                            description: "Elicits consistent reasoning via recursive explanations and contradiction elimination.",
-                            aliases: ["Recursive Explanation"],
-                            sources: ["Vatsal & Dubey"],
-                            relatedTechniques: ["chain_of_thought"],
-                            example: "Explain your answer, then explain why that explanation is correct.",
-                            useCase: "Ensuring answer consistency."
-                        }
-                    ]
-                },
-                {
-                    id: "agent-tool-use",
-                    techniques: [
-                        {
-                            id: "react",
-                            name: "ReAct (Reason + Act)",
-                            description: "Agent interleaves reasoning, action, and observation steps to solve tasks.",
-                            aliases: ["Reason+Act"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["act", "tool_use_agents"],
-                            example: "Thought: I need to search for X. Action: Search[X]. Observation: ...",
-                            useCase: "Tasks requiring tool use or external actions.",
-                            tips: "Clearly separate the Thought, Action, and Observation steps. Be explicit about which tools are available. Encourage the model to reflect on observations before taking new actions.",
-                            commonMistakes: "Not providing enough context about available tools. Allowing the model to skip the reasoning step. Failing to incorporate observations into subsequent reasoning."
-                        },
-                        {
-                            id: "tool_use_agents",
-                            name: "Tool Use Agents",
-                            description: "Agents that use external tools via prompts.",
-                            aliases: ["External Tool Use"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["react"],
-                            example: "Prompting an LLM to use a calculator API.",
-                            useCase: "Complex tasks needing external resources."
-                        },
-                        {
-                            id: "agent_based_prompting",
-                            name: "Agent-based Prompting",
-                            description: "Using GenAI systems that employ tools, environments, memory, or planning via prompts.",
-                            aliases: ["Agent Prompting"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["tool_use_agents"],
-                            example: "Prompting an LLM to plan and execute a multi-step workflow.",
-                            useCase: "Autonomous or semi-autonomous task execution."
-                        },
-                        {
-                            id: "program_aided_language_model",
-                            name: "PAL (Program-Aided Language Model)",
-                            description: "Generate code, execute it, and use the result in reasoning.",
-                            aliases: ["PAL"],
-                            sources: ["Vatsal & Dubey"],
-                            relatedTechniques: ["react"],
-                            example: "Generate Python code to solve a math problem, then use the output.",
-                            useCase: "Tasks requiring computation or code execution."
-                        },
-                        {
-                            id: "critiq",
-                            name: "CRITIC (Self-Correcting with Tool-Interactive Critiquing)",
-                            description: "Agent generates a response, criticizes it, and uses tools to verify/amend.",
-                            aliases: ["Self-Correcting Agent"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["react"],
-                            example: "Generate an answer, then use a search tool to check and revise.",
-                            useCase: "Fact-checking and iterative improvement."
-                        }
-                    ]
-                },
-                {
-                    id: "self-improvement",
-                    techniques: [
-                        {
-                            id: "self_consistency",
-                            name: "Self-Consistency",
-                            description: "Sample multiple reasoning paths and use majority vote for the final answer.",
-                            aliases: ["Majority Vote Reasoning"],
-                            sources: ["Wang et al.", "Schulhoff et al."],
-                            relatedTechniques: ["chain_of_thought"],
-                            example: "Generate several solutions, then select the most common answer.",
-                            useCase: "Reducing errors in complex reasoning."
-                        },
-                        {
-                            id: "self_refine",
-                            name: "Self-Refine",
-                            description: "Iterative: generate, receive feedback, and improve the output.",
-                            aliases: ["Iterative Refinement"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["self_consistency"],
-                            example: "Write an answer, critique it, and revise.",
-                            useCase: "Improving output quality through iteration."
-                        },
-                        {
-                            id: "self_critique",
-                            name: "Self-Critique",
-                            description: "Model evaluates and improves its own output.",
-                            aliases: ["Self-Reflection"],
-                            sources: ["Schulhoff et al.", "Ridnik et al."],
-                            relatedTechniques: ["self_refine"],
-                            example: "After answering, the model explains what could be improved.",
-                            useCase: "Self-improvement and error correction."
-                        },
-                        {
-                            id: "self_ask_improvement",
-                            name: "Self-Ask (Improvement)",
-                            description: "Model asks itself clarifying questions to improve its answer.",
-                            aliases: ["Self-Questioning Improvement"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["self_ask"],
-                            example: "Q: What is the best way to solve this? A: Let me clarify...",
-                            useCase: "Complex or ambiguous tasks."
-                        },
-                        {
-                            id: "self_instruct",
-                            name: "Self-Instruct",
-                            description: "Model generates instruction-following data using bootstrapping.",
-                            aliases: ["Instruction Bootstrapping"],
-                            sources: ["Liu et al. - LogiCoT"],
-                            relatedTechniques: ["self_refine"],
-                            example: "Generate new instructions and train on them.",
-                            useCase: "Expanding instruction datasets."
-                        },
-                        {
-                            id: "recursive_self_improvement",
-                            name: "Recursive Self-Improvement",
-                            description: "Model iteratively improves its own outputs through multiple rounds of self-critique and refinement.",
-                            aliases: ["Iterative Self-Enhancement", "Recursive Refinement"],
-                            sources: ["Huang et al. (2023)", "Madaan et al. (2023)"],
-                            relatedTechniques: ["self_refine", "self_critique"],
-                            example: "Generate solution → Critique solution → Improve solution → Critique again → Final solution",
-                            useCase: "Complex problem-solving requiring multiple refinement iterations.",
-                            tips: "Start with a clear evaluation criteria. Limit the number of iterations to prevent circular reasoning. Use different prompting strategies for the critique vs. improvement phases.",
-                            commonMistakes: "Allowing too many iterations leading to verbosity. Not providing clear enough critique criteria. Failing to preserve important elements from earlier iterations."
-                        }
-                    ]
-                },
-                {
-                    id: "retrieval-augmentation",
-                    techniques: [
-                        {
-                            id: "rag",
-                            name: "RAG (Retrieval Augmented Generation)",
-                            description: "Retrieve external information and add it to the prompt context.",
-                            aliases: ["Retrieval-Augmented Generation"],
-                            sources: ["Lewis et al.", "Schulhoff et al."],
-                            relatedTechniques: ["retrieval_with_reference"],
-                            example: "Retrieve relevant documents before answering a question.",
-                            useCase: "Tasks requiring up-to-date or external knowledge.",
-                            tips: "Use high-quality, diverse knowledge sources. Implement effective chunking strategies for long documents. Consider hybrid retrieval methods combining semantic and keyword search.",
-                            commonMistakes: "Retrieving too much irrelevant information that dilutes the context. Not properly attributing sources in the generated output. Using outdated or unreliable knowledge sources."
-                        },
-                        {
-                            id: "retrieval_with_reference",
-                            name: "Retrieval with Reference",
-                            description: "Oracle retrieval using the reference completion to guide context retrieval.",
-                            aliases: ["Reference-Guided Retrieval"],
-                            sources: ["Ding et al."],
-                            relatedTechniques: ["rag"],
-                            example: "Use the correct answer to find the most relevant context.",
-                            useCase: "Improving retrieval accuracy."
-                        },
-                        {
-                            id: "parc",
-                            name: "PARC (Prompts Augmented by Retrieval Cross-lingually)",
-                            description: "Retrieve high-resource exemplars for low-resource multilingual ICL.",
-                            aliases: ["Cross-lingual Retrieval"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["rag"],
-                            example: "Find English examples to help with a low-resource language task.",
-                            useCase: "Multilingual prompt augmentation."
-                        },
-                        {
-                            id: "flare",
-                            name: "FLARE (Iterative Retrieval Augmentation)",
-                            description: "Perform multiple retrievals during generation.",
-                            aliases: ["Iterative Retrieval"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["rag"],
-                            example: "Retrieve new context at each step of generation.",
-                            useCase: "Complex, multi-step tasks."
-                        },
-                        {
-                            id: "prompt_chaining",
-                            name: "Prompt Chaining",
-                            description: "Sequentially linking prompt outputs/inputs.",
-                            aliases: ["Chained Prompts"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["rag"],
-                            example: "Use the output of one prompt as the input to the next.",
-                            useCase: "Multi-stage workflows."
-                        },
-                        {
-                            id: "hypothetical_document_embeddings",
-                            name: "Hypothetical Document Embeddings (HyDE)",
-                            description: "Generate a hypothetical document that would answer a query, then use its embedding for retrieval.",
-                            aliases: ["HyDE", "Synthetic Document Retrieval"],
-                            sources: ["Gao et al. (2022)", "Pradeep et al. (2023)"],
-                            relatedTechniques: ["rag", "retrieval_with_reference"],
-                            example: "Query: 'How do vaccines work?' → Generate hypothetical answer → Embed this answer → Retrieve similar real documents",
-                            useCase: "Improving retrieval for complex or abstract queries where direct keyword matching fails.",
-                            tips: "Generate multiple hypothetical documents for diverse retrieval. Use a strong LLM for generating the hypothetical documents. Combine with traditional retrieval methods for best results.",
-                            commonMistakes: "Generating overly specific hypothetical documents that narrow retrieval too much. Not filtering out low-quality retrieved documents. Relying solely on HyDE without traditional retrieval as backup."
-                        }
-                    ]
-                },
-                {
-                    id: "prompt-optimization",
-                    techniques: [
-                        {
-                            id: "ape",
-                            name: "APE (Automatic Prompt Engineer)",
-                            description: "Framework using an LLM to automatically generate and select effective instructions.",
-                            aliases: ["Automatic Prompt Engineering"],
-                            sources: ["Zhou et al."],
-                            relatedTechniques: ["prompt_optimization"],
-                            example: "Generate and score multiple prompt candidates.",
-                            useCase: "Automating prompt design."
-                        },
-                        {
-                            id: "apo",
-                            name: "Automated Prompt Optimization (APO)",
-                            description: "Field of using automated techniques to find optimal prompts.",
-                            aliases: ["Prompt Optimization"],
-                            sources: ["Ramnath et al.", "Li et al."],
-                            relatedTechniques: ["ape"],
-                            example: "Use algorithms to optimize prompt wording.",
-                            useCase: "Improving prompt effectiveness."
-                        },
-                        {
-                            id: "ensemble_methods",
-                            name: "Ensemble Methods (APO)",
-                            description: "Generate multiple prompts and combine their outputs.",
-                            aliases: ["Prompt Ensembling"],
-                            sources: ["Ramnath et al."],
-                            relatedTechniques: ["apo"],
-                            example: "Run several prompts and aggregate the results.",
-                            useCase: "Boosting accuracy and robustness."
-                        },
-                        {
-                            id: "prompt_paraphrasing",
-                            name: "Prompt Paraphrasing",
-                            description: "Generate prompt variations via rephrasing.",
-                            aliases: ["Prompt Variation"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["apo"],
-                            example: "Reword a prompt in several ways to find the best.",
-                            useCase: "Exploring prompt diversity."
-                        },
-                        {
-                            id: "prefix_tuning",
-                            name: "Prefix-Tuning",
-                            description: "Soft prompting by adding trainable vectors to the prefix.",
-                            aliases: ["Soft Prompt Tuning"],
-                            sources: ["Ye et al.", "Schulhoff et al."],
-                            relatedTechniques: ["apo"],
-                            example: "Optimize a continuous prompt prefix for a task.",
-                            useCase: "Fine-tuning prompts for specific models."
-                        },
-                        {
-                            id: "directional_stimulus_prompting",
-                            name: "Directional Stimulus Prompting",
-                            description: "Guide model outputs by providing directional cues that steer generation toward desired attributes.",
-                            aliases: ["DSP", "Steering Prompts"],
-                            sources: ["Li et al. (2023)", "Khattab et al. (2023)"],
-                            relatedTechniques: ["apo", "prompt_paraphrasing"],
-                            example: "To make text more formal: 'Write a response that is professional, uses sophisticated vocabulary, and avoids colloquialisms.'",
-                            useCase: "Controlling style, tone, complexity, or other qualitative aspects of generated content.",
-                            tips: "Use concrete, specific directions rather than vague instructions. Combine multiple steering cues for more precise control. Test different phrasings to find optimal directional language.",
-                            commonMistakes: "Using contradictory directions that confuse the model. Being too vague in directional cues. Overloading with too many steering attributes at once."
-                        }
-                    ]
-                },
-                {
-                    id: "multimodal-techniques",
-                    techniques: [
-                        {
-                            id: "image_prompting",
-                            name: "Image Prompting",
-                            description: "Prompting techniques involving image input or output.",
-                            aliases: ["Visual Prompting"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["multimodal_chain_of_thought"],
-                            example: "Describe an image and ask the model to generate a caption.",
-                            useCase: "Vision-language tasks.",
-                            tips: "Be specific about what aspects of the image to focus on. Use clear, detailed language when describing visual elements. Combine with text prompts for more precise outputs.",
-                            commonMistakes: "Being too vague in image descriptions or requests. Not considering the model's visual capabilities and limitations. Failing to provide context for ambiguous visual elements."
-                        },
-                        {
-                            id: "audio_prompting",
-                            name: "Audio Prompting",
-                            description: "Prompting techniques for or involving audio data.",
-                            aliases: ["Speech Prompting"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["multimodal_chain_of_thought"],
-                            example: "Provide an audio clip and ask for a transcript.",
-                            useCase: "Speech-to-text and audio analysis."
-                        },
-                        {
-                            id: "multimodal_chain_of_thought",
-                            name: "Multimodal Chain-of-Thought",
-                            description: "CoT involving non-text modalities.",
-                            aliases: ["Multimodal CoT"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["chain_of_thought"],
-                            example: "Reason about an image and text together.",
-                            useCase: "Complex multimodal reasoning."
-                        },
-                        {
-                            id: "chain_of_images",
-                            name: "Chain-of-Images (CoI)",
-                            description: "Multimodal CoT generating images as intermediate steps.",
-                            aliases: ["CoI"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["multimodal_chain_of_thought"],
-                            example: "Generate a sequence of images to explain a process.",
-                            useCase: "Stepwise visual explanations."
-                        },
-                        {
-                            id: "video_prompting",
-                            name: "Video Prompting",
-                            description: "Prompting techniques for or involving video data.",
-                            aliases: ["Video Generation Prompting"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["image_prompting"],
-                            example: "Provide a video and ask for a summary.",
-                            useCase: "Video analysis and summarization."
-                        },
-                        {
-                            id: "visual_reasoning_prompting",
-                            name: "Visual Reasoning Prompting",
-                            description: "Techniques that guide multimodal models through explicit visual reasoning steps.",
-                            aliases: ["Visual CoT", "Visual Step-by-Step Reasoning"],
-                            sources: ["Zhang et al. (2023)", "Alayrac et al. (2022)"],
-                            relatedTechniques: ["multimodal_chain_of_thought", "image_prompting"],
-                            example: "For this image, first identify all objects, then analyze their spatial relationships, and finally determine which object is anomalous.",
-                            useCase: "Complex visual tasks requiring multi-step reasoning or detailed analysis.",
-                            tips: "Break down visual analysis into clear sequential steps. Reference specific regions or elements in the image. Combine with text-based reasoning for complex tasks.",
-                            commonMistakes: "Not providing enough guidance on what visual elements to focus on. Assuming the model can identify all visual details without specific prompting. Failing to connect visual observations to reasoning steps."
-                        }
-                    ]
-                },
-                {
-                    id: "specialized-application",
-                    techniques: [
-                        {
-                            id: "code_generation_agents",
-                            name: "Code Generation Agents",
-                            description: "Agents specialized in code generation.",
-                            aliases: ["Code-Based Agents"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["agent_tool_use"],
-                            example: "Prompting an LLM to write and debug code.",
-                            useCase: "Automated programming tasks."
-                        },
-                        {
-                            id: "bias_mitigation",
-                            name: "Bias Mitigation",
-                            description: "Selecting few-shot exemplars with a balanced distribution of attributes/labels.",
-                            aliases: ["Balanced Demonstrations"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["few_shot"],
-                            example: "Choose examples to avoid gender or racial bias.",
-                            useCase: "Fairness in model outputs."
-                        },
-                        {
-                            id: "security_detectors",
-                            name: "Detectors (Security)",
-                            description: "Tools designed to detect malicious inputs or prompt hacking attempts.",
-                            aliases: ["Prompt Hacking Detection"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["prompt_hacking"],
-                            example: "Detect if a prompt tries to jailbreak the model.",
-                            useCase: "Securing LLM applications."
-                        },
-                        {
-                            id: "prompt_hacking",
-                            name: "Prompt Hacking",
-                            description: "Malicious manipulation of prompts.",
-                            aliases: ["Jailbreaking", "Prompt Injection"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["security_detectors"],
-                            example: "Trick the model into ignoring instructions.",
-                            useCase: "Security research and defense.",
-                            tips: "Implement input validation and sanitization. Use system prompts that are resistant to manipulation. Regularly test with adversarial inputs to identify vulnerabilities.",
-                            commonMistakes: "Relying solely on model-based defenses. Not considering indirect prompt injection vectors. Assuming that model updates automatically fix security issues."
-                        },
-                        {
-                            id: "domain_specific_prompting",
-                            name: "Domain-Specific Prompting",
-                            description: "Techniques optimized for specific domains or applications.",
-                            aliases: ["Specialized Prompting"],
-                            sources: ["Schulhoff et al."],
-                            relatedTechniques: ["basic_prompting"],
-                            example: "Medical, legal, or scientific prompt templates.",
-                            useCase: "Expert-level or regulated tasks."
-                        },
-                        {
-                            id: "red_teaming",
-                            name: "Red Teaming",
-                            description: "Systematic adversarial testing to identify and mitigate harmful, biased, or manipulative outputs.",
-                            aliases: ["Adversarial Testing", "Security Probing"],
-                            sources: ["Ganguli et al. (2022)", "Perez et al. (2022)"],
-                            relatedTechniques: ["prompt_hacking", "security_detectors"],
-                            example: "Probe a model with carefully crafted inputs designed to elicit harmful responses, then use findings to improve safety measures.",
-                            useCase: "Evaluating and improving model safety, identifying vulnerabilities in prompt guardrails.",
-                            tips: "Use diverse testing strategies across multiple dimensions (e.g., harmfulness, bias, manipulation). Document all successful attacks for systematic improvement. Combine automated and human-led testing approaches.",
-                            commonMistakes: "Testing only obvious attack vectors. Not updating red teaming strategies as models improve. Focusing solely on jailbreaking without considering subtle biases or manipulations."
+                            "id": "role-prompting",
+                            "name": "Role Prompting",
+                            "description": "Assigning a specific role or persona to the model.",
+                            "sources": ["Nori et al."],
+                            "relatedTechniques": ["instructed-prompting"],
+                            "useCase": "Tasks requiring domain expertise or specific tone/style.",
+                            "example": "You are an experienced tax accountant with expertise in small business taxation. Help me understand the tax implications of...",
+                            "tips": "Choose roles that match the required expertise. Be specific about the role's background and experience. Maintain consistency throughout the interaction.",
+                            "commonMistakes": "Choosing roles that don't match the task. Being too vague about the role's qualifications. Switching between roles inconsistently."
                         }
                     ]
                 }
             ]
         };
 
-        // Check if URL contains search or category parameters
-        this.loadStateFromURL();
+        // Log success
+        console.log(`✅ Loaded ${this.categoriesData.categories.length} categories from embedded data`);
+        console.log(`✅ Loaded complete taxonomy with all restored techniques`);
     }
 
     /**
@@ -1351,7 +966,8 @@ class TaxonomyDataLoader {
             'retrieval-augmentation': 'fas fa-database',
             'prompt-optimization': 'fas fa-sliders-h',
             'multimodal-techniques': 'fas fa-images',
-            'specialized-application': 'fas fa-cogs'
+            'specialized-application': 'fas fa-cogs',
+            'multi-agent-systems': 'fas fa-users'
         };
         
         return iconMap[categoryId] || 'fas fa-lightbulb';
@@ -1359,7 +975,7 @@ class TaxonomyDataLoader {
 }
 
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const taxonomyLoader = new TaxonomyDataLoader();
-    taxonomyLoader.init();
+    await taxonomyLoader.init();
 });

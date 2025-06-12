@@ -4,6 +4,7 @@
       "id": "basic-concepts",
       "name": "Basic Concepts",
       "description": "Fundamental prompting structures and conceptual frameworks",
+      "techniqueCount": 10,
       "techniques": [
         "basic-prompting",
         "few-shot-learning",
@@ -13,13 +14,15 @@
         "cloze-prompts",
         "prefix-prompts",
         "template-prompting",
-        "instructed-prompting"
+        "instructed-prompting",
+        "role-prompting"
       ]
     },
     {
       "id": "reasoning-frameworks",
       "name": "Reasoning Frameworks",
       "description": "Techniques that guide the model through explicit reasoning steps",
+      "techniqueCount": 13,
       "techniques": [
         "chain-of-thought",
         "zero-shot-cot",
@@ -40,6 +43,7 @@
       "id": "agent-tool-use",
       "name": "Agent & Tool Use",
       "description": "Techniques that enable LLMs to interact with external tools and environments",
+      "techniqueCount": 12,
       "techniques": [
         "agent-based-prompting",
         "react",
@@ -59,6 +63,7 @@
       "id": "self-improvement",
       "name": "Self-Improvement Techniques",
       "description": "Methods for the model to reflect on and improve its own outputs",
+      "techniqueCount": 10,
       "techniques": [
         "self-consistency",
         "self-correction",
@@ -76,6 +81,7 @@
       "id": "retrieval-augmentation",
       "name": "Retrieval & Augmentation",
       "description": "Techniques that incorporate external knowledge into prompts",
+      "techniqueCount": 8,
       "techniques": [
         "rag",
         "dsp",
@@ -91,6 +97,7 @@
       "id": "prompt-optimization",
       "name": "Prompt Optimization",
       "description": "Techniques to automate and improve prompt engineering",
+      "techniqueCount": 11,
       "techniques": [
         "automated-prompt-optimization",
         "ape",
@@ -109,6 +116,7 @@
       "id": "multimodal-techniques",
       "name": "Multimodal Techniques",
       "description": "Techniques involving non-text modalities like images, audio, and video",
+      "techniqueCount": 11,
       "techniques": [
         "3d-prompting",
         "audio-prompting",
@@ -127,6 +135,7 @@
       "id": "specialized-application",
       "name": "Specialized Application Techniques",
       "description": "Techniques optimized for specific domains or applications",
+      "techniqueCount": 12,
       "techniques": [
         "alphacodium",
         "code-generation-agents",
@@ -140,6 +149,19 @@
         "modular-code-generation",
         "flow-engineering",
         "test-based-iterative-flow"
+      ]
+    },
+    {
+      "id": "multi-agent-systems",
+      "name": "Multi-Agent Systems & Team Frameworks",
+      "description": "Advanced techniques for organizing and coordinating multiple AI agents",
+      "techniqueCount": 5,
+      "techniques": [
+        "boomerang-task-delegation",
+        "mode-based-specialization",
+        "semantic-guardrails",
+        "task-boundary-enforcement",
+        "error-pattern-libraries"
       ]
     }
   ]

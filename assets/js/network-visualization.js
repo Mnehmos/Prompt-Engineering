@@ -202,6 +202,18 @@ class TechniqueNetworkVisualization {
                     "flow-engineering",
                     "test-based-iterative-flow"
                   ]
+                },
+                {
+                  "id": "multi-agent-systems",
+                  "name": "Multi-Agent Systems & Team Frameworks",
+                  "description": "Advanced techniques for organizing and coordinating multiple AI agents",
+                  "techniques": [
+                    "boomerang-task-delegation",
+                    "mode-based-specialization",
+                    "semantic-guardrails",
+                    "task-boundary-enforcement",
+                    "error-pattern-libraries"
+                  ]
                 }
               ]
             };
@@ -512,6 +524,60 @@ class TechniqueNetworkVisualization {
                   "relatedTechniques": ["chain-of-thought"],
                   "useCase": "Solving math word problems.",
                   "example": "Solve: If a train travels 60 miles in 1.5 hours, what is its average speed?"
+                }
+              ]
+            });
+
+            // Add Multi-Agent Systems & Team Frameworks
+            this.techniquesData.categories.push({
+              "id": "multi-agent-systems",
+              "name": "Multi-Agent Systems & Team Frameworks",
+              "description": "Advanced techniques for organizing and coordinating multiple AI agents",
+              "techniques": [
+                {
+                  "id": "boomerang-task-delegation",
+                  "name": "Boomerang Task Delegation",
+                  "description": "A hierarchical task decomposition pattern where complex requests are broken into subtasks, delegated to specialized modes, and their results 'boomerang' back for integration.",
+                  "sources": ["Mnehmos (2024)", "Building Structured AI Teams"],
+                  "relatedTechniques": ["mode-based-specialization", "task-boundary-enforcement"],
+                  "useCase": "Complex multi-step projects requiring coordination between specialized AI agents with different capabilities.",
+                  "example": "Orchestrator receives 'Build a web app' → Creates subtasks → Delegates 'Design architecture' to Architect mode → Delegates 'Write code' to Code mode → Integrates results"
+                },
+                {
+                  "id": "mode-based-specialization",
+                  "name": "Mode-Based Agent Specialization",
+                  "description": "Organizing AI systems into specialized operational modes, each with distinct capabilities, roles, and system prompts optimized for specific types of tasks.",
+                  "sources": ["Mnehmos (2024)", "Building Structured AI Teams"],
+                  "relatedTechniques": ["boomerang-task-delegation", "semantic-guardrails"],
+                  "useCase": "Systems requiring diverse capabilities where different types of tasks benefit from specialized approaches and constraints.",
+                  "example": "Code mode: Optimized for implementation with tool permissions for file operations. Architect mode: Focused on design with restricted file access."
+                },
+                {
+                  "id": "semantic-guardrails",
+                  "name": "Semantic Guardrails",
+                  "description": "Mode-specific validation mechanisms that monitor AI outputs for semantic drift, ensuring responses align with expected behavior and role-appropriate content.",
+                  "sources": ["Mnehmos (2024)", "Detecting and Correcting Emergent Errors"],
+                  "relatedTechniques": ["mode-based-specialization", "error-pattern-libraries"],
+                  "useCase": "Production AI systems where maintaining consistent, role-appropriate behavior is critical for reliability and user trust.",
+                  "example": "Code mode guardrails: Check for implementation completeness, technical precision, code quality. Architect mode guardrails: Ensure structured planning, avoid direct implementation."
+                },
+                {
+                  "id": "task-boundary-enforcement",
+                  "name": "Task Boundary Enforcement",
+                  "description": "Implementing strict schemas and validation to prevent errors from propagating between tasks in multi-agent systems through immutable inputs and sanitized outputs.",
+                  "sources": ["Mnehmos (2024)", "Detecting and Correcting Emergent Errors"],
+                  "relatedTechniques": ["boomerang-task-delegation", "semantic-guardrails"],
+                  "useCase": "Complex multi-agent workflows where error containment and task isolation are essential for system stability and debugging.",
+                  "example": "Define JSON schemas for task inputs/outputs → Validate at task creation → Treat contextual data as immutable → Sanitize results before parent integration"
+                },
+                {
+                  "id": "error-pattern-libraries",
+                  "name": "Error Pattern Libraries",
+                  "description": "Community-maintained repositories of common AI system errors, their causes, reproduction steps, and correction strategies to enable systematic learning from failures.",
+                  "sources": ["Mnehmos (2024)", "Detecting and Correcting Emergent Errors"],
+                  "relatedTechniques": ["semantic-guardrails"],
+                  "useCase": "Organizations and communities running AI systems that need to systematically capture, share, and learn from operational errors and edge cases.",
+                  "example": "Error: 'Semantic drift in Code mode' → Cause: 'Overly general system prompt' → Reproduction: 'Ask code mode to write poetry' → Solution: 'Add technical focus guardrail'"
                 }
               ]
             });

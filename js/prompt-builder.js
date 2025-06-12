@@ -212,6 +212,7 @@ class PromptBuilder {
         // into a flat map with extra category information for easy access
         
         // Comprehensive technique data (embedded to avoid CORS issues)
+        // SYNCHRONIZED with data/processed/techniques.json - Contains all 9 categories and complete technique definitions
         const techniquesData = {
             "categories": [
                 {
@@ -227,7 +228,9 @@ class PromptBuilder {
                             "sources": ["Vatsal & Dubey", "Schulhoff et al.", "Wei et al."],
                             "relatedTechniques": ["instructed-prompting", "zero-shot-learning"],
                             "useCase": "Simple, direct tasks where clarity is paramount. Effective for well-defined tasks with clear instructions.",
-                            "example": "Translate the following English text to French: 'Hello, how are you?'"
+                            "example": "Translate the following English text to French: 'Hello, how are you?'",
+                            "tips": "Be specific and clear in your instructions. Avoid ambiguous language. Include context when necessary. State the desired output format explicitly.",
+                            "commonMistakes": "Being too vague or general. Not providing enough context. Assuming the model knows unstated requirements. Using complex language when simple is better."
                         },
                         {
                             "id": "few-shot-learning",
@@ -236,7 +239,9 @@ class PromptBuilder {
                             "sources": ["Brown et al.", "Wei et al.", "Schulhoff et al."],
                             "relatedTechniques": ["one-shot-learning", "zero-shot-learning", "in-context-learning"],
                             "useCase": "Tasks where examples help illustrate the desired pattern or format of response.",
-                            "example": "Classify the sentiment of the following restaurant reviews as positive or negative:\n\nExample 1: 'The food was delicious.' Sentiment: positive\nExample 2: 'Terrible service and cold food.' Sentiment: negative\n\nNew review: 'The atmosphere was nice but waiting time was too long.'"
+                            "example": "Classify the sentiment of the following restaurant reviews as positive or negative:\n\nExample 1: 'The food was delicious.' Sentiment: positive\nExample 2: 'Terrible service and cold food.' Sentiment: negative\n\nNew review: 'The atmosphere was nice but waiting time was too long.'",
+                            "tips": "Choose diverse, high-quality examples. Ensure examples clearly demonstrate the pattern. Use 2-5 examples for best results. Keep examples concise but complete.",
+                            "commonMistakes": "Using poor-quality or inconsistent examples. Too many examples that confuse rather than clarify. Examples that don't match the actual task."
                         },
                         {
                             "id": "zero-shot-learning",
@@ -245,7 +250,9 @@ class PromptBuilder {
                             "sources": ["Brown et al.", "Vatsal & Dubey", "Schulhoff et al."],
                             "relatedTechniques": ["few-shot-learning", "one-shot-learning", "instructed-prompting"],
                             "useCase": "Simple tasks or when working with capable models that don't require examples.",
-                            "example": "Summarize the main points of the following article in 3 bullet points: [article text]"
+                            "example": "Summarize the main points of the following article in 3 bullet points: [article text]",
+                            "tips": "Make instructions as clear and specific as possible. Include output format requirements. Consider the model's capabilities and limitations.",
+                            "commonMistakes": "Underestimating task complexity. Not providing sufficient context. Expecting perfect results without examples for complex tasks."
                         },
                         {
                             "id": "one-shot-learning",
@@ -254,16 +261,9 @@ class PromptBuilder {
                             "sources": ["Brown et al.", "Schulhoff et al."],
                             "relatedTechniques": ["few-shot-learning", "zero-shot-learning", "in-context-learning"],
                             "useCase": "When a single example sufficiently conveys the pattern or when context length is limited.",
-                            "example": "Translate English to French:\nEnglish: The weather is beautiful today.\nFrench: Le temps est beau aujourd'hui.\n\nEnglish: I would like to order dinner."
-                        },
-                        {
-                            "id": "role-prompting",
-                            "name": "Role Prompting",
-                            "description": "Assigning a specific role or persona to the model.",
-                            "sources": ["Nori et al."],
-                            "relatedTechniques": ["instructed-prompting"],
-                            "useCase": "Tasks requiring domain expertise or specific tone/style.",
-                            "example": "You are an experienced tax accountant with expertise in small business taxation. Help me understand the tax implications of..."
+                            "example": "Translate English to French:\nEnglish: The weather is beautiful today.\nFrench: Le temps est beau aujourd'hui.\n\nEnglish: I would like to order dinner.",
+                            "tips": "Choose the most representative example possible. Ensure the example is clear and unambiguous. Make sure the pattern is obvious from one example.",
+                            "commonMistakes": "Choosing an example that doesn't clearly show the pattern. Using edge cases as the single example. Overcomplicating the example."
                         },
                         {
                             "id": "in-context-learning",
@@ -272,7 +272,9 @@ class PromptBuilder {
                             "sources": ["Brown et al.", "Schulhoff et al."],
                             "relatedTechniques": ["few-shot-learning", "exemplar-selection", "exemplar-ordering"],
                             "useCase": "Achieving task-specific behavior without fine-tuning, particularly effective for classification, translation, and reasoning tasks.",
-                            "example": "Q: What is the capital of France?\nA: Paris\n\nQ: What is the capital of Japan?\nA: Tokyo\n\nQ: What is the capital of Australia?\nA:"
+                            "example": "Q: What is the capital of France?\nA: Paris\n\nQ: What is the capital of Japan?\nA: Tokyo\n\nQ: What is the capital of Australia?\nA:",
+                            "tips": "Provide clear, consistent examples. Maintain the same format throughout. Use examples that cover the range of expected inputs.",
+                            "commonMistakes": "Inconsistent formatting between examples. Examples that don't represent the full scope of the task. Too much variation in example quality."
                         },
                         {
                             "id": "cloze-prompts",
@@ -284,13 +286,44 @@ class PromptBuilder {
                             "example": "The capital of France is _____."
                         },
                         {
+                            "id": "prefix-prompts",
+                            "name": "Prefix Prompts",
+                            "description": "Standard prompt format where the prediction follows the input.",
+                            "sources": ["Wang et al. - Healthcare Survey", "Schulhoff et al."],
+                            "relatedTechniques": ["cloze-prompts", "continuous-prompt"],
+                            "useCase": "Most general-purpose prompting scenarios where text completion is desired.",
+                            "example": "Write a short poem about autumn:"
+                        },
+                        {
+                            "id": "template-prompting",
+                            "name": "Templating (Prompting)",
+                            "description": "Using functions with variable slots to construct prompts in a systematic way.",
+                            "sources": ["Schulhoff et al."],
+                            "relatedTechniques": ["basic-prompting", "instruction-selection"],
+                            "useCase": "When standardizing prompts across multiple inputs or creating programmatic interfaces.",
+                            "example": "def generate_summary_prompt(text):\n    return f\"Summarize the following text in 3 sentences:\\n\\n{text}\""
+                        },
+                        {
                             "id": "instructed-prompting",
                             "name": "Instructed Prompting",
                             "description": "Explicitly instructing the LLM with clear directions about the task.",
                             "sources": ["Vatsal & Dubey"],
                             "relatedTechniques": ["basic-prompting", "zero-shot-learning"],
                             "useCase": "Any task where specific behavioral guidance is needed.",
-                            "example": "You are a professional translator. Translate the following English text to Spanish, maintaining the same tone and formality level:"
+                            "example": "You are a professional translator. Translate the following English text to Spanish, maintaining the same tone and formality level:",
+                            "tips": "Be explicit and detailed in your instructions. Use clear, imperative language. Break down complex instructions into steps. Specify what to avoid as well as what to do.",
+                            "commonMistakes": "Being too vague or ambiguous in instructions. Not providing enough detail about the expected process. Conflicting or contradictory instructions."
+                        },
+                        {
+                            "id": "role-prompting",
+                            "name": "Role Prompting",
+                            "description": "Assigning a specific role or persona to the model.",
+                            "sources": ["Nori et al."],
+                            "relatedTechniques": ["instructed-prompting"],
+                            "useCase": "Tasks requiring domain expertise or specific tone/style.",
+                            "example": "You are an experienced tax accountant with expertise in small business taxation. Help me understand the tax implications of...",
+                            "tips": "Choose roles that match the required expertise. Be specific about the role's background and experience. Maintain consistency throughout the interaction.",
+                            "commonMistakes": "Choosing roles that don't match the task. Being too vague about the role's qualifications. Switching between roles inconsistently."
                         }
                     ]
                 },
@@ -306,7 +339,9 @@ class PromptBuilder {
                             "sources": ["Wei et al.", "Schulhoff et al.", "Vatsal & Dubey", "Wang et al. - Self-Consistency"],
                             "relatedTechniques": ["zero-shot-cot", "few-shot-cot", "self-consistency"],
                             "useCase": "Complex reasoning tasks, math problems, logical deductions, and multi-step decision processes.",
-                            "example": "Question: Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?\n\nLet's think about this step-by-step:\n1. Roger starts with 5 tennis balls\n2. He buys 2 cans of tennis balls, with 3 balls per can\n3. So he gets 2 × 3 = 6 new tennis balls\n4. In total, he has 5 + 6 = 11 tennis balls\n\nAnswer: 11 tennis balls"
+                            "example": "Question: Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?\n\nLet's think about this step-by-step:\n1. Roger starts with 5 tennis balls\n2. He buys 2 cans of tennis balls, with 3 balls per can\n3. So he gets 2 × 3 = 6 new tennis balls\n4. In total, he has 5 + 6 = 11 tennis balls\n\nAnswer: 11 tennis balls",
+                            "tips": "Provide clear, detailed reasoning steps in your examples. Break down complex problems into smaller, logical steps. Use natural language that matches how humans reason through problems.",
+                            "commonMistakes": "Skipping intermediate steps in reasoning chains. Using overly complex examples that confuse the model. Not adapting the reasoning style to the specific problem domain."
                         },
                         {
                             "id": "zero-shot-cot",
@@ -315,16 +350,9 @@ class PromptBuilder {
                             "sources": ["Schulhoff et al.", "Vatsal & Dubey"],
                             "relatedTechniques": ["chain-of-thought", "few-shot-cot"],
                             "useCase": "When example chains of reasoning aren't available but step-by-step thinking is still beneficial.",
-                            "example": "Question: If a store has 10 apples and 3 people each buy 2 apples, how many apples are left?\n\nLet's think step by step."
-                        },
-                        {
-                            "id": "tree-of-thoughts",
-                            "name": "Tree-of-Thoughts (ToT)",
-                            "description": "Exploring multiple reasoning paths in a tree structure using generate, evaluate, and search methods.",
-                            "sources": ["Yao et al.", "Vatsal & Dubey", "Schulhoff et al."],
-                            "relatedTechniques": ["chain-of-thought", "graph-of-thoughts", "self-consistency"],
-                            "useCase": "Complex problems with multiple possible approaches, where exploring alternatives is beneficial.",
-                            "example": "Problem: Find the optimal strategy for the game of 24 (reach 24 using +, -, *, / with cards 3, 9, 4, 1).\n\nPath 1: (3 + 9) * (4 - 1) = 12 * 3 = 36 (invalid)\nPath 2: (3 * 9 - 4) - 1 = 27 - 4 - 1 = 22 (invalid)\nPath 3: (3 + 1) * 9 - 4 = 4 * 9 - 4 = 36 - 4 = 32 (invalid)\nPath 4: 3 * (9 - 1) - 4 = 3 * 8 - 4 = 24 - 4 = 20 (invalid)\nPath 5: (9 - 1) * (4 - 3) = 8 * 1 = 8 (invalid)\nPath 6: 3 * 9 - 4 - 1 = 27 - 4 - 1 = 22 (invalid)\nPath 7: 3 * (9 - 4) + 1 = 3 * 5 + 1 = 15 + 1 = 16 (invalid)\nPath 8: (3 + 9) * 4 / (1 + 3) = 12 * 4 / 4 = 12 (invalid)\nPath 9: 9 * 4 / 3 + 1 = 36 / 3 + 1 = 12 + 1 = 13 (invalid)\nPath 10: (9 - 1) * 3 = 8 * 3 = 24 (valid!)"
+                            "example": "Question: If a store has 10 apples and 3 people each buy 2 apples, how many apples are left?\n\nLet's think step by step.",
+                            "tips": "Use clear thought-inducing phrases like \"Let's think step by step\" or \"Let's work through this systematically.\" Be explicit about wanting reasoning.",
+                            "commonMistakes": "Not being explicit enough about wanting step-by-step reasoning. Using phrases that don't actually trigger reasoning. Expecting detailed reasoning without proper prompting."
                         },
                         {
                             "id": "few-shot-cot",
@@ -333,7 +361,27 @@ class PromptBuilder {
                             "sources": ["Schulhoff et al.", "Vatsal & Dubey"],
                             "relatedTechniques": ["chain-of-thought", "zero-shot-cot"],
                             "useCase": "Complex reasoning tasks where the model needs to learn specific reasoning patterns.",
-                            "example": "Q: Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?\nA: Roger starts with 5 tennis balls. He buys 2 cans, each with 3 tennis balls. So he gets 2×3=6 more tennis balls. In total, he has 5+6=11 tennis balls.\n\nQ: Alice has 7 books. She gives 2 books to Bob and buys 3 more books. How many books does she have now?"
+                            "example": "Q: Roger has 5 tennis balls. He buys 2 cans, each with 3 tennis balls. How many tennis balls does he have now?\nA: Roger starts with 5 tennis balls. He buys 2 cans, each with 3 tennis balls. So he gets 2×3=6 more tennis balls. In total, he has 5+6=11 tennis balls.\n\nQ: Alice has 7 books. She gives 2 books to Bob and buys 3 more books. How many books does she have now?"
+                        },
+                        {
+                            "id": "tree-of-thoughts",
+                            "name": "Tree-of-Thoughts (ToT)",
+                            "description": "Exploring multiple reasoning paths in a tree structure using generate, evaluate, and search methods.",
+                            "sources": ["Yao et al.", "Vatsal & Dubey", "Schulhoff et al."],
+                            "relatedTechniques": ["chain-of-thought", "graph-of-thoughts", "self-consistency"],
+                            "useCase": "Complex problems with multiple possible approaches, where exploring alternatives is beneficial.",
+                            "example": "Problem: Find the optimal strategy for the game of 24 (reach 24 using +, -, *, / with cards 3, 9, 4, 1).\n\nPath 1: (3 + 9) * (4 - 1) = 12 * 3 = 36 (invalid)\nPath 2: (3 * 9 - 4) - 1 = 27 - 4 - 1 = 22 (invalid)\nPath 3: (3 + 1) * 9 - 4 = 4 * 9 - 4 = 36 - 4 = 32 (invalid)\nPath 4: 3 * (9 - 1) - 4 = 3 * 8 - 4 = 24 - 4 = 20 (invalid)\nPath 5: (9 - 1) * (4 - 3) = 8 * 1 = 8 (invalid)\nPath 6: 3 * 9 - 4 - 1 = 27 - 4 - 1 = 22 (invalid)\nPath 7: 3 * (9 - 4) + 1 = 3 * 5 + 1 = 15 + 1 = 16 (invalid)\nPath 8: (3 + 9) * 4 / (1 + 3) = 12 * 4 / 4 = 12 (invalid)\nPath 9: 9 * 4 / 3 + 1 = 36 / 3 + 1 = 12 + 1 = 13 (invalid)\nPath 10: (9 - 1) * 3 = 8 * 3 = 24 (valid!)",
+                            "tips": "Encourage exploration of multiple paths. Use evaluation criteria for different approaches. Be prepared for longer response times. Structure the exploration systematically.",
+                            "commonMistakes": "Not providing clear evaluation criteria. Allowing too much branching without focus. Not synthesizing insights from different paths."
+                        },
+                        {
+                            "id": "skeleton-of-thought",
+                            "name": "Skeleton-of-Thought (SoT)",
+                            "description": "A two-stage approach: first generating a skeleton (outline) and then expanding points in parallel.",
+                            "sources": ["Ning et al.", "Schulhoff et al."],
+                            "relatedTechniques": ["tree-of-thoughts", "parallel-point-expanding"],
+                            "useCase": "Long-form content generation where structure is important, like essays or reports.",
+                            "example": "Task: Write an essay about climate change.\n\nSkeleton:\n1. Introduction to climate change\n2. Causes of climate change\n3. Effects on ecosystems\n4. Economic impacts\n5. Potential solutions\n6. Conclusion\n\n[Then each point is expanded in parallel]"
                         },
                         {
                             "id": "self-consistency",
@@ -342,7 +390,9 @@ class PromptBuilder {
                             "sources": ["Wang et al., 2022"],
                             "relatedTechniques": ["chain-of-thought", "tree-of-thoughts"],
                             "useCase": "Improving answer reliability in complex reasoning tasks.",
-                            "example": "Generate several distinct reasoning paths for this problem, then select the most consistent answer that appears across multiple paths."
+                            "example": "Generate several distinct reasoning paths for this problem, then select the most consistent answer that appears across multiple paths.",
+                            "tips": "Generate multiple reasoning paths with different approaches. Look for the most common final answer. Use temperature > 0 for diversity in reasoning.",
+                            "commonMistakes": "Not generating enough diverse paths. Focusing only on the final answer rather than reasoning quality. Using identical reasoning approaches."
                         },
                         {
                             "id": "react",
@@ -351,7 +401,9 @@ class PromptBuilder {
                             "sources": ["Yao et al., 2022"],
                             "relatedTechniques": ["tree-of-thoughts", "chain-of-thought"],
                             "useCase": "Complex tasks requiring both reasoning and actions like tool use.",
-                            "example": "Thought: I need to understand what the question is asking.\nAction: Analyze the question\nObservation: The question is about calculating compound interest.\nThought: To calculate compound interest, I need the formula A = P(1 + r/n)^(nt)."
+                            "example": "Thought: I need to understand what the question is asking.\nAction: Analyze the question\nObservation: The question is about calculating compound interest.\nThought: To calculate compound interest, I need the formula A = P(1 + r/n)^(nt).",
+                            "tips": "Clearly separate the Thought, Action, and Observation steps. Be explicit about which tools are available. Encourage the model to reflect on observations before taking new actions.",
+                            "commonMistakes": "Not providing enough context about available tools. Allowing the model to skip the reasoning step. Failing to incorporate observations into subsequent reasoning."
                         }
                     ]
                 },
@@ -367,7 +419,9 @@ class PromptBuilder {
                             "sources": ["Madaan et al., 2023"],
                             "relatedTechniques": ["self-critique", "self-evaluation"],
                             "useCase": "Error reduction, iterative improvement.",
-                            "example": "After generating your answer, review it for any errors or issues, and provide a corrected version."
+                            "example": "After generating your answer, review it for any errors or issues, and provide a corrected version.",
+                            "tips": "Be explicit about the review process. Provide specific criteria for evaluation. Encourage honest self-assessment. Allow multiple revision rounds if needed.",
+                            "commonMistakes": "Not providing clear evaluation criteria. Being too lenient or too harsh in self-evaluation. Not actually making meaningful corrections."
                         },
                         {
                             "id": "self-critique",
@@ -386,6 +440,15 @@ class PromptBuilder {
                             "relatedTechniques": ["self-correction", "self-evaluation"],
                             "useCase": "Fact-checking, ensuring solution validity before presenting to users.",
                             "example": "Solve this problem. Then verify your answer by solving it again with a different approach. Only present your answer if both methods yield the same result."
+                        },
+                        {
+                            "id": "self-refine",
+                            "name": "Self-Refine",
+                            "description": "Iteratively refining outputs through self-feedback without additional training.",
+                            "sources": ["Madaan et al."],
+                            "relatedTechniques": ["self-correction", "self-critique"],
+                            "useCase": "Improving output quality through iterative refinement.",
+                            "example": "Generate initial output, provide self-feedback, then refine based on that feedback."
                         }
                     ]
                 },
@@ -413,8 +476,160 @@ class PromptBuilder {
                             "example": "You can use the following tools to help with this task:\n1. Search(query): Search the web\n2. Calculator(expression): Evaluate mathematical expressions\n\nUse tools when needed by writing [tool][arguments]."
                         }
                     ]
+                },
+                {
+                    "id": "retrieval-augmentation",
+                    "name": "Retrieval & Augmentation",
+                    "description": "Techniques that incorporate external knowledge into prompts",
+                    "techniques": [
+                        {
+                            "id": "rag",
+                            "name": "Retrieval-Augmented Generation (RAG)",
+                            "description": "Enhancing LLM responses by retrieving relevant information from external sources.",
+                            "sources": ["Lewis et al.", "Vatsal & Dubey"],
+                            "relatedTechniques": ["dsp"],
+                            "useCase": "Tasks requiring specific factual information beyond the model's training data.",
+                            "example": "Question: What were the key provisions of the Paris Climate Agreement? [System retrieves relevant documents...]"
+                        },
+                        {
+                            "id": "dsp",
+                            "name": "Demonstration-Search-Predict (DSP)",
+                            "description": "A retrieval technique that searches for demonstrations relevant to the input query.",
+                            "sources": ["Khattab et al.", "Vatsal & Dubey"],
+                            "relatedTechniques": ["rag"],
+                            "useCase": "Tasks benefiting from retrieving similar examples.",
+                            "example": "Question: How does photosynthesis work? [System searches for relevant demonstrations...]"
+                        }
+                    ]
+                },
+                {
+                    "id": "prompt-optimization",
+                    "name": "Prompt Optimization",
+                    "description": "Techniques to automate and improve prompt engineering",
+                    "techniques": [
+                        {
+                            "id": "ape",
+                            "name": "Automatic Prompt Engineer (APE)",
+                            "description": "Automatically generates and optimizes prompts for a given task.",
+                            "sources": ["Zhou et al."],
+                            "relatedTechniques": ["grips"],
+                            "useCase": "Automating prompt design for large-scale or complex tasks.",
+                            "example": "Given a task, APE generates multiple candidate prompts and selects the best-performing one."
+                        },
+                        {
+                            "id": "grips",
+                            "name": "GRIPS",
+                            "description": "Gradient-based prompt search for optimization.",
+                            "sources": ["Prasad et al."],
+                            "relatedTechniques": ["ape"],
+                            "useCase": "Optimizing prompts using gradient-based methods.",
+                            "example": "GRIPS iteratively updates prompt tokens to maximize task performance."
+                        }
+                    ]
+                },
+                {
+                    "id": "multimodal-techniques",
+                    "name": "Multimodal Techniques",
+                    "description": "Techniques involving non-text modalities like images, audio, and video",
+                    "techniques": [
+                        {
+                            "id": "image-prompting",
+                            "name": "Image Prompting",
+                            "description": "Incorporating images as part of the prompt to guide model outputs.",
+                            "sources": ["Tsimpoukelli et al."],
+                            "relatedTechniques": ["multimodal-chain-of-thought"],
+                            "useCase": "Tasks requiring visual context or image-based reasoning.",
+                            "example": "Prompt: [Image of a cat] Describe what you see."
+                        },
+                        {
+                            "id": "multimodal-chain-of-thought",
+                            "name": "Multimodal Chain-of-Thought",
+                            "description": "Combining reasoning over text and images in a step-by-step manner.",
+                            "sources": ["Zhu et al."],
+                            "relatedTechniques": ["image-prompting"],
+                            "useCase": "Complex tasks involving both text and images.",
+                            "example": "Given an image and a question, reason step by step using both modalities."
+                        }
+                    ]
+                },
+                {
+                    "id": "specialized-application",
+                    "name": "Specialized Application Techniques",
+                    "description": "Techniques optimized for specific domains or applications",
+                    "techniques": [
+                        {
+                            "id": "code-generation-agents",
+                            "name": "Code Generation Agents",
+                            "description": "Agents specialized for generating and refining code.",
+                            "sources": ["Chen et al."],
+                            "relatedTechniques": ["chain-of-thought"],
+                            "useCase": "Automated code writing and debugging.",
+                            "example": "Write a Python function to reverse a string."
+                        },
+                        {
+                            "id": "mathprompter",
+                            "name": "MathPrompter",
+                            "description": "Prompting techniques specialized for mathematical problem solving.",
+                            "sources": ["Wang et al."],
+                            "relatedTechniques": ["chain-of-thought"],
+                            "useCase": "Solving math word problems.",
+                            "example": "Solve: If a train travels 60 miles in 1.5 hours, what is its average speed?"
+                        }
+                    ]
+                },
+                {
+                    "id": "multi-agent-systems",
+                    "name": "Multi-Agent Systems & Team Frameworks",
+                    "description": "Advanced techniques for organizing and coordinating multiple AI agents",
+                    "techniques": [
+                        {
+                            "id": "boomerang-task-delegation",
+                            "name": "Boomerang Task Delegation",
+                            "description": "A hierarchical task decomposition pattern where complex requests are broken into subtasks, delegated to specialized modes, and their results 'boomerang' back for integration.",
+                            "sources": ["Mnehmos (2024)", "Building Structured AI Teams"],
+                            "relatedTechniques": ["mode-based-specialization", "task-boundary-enforcement"],
+                            "useCase": "Complex multi-step projects requiring coordination between specialized AI agents with different capabilities.",
+                            "example": "Orchestrator receives 'Build a web app' → Creates subtasks → Delegates 'Design architecture' to Architect mode → Delegates 'Write code' to Code mode → Integrates results"
+                        },
+                        {
+                            "id": "mode-based-specialization",
+                            "name": "Mode-Based Agent Specialization",
+                            "description": "Organizing AI systems into specialized operational modes, each with distinct capabilities, roles, and system prompts optimized for specific types of tasks.",
+                            "sources": ["Mnehmos (2024)", "Building Structured AI Teams"],
+                            "relatedTechniques": ["boomerang-task-delegation", "semantic-guardrails"],
+                            "useCase": "Systems requiring diverse capabilities where different types of tasks benefit from specialized approaches and constraints.",
+                            "example": "Code mode: Optimized for implementation with tool permissions for file operations. Architect mode: Focused on design with restricted file access."
+                        },
+                        {
+                            "id": "semantic-guardrails",
+                            "name": "Semantic Guardrails",
+                            "description": "Mode-specific validation mechanisms that monitor AI outputs for semantic drift, ensuring responses align with expected behavior and role-appropriate content.",
+                            "sources": ["Mnehmos (2024)", "Detecting and Correcting Emergent Errors"],
+                            "relatedTechniques": ["mode-based-specialization", "error-pattern-libraries"],
+                            "useCase": "Production AI systems where maintaining consistent, role-appropriate behavior is critical for reliability and user trust.",
+                            "example": "Code mode guardrails: Check for implementation completeness, technical precision, code quality. Architect mode guardrails: Ensure structured planning, avoid direct implementation."
+                        },
+                        {
+                            "id": "task-boundary-enforcement",
+                            "name": "Task Boundary Enforcement",
+                            "description": "Implementing strict schemas and validation to prevent errors from propagating between tasks in multi-agent systems through immutable inputs and sanitized outputs.",
+                            "sources": ["Mnehmos (2024)", "Detecting and Correcting Emergent Errors"],
+                            "relatedTechniques": ["boomerang-task-delegation", "semantic-guardrails"],
+                            "useCase": "Complex multi-agent workflows where error containment and task isolation are essential for system stability and debugging.",
+                            "example": "Define JSON schemas for task inputs/outputs → Validate at task creation → Treat contextual data as immutable → Sanitize results before parent integration"
+                        },
+                        {
+                            "id": "error-pattern-libraries",
+                            "name": "Error Pattern Libraries",
+                            "description": "Community-maintained repositories of common AI system errors, their causes, reproduction steps, and correction strategies to enable systematic learning from failures.",
+                            "sources": ["Mnehmos (2024)", "Detecting and Correcting Emergent Errors"],
+                            "relatedTechniques": ["semantic-guardrails"],
+                            "useCase": "Organizations and communities running AI systems that need to systematically capture, share, and learn from operational errors and edge cases.",
+                            "example": "Error: 'Semantic drift in Code mode' → Cause: 'Overly general system prompt' → Reproduction: 'Ask code mode to write poetry' → Solution: 'Add technical focus guardrail'"
+                        }
+                    ]
                 }
-            ]
+           ]
         };
         
         // Process the techniques data into the flat map
