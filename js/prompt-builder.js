@@ -1,58 +1,16 @@
 /**
  * Interactive Prompt Builder for Prompt Engineering Taxonomy
- * Clean, modern implementation using TaxonomyDataUtils
+ * Side-by-side layout with live editing
  */
 
 class PromptBuilder {
     constructor() {
         this.selectedTechniques = new Set();
         this.techniqueData = new Map();
-        this.currentStep = 1;
         this.promptData = {
-            template: null,
             basePrompt: '',
             taskDescription: '',
-            outputFormat: '',
-            templateFields: {}
-        };
-        
-        // Predefined templates
-        this.templates = {
-            basic: {
-                id: 'basic',
-                name: 'Basic Prompt',
-                description: 'Simple instruction-based prompt',
-                template: '{task_description}\n\n{output_format}',
-                fields: []
-            },
-            role: {
-                id: 'role',
-                name: 'Role-Based Prompt',
-                description: 'Assign a specific role or expertise',
-                template: 'You are {role_description}.\n\n{task_description}\n\n{output_format}',
-                fields: ['role_description']
-            },
-            cot: {
-                id: 'cot',
-                name: 'Chain-of-Thought',
-                description: 'Step-by-step reasoning approach',
-                template: '{task_description}\n\nLet\'s think step by step:\n\n{output_format}',
-                fields: []
-            },
-            fewshot: {
-                id: 'fewshot',
-                name: 'Few-Shot Examples',
-                description: 'Provide examples before the task',
-                template: 'Here are some examples:\n\n{examples}\n\nNow, {task_description}\n\n{output_format}',
-                fields: ['examples']
-            },
-            structured: {
-                id: 'structured',
-                name: 'Structured Output',
-                description: 'Request specific output structure',
-                template: '{task_description}\n\nPlease provide your response in the following format:\n{structure}\n\n{output_format}',
-                fields: ['structure']
-            }
+            outputFormat: ''
         };
     }
 
@@ -97,14 +55,11 @@ class PromptBuilder {
         // Initialize technique selector
         this.renderTechniqueSelector();
         
-        // Initialize template selector
-        this.renderTemplateSelector();
-        
-        // Update step indicators
-        this.updateStepIndicator();
-        
         // Initialize prompt preview
         this.updatePromptPreview();
+        
+        // Update selected techniques display
+        this.updateSelectedTechniquesDisplay();
     }
 
     renderTechniqueSelector() {
@@ -134,14 +89,14 @@ class PromptBuilder {
                 <h3>${category.name}</h3>
                 <div class="technique-list" data-category="${categoryId}">
                     ${category.techniques.map(technique => `
-                        <div class="technique-selector-item">
-                            <input type="checkbox" 
-                                   id="technique-${technique.id}" 
+                        <div class="technique-selector-item" data-technique-id="${technique.id}">
+                            <input type="checkbox"
+                                   id="technique-${technique.id}"
                                    value="${technique.id}"
                                    ${this.selectedTechniques.has(technique.id) ? 'checked' : ''}>
                             <label for="technique-${technique.id}">${technique.name}</label>
-                            <i class="fas fa-info-circle technique-info-icon" 
-                               data-technique="${technique.id}" 
+                            <i class="fas fa-info-circle technique-info-icon"
+                               data-technique="${technique.id}"
                                title="View details"></i>
                         </div>
                     `).join('')}
@@ -152,26 +107,16 @@ class PromptBuilder {
         });
     }
 
-    renderTemplateSelector() {
-        const selector = document.getElementById('template-selector');
-        if (!selector) return;
-        
-        // Clear and add options
-        selector.innerHTML = '<option value="">-- Select a template --</option>';
-        
-        Object.values(this.templates).forEach(template => {
-            const option = document.createElement('option');
-            option.value = template.id;
-            option.textContent = template.name;
-            selector.appendChild(option);
-        });
-    }
-
     setupEventListeners() {
         // Technique selection
         document.addEventListener('change', (e) => {
             if (e.target.matches('#technique-selector input[type="checkbox"]')) {
                 this.handleTechniqueToggle(e.target.value, e.target.checked);
+                // Update visual state of the selector item
+                const item = e.target.closest('.technique-selector-item');
+                if (item) {
+                    item.classList.toggle('selected', e.target.checked);
+                }
             }
         });
         
@@ -182,15 +127,7 @@ class PromptBuilder {
             }
         });
         
-        // Template selection
-        const templateSelector = document.getElementById('template-selector');
-        if (templateSelector) {
-            templateSelector.addEventListener('change', (e) => {
-                this.selectTemplate(e.target.value);
-            });
-        }
-        
-        // Input fields
+        // Input fields - live updating
         ['base-prompt', 'task-description', 'output-format'].forEach(id => {
             const input = document.getElementById(id);
             if (input) {
@@ -204,16 +141,13 @@ class PromptBuilder {
             }
         });
         
-        // Navigation buttons
-        this.setupNavigationButtons();
-        
         // Action buttons
         document.getElementById('copy-prompt-button')?.addEventListener('click', () => {
             this.copyPrompt();
         });
         
-        document.getElementById('clear-prompt-button')?.addEventListener('click', () => {
-            this.clearPrompt();
+        document.getElementById('clear-all-button')?.addEventListener('click', () => {
+            this.clearAll();
         });
         
         document.getElementById('save-prompt-button')?.addEventListener('click', () => {
@@ -222,32 +156,6 @@ class PromptBuilder {
         
         document.getElementById('export-prompt-button')?.addEventListener('click', () => {
             this.exportPrompt();
-        });
-    }
-
-    setupNavigationButtons() {
-        // Next buttons
-        for (let i = 1; i <= 3; i++) {
-            const btn = document.getElementById(`next-step-${i}`);
-            if (btn) {
-                btn.addEventListener('click', () => this.goToStep(i + 1));
-            }
-        }
-        
-        // Previous buttons
-        for (let i = 2; i <= 4; i++) {
-            const btn = document.getElementById(`prev-step-${i}`);
-            if (btn) {
-                btn.addEventListener('click', () => this.goToStep(i - 1));
-            }
-        }
-        
-        // Start over
-        document.getElementById('start-over-button')?.addEventListener('click', () => {
-            if (confirm('Start over? This will clear all selections.')) {
-                this.clearPrompt();
-                this.goToStep(1);
-            }
         });
     }
 
@@ -260,102 +168,64 @@ class PromptBuilder {
         
         this.updateSelectedTechniquesDisplay();
         this.updatePromptPreview();
-        this.updateNavigationState();
     }
 
     updateSelectedTechniquesDisplay() {
-        const container = document.getElementById('selected-techniques');
         const countBadge = document.getElementById('technique-count');
+        const summaryContainer = document.getElementById('selected-techniques-summary');
+        const listContainer = document.getElementById('selected-techniques-list');
         
+        // Update count badge
         if (countBadge) {
             countBadge.textContent = this.selectedTechniques.size;
         }
         
-        if (!container) return;
-        
-        if (this.selectedTechniques.size === 0) {
-            container.innerHTML = '<p class="empty-state">No techniques selected. Select techniques from the list below.</p>';
-            return;
+        // Show/hide summary section
+        if (summaryContainer) {
+            if (this.selectedTechniques.size === 0) {
+                summaryContainer.style.display = 'none';
+            } else {
+                summaryContainer.style.display = 'block';
+            }
         }
         
-        container.innerHTML = `
-            <div class="selected-techniques-list">
-                ${Array.from(this.selectedTechniques).map(id => {
+        // Update selected techniques list
+        if (listContainer) {
+            if (this.selectedTechniques.size === 0) {
+                listContainer.innerHTML = '';
+            } else {
+                listContainer.innerHTML = Array.from(this.selectedTechniques).map(id => {
                     const technique = this.techniqueData.get(id);
                     return `
-                        <div class="selected-technique-item">
-                            <button class="remove-technique-button" data-technique="${id}">
+                        <div class="selected-technique-tag">
+                            <span>${technique.name}</span>
+                            <button class="remove-technique" data-technique="${id}" title="Remove">
                                 <i class="fas fa-times"></i>
                             </button>
-                            <span>${technique.name}</span>
-                            <span class="selected-technique-category">${technique.categoryName}</span>
                         </div>
                     `;
-                }).join('')}
-            </div>
-        `;
-        
-        // Add remove handlers
-        container.querySelectorAll('.remove-technique-button').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const techniqueId = btn.dataset.technique;
-                this.selectedTechniques.delete(techniqueId);
-                const checkbox = document.getElementById(`technique-${techniqueId}`);
-                if (checkbox) checkbox.checked = false;
-                this.updateSelectedTechniquesDisplay();
-                this.updatePromptPreview();
-                this.updateNavigationState();
-            });
-        });
-    }
-
-    selectTemplate(templateId) {
-        this.promptData.template = templateId ? this.templates[templateId] : null;
-        
-        const description = document.getElementById('template-description');
-        if (description) {
-            description.textContent = this.promptData.template?.description || '';
+                }).join('');
+                
+                // Add remove handlers
+                listContainer.querySelectorAll('.remove-technique').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const techniqueId = btn.dataset.technique;
+                        this.selectedTechniques.delete(techniqueId);
+                        const checkbox = document.getElementById(`technique-${techniqueId}`);
+                        if (checkbox) {
+                            checkbox.checked = false;
+                            // Update visual state
+                            const item = checkbox.closest('.technique-selector-item');
+                            if (item) {
+                                item.classList.remove('selected');
+                            }
+                        }
+                        this.updateSelectedTechniquesDisplay();
+                        this.updatePromptPreview();
+                    });
+                });
+            }
         }
-        
-        this.renderTemplateFields();
-        this.updatePromptPreview();
-        this.updateNavigationState();
-    }
-
-    renderTemplateFields() {
-        const container = document.getElementById('template-fields-container');
-        if (!container) return;
-        
-        container.innerHTML = '';
-        
-        if (!this.promptData.template || !this.promptData.template.fields.length) {
-            return;
-        }
-        
-        this.promptData.template.fields.forEach(field => {
-            const fieldElement = document.createElement('div');
-            fieldElement.className = 'input-group';
-            
-            const label = field.replace(/_/g, ' ')
-                .split(' ')
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ');
-            
-            fieldElement.innerHTML = `
-                <label for="template-${field}">${label}:</label>
-                <textarea id="template-${field}" 
-                          placeholder="Enter ${label.toLowerCase()}...">${this.promptData.templateFields[field] || ''}</textarea>
-            `;
-            
-            container.appendChild(fieldElement);
-            
-            // Add event listener
-            const textarea = fieldElement.querySelector('textarea');
-            textarea.addEventListener('input', (e) => {
-                this.promptData.templateFields[field] = e.target.value;
-                this.updatePromptPreview();
-            });
-        });
     }
 
     updatePromptPreview() {
@@ -373,43 +243,31 @@ class PromptBuilder {
         }
         
         // Add base prompt if present
-        if (this.promptData.basePrompt) {
-            prompt += this.promptData.basePrompt + '\n\n';
+        if (this.promptData.basePrompt.trim()) {
+            prompt += this.promptData.basePrompt.trim() + '\n\n';
         }
         
-        // Apply template or default structure
-        if (this.promptData.template) {
-            let templateText = this.promptData.template.template;
-            
-            // Replace placeholders
-            templateText = templateText.replace(/{task_description}/g, this.promptData.taskDescription || '[Task description]');
-            templateText = templateText.replace(/{output_format}/g, this.promptData.outputFormat || '[Output format]');
-            
-            // Replace template-specific fields
-            Object.entries(this.promptData.templateFields).forEach(([field, value]) => {
-                templateText = templateText.replace(new RegExp(`{${field}}`, 'g'), value || `[${field}]`);
-            });
-            
-            prompt += templateText;
-        } else {
-            // Default structure
-            if (this.promptData.taskDescription) {
-                prompt += `Task: ${this.promptData.taskDescription}\n\n`;
-            }
-            if (this.promptData.outputFormat) {
-                prompt += `Output format: ${this.promptData.outputFormat}`;
-            }
+        // Add task description
+        if (this.promptData.taskDescription.trim()) {
+            prompt += this.promptData.taskDescription.trim() + '\n\n';
         }
         
-        preview.textContent = prompt || 'Your prompt will appear here...';
+        // Add output format
+        if (this.promptData.outputFormat.trim()) {
+            prompt += 'Output format: ' + this.promptData.outputFormat.trim();
+        }
+        
+        // Set the preview content
+        const finalPrompt = prompt.trim() || 'Select techniques and fill in the fields above to see your prompt here...';
+        preview.textContent = finalPrompt;
         
         // Update token count
-        this.updateTokenCount(prompt);
+        this.updateTokenCount(finalPrompt);
         
         // Enable/disable copy button
         const copyBtn = document.getElementById('copy-prompt-button');
         if (copyBtn) {
-            copyBtn.disabled = !prompt || prompt === 'Your prompt will appear here...';
+            copyBtn.disabled = !prompt.trim();
         }
     }
 
@@ -437,8 +295,16 @@ class PromptBuilder {
             instructions.push('After your initial response, review it for errors and provide a corrected version.');
         }
         
-        if (this.selectedTechniques.has('role-prompting') && !this.promptData.basePrompt) {
+        if (this.selectedTechniques.has('role-prompting') && !this.promptData.basePrompt.trim()) {
             instructions.push('Approach this task with expert knowledge and professional insight.');
+        }
+        
+        if (this.selectedTechniques.has('few-shot-learning')) {
+            instructions.push('Learn from the examples provided and apply similar patterns.');
+        }
+        
+        if (this.selectedTechniques.has('react')) {
+            instructions.push('Use reasoning and acting in an interleaved manner.');
         }
         
         return instructions.join(' ');
@@ -450,73 +316,12 @@ class PromptBuilder {
         
         // Rough estimate: ~4 chars per token
         const tokens = Math.ceil(text.length / 4);
-        counter.innerHTML = `<i class="fas fa-calculator"></i> ~${tokens} tokens (${text.length} chars)`;
+        counter.innerHTML = `<i class="fas fa-calculator"></i> ~${tokens} tokens`;
         
         if (tokens > 500) {
             counter.classList.add('token-count-warning');
         } else {
             counter.classList.remove('token-count-warning');
-        }
-    }
-
-    goToStep(step) {
-        this.currentStep = step;
-        
-        // Hide all steps
-        document.querySelectorAll('.wizard-content').forEach(content => {
-            content.style.display = 'none';
-        });
-        
-        // Show current step
-        const currentContent = document.getElementById(`step-${step}-content`);
-        if (currentContent) {
-            currentContent.style.display = 'block';
-        }
-        
-        // Update step indicator
-        this.updateStepIndicator();
-        
-        // Update navigation state
-        this.updateNavigationState();
-    }
-
-    updateStepIndicator() {
-        // Update step classes
-        document.querySelectorAll('.wizard-step').forEach(stepEl => {
-            const stepNum = parseInt(stepEl.dataset.step);
-            stepEl.classList.remove('active', 'completed');
-            
-            if (stepNum === this.currentStep) {
-                stepEl.classList.add('active');
-            } else if (stepNum < this.currentStep) {
-                stepEl.classList.add('completed');
-            }
-        });
-        
-        // Update progress bar
-        const progressBar = document.querySelector('.progress-bar');
-        if (progressBar) {
-            progressBar.style.width = `${(this.currentStep / 4) * 100}%`;
-        }
-    }
-
-    updateNavigationState() {
-        // Step 1: Need at least one technique selected
-        const nextStep1 = document.getElementById('next-step-1');
-        if (nextStep1) {
-            nextStep1.disabled = this.selectedTechniques.size === 0;
-        }
-        
-        // Step 2: Need a template selected (optional, so always enabled)
-        const nextStep2 = document.getElementById('next-step-2');
-        if (nextStep2) {
-            nextStep2.disabled = false;
-        }
-        
-        // Step 3: Need task description
-        const nextStep3 = document.getElementById('next-step-3');
-        if (nextStep3) {
-            nextStep3.disabled = !this.promptData.taskDescription;
         }
     }
 
@@ -554,7 +359,7 @@ class PromptBuilder {
         const modalBody = document.getElementById('technique-modal-body');
         modalBody.innerHTML = `
             <h2>${technique.name}</h2>
-            <div class="technique-category">${technique.categoryName}</div>
+            <div class="technique-category" style="color: #666; margin-bottom: 16px; font-style: italic;">${technique.categoryName}</div>
             <p>${technique.description}</p>
             
             ${technique.useCase ? `
@@ -597,7 +402,14 @@ class PromptBuilder {
             
             // Update checkbox
             const checkbox = document.getElementById(`technique-${techniqueId}`);
-            if (checkbox) checkbox.checked = !isSelected;
+            if (checkbox) {
+                checkbox.checked = !isSelected;
+                // Update visual state
+                const item = checkbox.closest('.technique-selector-item');
+                if (item) {
+                    item.classList.toggle('selected', !isSelected);
+                }
+            }
             
             // Update button text
             e.target.textContent = isSelected ? 'Add to Prompt' : 'Remove from Prompt';
@@ -611,49 +423,60 @@ class PromptBuilder {
         if (!preview) return;
         
         const text = preview.textContent;
-        if (text && text !== 'Your prompt will appear here...') {
+        if (text && text !== 'Select techniques and fill in the fields above to see your prompt here...') {
             navigator.clipboard.writeText(text).then(() => {
                 const btn = document.getElementById('copy-prompt-button');
-                const originalText = btn.textContent;
-                btn.textContent = 'Copied!';
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                btn.style.background = '#38a169';
                 setTimeout(() => {
-                    btn.textContent = originalText;
+                    btn.innerHTML = originalHTML;
+                    btn.style.background = '';
                 }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                this.showMessage('Failed to copy to clipboard', 'error');
             });
         }
     }
 
-    clearPrompt() {
-        // Clear selections
-        this.selectedTechniques.clear();
-        this.promptData = {
-            template: null,
-            basePrompt: '',
-            taskDescription: '',
-            outputFormat: '',
-            templateFields: {}
-        };
-        
-        // Clear UI
-        document.querySelectorAll('#technique-selector input[type="checkbox"]').forEach(cb => {
-            cb.checked = false;
-        });
-        
-        document.getElementById('template-selector').value = '';
-        document.getElementById('base-prompt').value = '';
-        document.getElementById('task-description').value = '';
-        document.getElementById('output-format').value = '';
-        
-        // Update displays
-        this.updateSelectedTechniquesDisplay();
-        this.renderTemplateFields();
-        this.updatePromptPreview();
-        this.updateNavigationState();
+    clearAll() {
+        if (confirm('Clear all selections and inputs? This action cannot be undone.')) {
+            // Clear selections
+            this.selectedTechniques.clear();
+            this.promptData = {
+                basePrompt: '',
+                taskDescription: '',
+                outputFormat: ''
+            };
+            
+            // Clear UI
+            document.querySelectorAll('#technique-selector input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+                const item = cb.closest('.technique-selector-item');
+                if (item) {
+                    item.classList.remove('selected');
+                }
+            });
+            
+            document.getElementById('base-prompt').value = '';
+            document.getElementById('task-description').value = '';
+            document.getElementById('output-format').value = '';
+            
+            // Update displays
+            this.updateSelectedTechniquesDisplay();
+            this.updatePromptPreview();
+            
+            this.showMessage('All cleared successfully', 'info');
+        }
     }
 
     savePrompt() {
         const preview = document.getElementById('prompt-preview');
-        if (!preview || preview.textContent === 'Your prompt will appear here...') return;
+        if (!preview || preview.textContent === 'Select techniques and fill in the fields above to see your prompt here...') {
+            this.showMessage('No prompt to save', 'error');
+            return;
+        }
         
         const name = prompt('Enter a name for this prompt:');
         if (!name) return;
@@ -673,7 +496,10 @@ class PromptBuilder {
 
     exportPrompt() {
         const preview = document.getElementById('prompt-preview');
-        if (!preview || preview.textContent === 'Your prompt will appear here...') return;
+        if (!preview || preview.textContent === 'Select techniques and fill in the fields above to see your prompt here...') {
+            this.showMessage('No prompt to export', 'error');
+            return;
+        }
         
         const exportData = {
             prompt: preview.textContent,
@@ -695,18 +521,40 @@ class PromptBuilder {
         a.download = 'prompt-export.json';
         a.click();
         URL.revokeObjectURL(url);
+        
+        this.showMessage('Prompt exported successfully!', 'success');
     }
 
     showMessage(text, type = 'info') {
         const msg = document.createElement('div');
         msg.className = `message message-${type}`;
         msg.textContent = text;
+        msg.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 16px;
+            border-radius: 4px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        `;
         
-        const container = document.querySelector('.prompt-builder-container');
-        if (container) {
-            container.insertBefore(msg, container.firstChild);
-            setTimeout(() => msg.remove(), 3000);
+        if (type === 'success') {
+            msg.style.background = '#e6f7e6';
+            msg.style.color = '#276749';
+            msg.style.border = '1px solid #38a169';
+        } else if (type === 'error') {
+            msg.style.background = '#fde8e8';
+            msg.style.color = '#c53030';
+            msg.style.border = '1px solid #e53e3e';
+        } else {
+            msg.style.background = '#e6f0ff';
+            msg.style.color = '#2b6cb0';
+            msg.style.border = '1px solid #4299e1';
         }
+        
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 3000);
     }
 
     showError(message) {
@@ -714,6 +562,15 @@ class PromptBuilder {
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message';
         errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+        errorDiv.style.cssText = `
+            padding: 20px;
+            text-align: center;
+            color: #c53030;
+            background: #fde8e8;
+            border: 1px solid #e53e3e;
+            border-radius: 8px;
+            margin: 20px;
+        `;
         
         const container = document.getElementById('technique-selector');
         if (container) {

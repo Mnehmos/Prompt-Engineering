@@ -624,6 +624,364 @@
             margin-top: 12px;
             width: 100%;
         }
+
+        /* New Side-by-Side Layout Styles */
+        .builder-layout {
+            display: flex;
+            gap: 20px;
+            height: calc(100vh - 200px);
+            min-height: 600px;
+        }
+
+        .left-panel {
+            flex: 0 0 400px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e1e4e8;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .right-panel {
+            flex: 1;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #e1e4e8;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e1e4e8;
+            background: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .left-panel .panel-header {
+            background: #f0f5ff;
+        }
+
+        .panel-header h3 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .selected-count {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .count-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #4a6cf7;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .skill-level-selector {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e1e4e8;
+            background: #fff;
+        }
+
+        .skill-level-selector label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .skill-level-selector select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fff;
+        }
+
+        .technique-selector-scrollable {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 20px;
+        }
+
+        .technique-category-section {
+            margin-bottom: 20px;
+        }
+
+        .technique-category-section h3 {
+            margin: 0 0 12px 0;
+            font-size: 1rem;
+            color: #333;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e1e4e8;
+        }
+
+        .technique-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .technique-selector-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: #fff;
+            border: 1px solid #e1e4e8;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .technique-selector-item:hover {
+            background: #f0f5ff;
+            border-color: #4a6cf7;
+        }
+
+        .technique-selector-item.selected {
+            background: #e6f0ff;
+            border-color: #4a6cf7;
+            box-shadow: 0 2px 4px rgba(74, 108, 247, 0.1);
+        }
+
+        .technique-selector-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .technique-selector-item label {
+            flex: 1;
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .technique-info-icon {
+            color: #4a6cf7;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .technique-info-icon:hover {
+            background: #f0f5ff;
+            color: #3451b2;
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .button.small {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+        }
+
+        .selected-techniques-summary {
+            padding: 16px 20px;
+            background: #f0f7ff;
+            border-bottom: 1px solid #d1e2ff;
+        }
+
+        .selected-techniques-summary h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .selected-techniques-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .selected-technique-tag {
+            background: #e6f0ff;
+            border: 1px solid #4a6cf7;
+            border-radius: 16px;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            color: #4a6cf7;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .remove-technique {
+            background: none;
+            border: none;
+            color: #4a6cf7;
+            cursor: pointer;
+            padding: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .remove-technique:hover {
+            background: #4a6cf7;
+            color: #fff;
+        }
+
+        .prompt-config {
+            padding: 20px;
+            border-bottom: 1px solid #e1e4e8;
+        }
+
+        .config-section {
+            margin-bottom: 16px;
+        }
+
+        .config-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .config-section label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .config-section textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            resize: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .config-section textarea:focus {
+            outline: none;
+            border-color: #4a6cf7;
+            box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.1);
+        }
+
+        .prompt-preview-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .preview-header h4 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .token-counter {
+            padding: 6px 12px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #555;
+            border: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .live-preview-editor {
+            flex: 1;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            line-height: 1.5;
+            color: #333;
+            min-height: 200px;
+        }
+
+        .editor-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #e1e4e8;
+            background: #f8f9fa;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .builder-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .left-panel {
+                flex: none;
+                max-height: 400px;
+            }
+            
+            .right-panel {
+                flex: none;
+                min-height: 500px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .left-panel {
+                max-height: 300px;
+            }
+            
+            .technique-list {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+            
+            .editor-actions {
+                flex-direction: column;
+                gap: 4px;
+            }
+            
+            .button.small {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -645,46 +1003,18 @@
 
         <section class="tab-content active" id="builder-tab">
             <div class="prompt-builder-container">
-                <!-- Step-by-step wizard navigation -->
-                <div class="wizard-steps">
-                    <div class="wizard-step active" data-step="1">
-                        <div class="wizard-step-number">1</div>
-                        <div class="wizard-step-title">Select Techniques</div>
-                        <div class="wizard-step-description">Choose techniques from the taxonomy</div>
-                    </div>
-                    <div class="wizard-step" data-step="2">
-                        <div class="wizard-step-number">2</div>
-                        <div class="wizard-step-title">Choose Template</div>
-                        <div class="wizard-step-description">Select a template structure</div>
-                    </div>
-                    <div class="wizard-step" data-step="3">
-                        <div class="wizard-step-number">3</div>
-                        <div class="wizard-step-title">Fill Details</div>
-                        <div class="wizard-step-description">Add your specific content</div>
-                    </div>
-                    <div class="wizard-step" data-step="4">
-                        <div class="wizard-step-number">4</div>
-                        <div class="wizard-step-title">Review & Copy</div>
-                        <div class="wizard-step-description">Finalize your prompt</div>
-                    </div>
-                </div>
-
-                <div class="progress-indicator">
-                    <div class="progress-bar" style="width: 25%"></div>
-                </div>
-
-                <!-- Step 1: Select Techniques -->
-                <div class="wizard-content" id="step-1-content">
-                    <h3><i class="fas fa-list-check"></i> Step 1: Select Techniques</h3>
-                    
-                    <div class="selected-techniques-panel">
-                        <h3>Selected Techniques <span class="count-badge" id="technique-count">0</span></h3>
-                        <div id="selected-techniques">
-                            <p class="empty-state">No techniques selected. Select techniques from the list below to build your prompt.</p>
+                <!-- Side-by-side layout -->
+                <div class="builder-layout">
+                    <!-- Left Panel: Technique Selection -->
+                    <div class="left-panel">
+                        <div class="panel-header">
+                            <h3><i class="fas fa-list-check"></i> Select Techniques</h3>
+                            <div class="selected-count">
+                                <span class="count-badge" id="technique-count">0</span>
+                                <span>selected</span>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="technique-selector-container">
+                        
                         <div class="skill-level-selector">
                             <label for="skill-level-selector"><i class="fas fa-graduation-cap"></i> Skill Level:</label>
                             <select id="skill-level-selector">
@@ -694,7 +1024,7 @@
                             </select>
                         </div>
 
-                        <div id="technique-selector">
+                        <div id="technique-selector" class="technique-selector-scrollable">
                             <!-- Technique selectors will be populated by JavaScript -->
                             <div class="loading">
                                 <p>Loading techniques...</p>
@@ -702,87 +1032,57 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="wizard-navigation">
-                        <div></div> <!-- Empty div for spacing -->
-                        <button id="next-step-1" class="button primary">Next: Choose Template <i class="fas fa-arrow-right"></i></button>
-                    </div>
-                </div>
 
-                <!-- Step 2: Choose Template -->
-                <div class="wizard-content" id="step-2-content" style="display: none;">
-                    <h3><i class="fas fa-file-alt"></i> Step 2: Choose Template</h3>
-                    
-                    <div class="prompt-inputs-container">
-                        <div class="input-group">
-                            <label for="template-selector"><i class="fas fa-puzzle-piece"></i> Prompt Template:</label>
-                            <select id="template-selector">
-                                <option value="">-- Select a template --</option>
-                                <!-- Template options will be populated by JavaScript -->
-                            </select>
-                            <p class="template-description" id="template-description"></p>
-                        </div>
-                    </div>
-                    
-                    <div class="wizard-navigation">
-                        <button id="prev-step-2" class="button secondary"><i class="fas fa-arrow-left"></i> Back: Select Techniques</button>
-                        <button id="next-step-2" class="button primary">Next: Fill Details <i class="fas fa-arrow-right"></i></button>
-                    </div>
-                </div>
-
-                <!-- Step 3: Fill Details -->
-                <div class="wizard-content" id="step-3-content" style="display: none;">
-                    <h3><i class="fas fa-pen-to-square"></i> Step 3: Fill Details</h3>
-                    
-                    <div class="prompt-inputs-container">
-                        <!-- Template-specific fields will be inserted here -->
-                        <div id="template-fields-container" class="template-fields-container"></div>
-                        
-                        <div class="input-group">
-                            <label for="base-prompt"><i class="fas fa-user-gear"></i> Base Prompt (optional):</label>
-                            <textarea id="base-prompt" placeholder="E.g., You are an expert copywriter with 20 years of experience..."></textarea>
-                        </div>
-                        
-                        <div class="input-group">
-                            <label for="task-description"><i class="fas fa-tasks"></i> Task Description:</label>
-                            <textarea id="task-description" placeholder="Describe the task you want the AI to perform..."></textarea>
-                        </div>
-                        
-                        <div class="input-group">
-                            <label for="output-format"><i class="fas fa-file-export"></i> Output Format (optional):</label>
-                            <textarea id="output-format" placeholder="Specify the desired format for the response..."></textarea>
-                        </div>
-                    </div>
-                    
-                    <div class="wizard-navigation">
-                        <button id="prev-step-3" class="button secondary"><i class="fas fa-arrow-left"></i> Back: Choose Template</button>
-                        <button id="next-step-3" class="button primary">Next: Review & Copy <i class="fas fa-arrow-right"></i></button>
-                    </div>
-                </div>
-
-                <!-- Step 4: Review & Copy -->
-                <div class="wizard-content" id="step-4-content" style="display: none;">
-                    <h3><i class="fas fa-check-circle"></i> Step 4: Review & Copy</h3>
-                    
-                    <div class="prompt-preview-container">
-                        <h3>Generated Prompt</h3>
-                        <div id="prompt-preview">
-                            Your prompt will appear here. Select techniques and fill in the input fields to build your prompt.
-                        </div>
-                        <div class="prompt-actions">
-                            <div id="token-count" class="token-counter"><i class="fas fa-calculator"></i> 0 tokens (0 characters)</div>
-                            <div class="prompt-actions-right">
-                                <button id="clear-prompt-button" class="button secondary"><i class="fas fa-eraser"></i> Clear</button>
-                                <button id="save-prompt-button" class="button secondary"><i class="fas fa-save"></i> Save</button>
-                                <button id="export-prompt-button" class="button secondary"><i class="fas fa-file-export"></i> Export</button>
-                                <button id="copy-prompt-button" class="button primary" disabled><i class="fas fa-copy"></i> Copy to Clipboard</button>
+                    <!-- Right Panel: Live Editor -->
+                    <div class="right-panel">
+                        <div class="panel-header">
+                            <h3><i class="fas fa-edit"></i> Prompt Editor</h3>
+                            <div class="editor-actions">
+                                <button id="clear-all-button" class="button small secondary"><i class="fas fa-eraser"></i> Clear All</button>
+                                <button id="copy-prompt-button" class="button small primary" disabled><i class="fas fa-copy"></i> Copy</button>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="wizard-navigation">
-                        <button id="prev-step-4" class="button secondary"><i class="fas fa-arrow-left"></i> Back: Fill Details</button>
-                        <button id="start-over-button" class="button primary">Start Over <i class="fas fa-redo"></i></button>
+
+                        <!-- Selected Techniques Summary -->
+                        <div class="selected-techniques-summary" id="selected-techniques-summary" style="display: none;">
+                            <h4>Active Techniques:</h4>
+                            <div id="selected-techniques-list"></div>
+                        </div>
+
+                        <!-- Prompt Configuration -->
+                        <div class="prompt-config">
+                            <div class="config-section">
+                                <label for="base-prompt"><i class="fas fa-user-gear"></i> Base Prompt:</label>
+                                <textarea id="base-prompt" rows="2" placeholder="You are an expert..."></textarea>
+                            </div>
+                            
+                            <div class="config-section">
+                                <label for="task-description"><i class="fas fa-tasks"></i> Task Description:</label>
+                                <textarea id="task-description" rows="3" placeholder="Describe the task you want the AI to perform..."></textarea>
+                            </div>
+                            
+                            <div class="config-section">
+                                <label for="output-format"><i class="fas fa-file-export"></i> Output Format:</label>
+                                <textarea id="output-format" rows="2" placeholder="Specify the desired format..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Live Preview -->
+                        <div class="prompt-preview-section">
+                            <div class="preview-header">
+                                <h4><i class="fas fa-eye"></i> Live Preview</h4>
+                                <div id="token-count" class="token-counter"><i class="fas fa-calculator"></i> 0 tokens</div>
+                            </div>
+                            <div id="prompt-preview" class="live-preview-editor">
+                                Select techniques and fill in the fields above to see your prompt here...
+                            </div>
+                        </div>
+
+                        <!-- Additional Actions -->
+                        <div class="editor-footer">
+                            <button id="save-prompt-button" class="button secondary"><i class="fas fa-save"></i> Save</button>
+                            <button id="export-prompt-button" class="button secondary"><i class="fas fa-file-export"></i> Export</button>
+                        </div>
                     </div>
                 </div>
             </div>
