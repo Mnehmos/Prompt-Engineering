@@ -35,7 +35,8 @@
         "step-back-prompting",
         "program-of-thoughts",
         "maieutic-prompting",
-        "chain-of-verification"
+        "chain-of-verification",
+        "five-whys-prompting"
       ]
     },
     {
@@ -56,7 +57,8 @@
         "voyager",
         "tora",
         "mcp-server-integration-patterns",
-        "github-integration-prompting"
+        "github-integration-prompting",
+        "browser-automation-prompting"
       ]
     },
     {
@@ -73,7 +75,8 @@
         "self-ask",
         "universal-self-consistency",
         "metacognitive-prompting",
-        "self-generated-icl"
+        "self-generated-icl",
+        "meta-prompt-improvement"
       ]
     },
     {
@@ -88,7 +91,8 @@
         "implicit-rag",
         "verify-and-edit",
         "cross-file-code-completion-prompting",
-        "retrieved-cross-file-context"
+        "retrieved-cross-file-context",
+        "context-priming"
       ]
     },
     {
@@ -144,7 +148,10 @@
         "modular-code-generation",
         "flow-engineering",
         "test-based-iterative-flow",
-        "automated-development-workflows"
+        "automated-development-workflows",
+        "visual-documentation-generation",
+        "comprehensive-code-analysis",
+        "automated-screenshot-documentation"
       ]
     },
     {
@@ -158,7 +165,9 @@
         "task-boundary-enforcement",
         "error-pattern-libraries",
         "ai-assistant-rule-systems",
-        "agent-configuration-management"
+        "agent-configuration-management",
+        "multi-perspective-analysis",
+        "structured-commit-workflow"
       ]
     }
   ]

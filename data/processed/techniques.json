@@ -1471,6 +1471,159 @@
           "example": "Configuration Hierarchy: ~/.claude/CLAUDE.md (global) → .cursor/rules/*.mdc (project) → task-specific prompts → runtime context",
           "tips": "Use hierarchical configuration systems. Implement configuration validation. Provide clear inheritance rules.",
           "commonMistakes": "Configuration conflicts. No validation. Poor documentation of precedence rules."
+        },
+        {
+          "id": "multi-perspective-analysis",
+          "name": "Multi-Perspective Analysis",
+          "description": "Analyzing problems or solutions from multiple distinct viewpoints or roles to ensure comprehensive coverage and identify blind spots.",
+          "sources": [
+            "steipete/agent-rules PR Review",
+            "Six Thinking Hats Method"
+          ],
+          "relatedTechniques": [
+            "role-prompting",
+            "self-correction"
+          ],
+          "useCase": "Code reviews, project planning, risk assessment, and any scenario requiring comprehensive analysis.",
+          "example": "Review from 6 perspectives: Product Manager (business value), Developer (code quality), QA Engineer (testing), Security Engineer (vulnerabilities), DevOps (deployment), UX Designer (user experience)",
+          "tips": "Define distinct roles with specific focus areas. Ensure each perspective has clear responsibilities. Synthesize findings across perspectives.",
+          "commonMistakes": "Overlapping role responsibilities. Not having clear evaluation criteria per role. Ignoring minority perspectives."
+        },
+        {
+          "id": "structured-commit-workflow",
+          "name": "Structured Commit Workflow",
+          "description": "Systematic approach to creating well-formatted commits with conventional commit messages, semantic typing, and automated validation steps.",
+          "sources": [
+            "steipete/agent-rules",
+            "Conventional Commits Specification"
+          ],
+          "relatedTechniques": [
+            "automated-development-workflows",
+            "workflow-template-prompting"
+          ],
+          "useCase": "Git workflow standardization, automated changelog generation, semantic versioning, and team collaboration.",
+          "example": "✨ feat(auth): add OAuth 2.0 support\n\nImplement OAuth 2.0 authentication flow for third-party login. Includes token refresh mechanism and secure storage.\n\nCloses #123",
+          "tips": "Use conventional commit types with emojis. Include scope when applicable. Write in imperative mood. Reference issues/PRs.",
+          "commonMistakes": "Inconsistent commit types. Missing issue references. Combining unrelated changes in single commit."
+        },
+        {
+          "id": "five-whys-prompting",
+          "name": "Five Whys Root Cause Analysis",
+          "description": "Systematic questioning technique that asks 'Why?' iteratively to drill down from symptoms to root causes of problems.",
+          "sources": [
+            "steipete/agent-rules",
+            "Toyota Production System"
+          ],
+          "relatedTechniques": [
+            "step-back-prompting",
+            "chain-of-thought"
+          ],
+          "useCase": "Debugging, problem-solving, process improvement, and understanding systemic issues.",
+          "example": "Problem: App crashes with large files → Why? Runs out of memory → Why? Loads entire file → Why? Parser not designed for streaming → Why? Requirements only specified small files → Why? Requirements gathering didn't consider growth",
+          "tips": "Focus on process, not people. Look for systemic issues. Document the analysis. Validate the logical chain.",
+          "commonMistakes": "Stopping at symptoms. Blaming individuals instead of processes. Not validating root cause."
+        },
+        {
+          "id": "visual-documentation-generation",
+          "name": "Visual Documentation Generation",
+          "description": "Automated creation of diagrams, flowcharts, and visual documentation from code structure, data models, or process descriptions.",
+          "sources": [
+            "steipete/agent-rules Mermaid",
+            "PlantUML Documentation"
+          ],
+          "relatedTechniques": [
+            "create-docs",
+            "code-analysis"
+          ],
+          "useCase": "Architecture documentation, process visualization, database schema documentation, and API documentation.",
+          "example": "Generate Mermaid diagram: sequenceDiagram\n    Client->>Server: Request\n    Server->>Database: Query\n    Database-->>Server: Result\n    Server-->>Client: Response",
+          "tips": "Choose appropriate diagram type for content. Keep diagrams focused and readable. Use consistent naming conventions.",
+          "commonMistakes": "Overcomplicating diagrams. Poor labeling. Not validating diagram syntax."
+        },
+        {
+          "id": "context-priming",
+          "name": "Context Priming",
+          "description": "Systematic technique for loading comprehensive project understanding by analyzing key files, structure, and conventions before performing tasks.",
+          "sources": [
+            "steipete/agent-rules",
+            "AI Assistant Best Practices"
+          ],
+          "relatedTechniques": [
+            "retrieval-augmentation",
+            "project-analysis"
+          ],
+          "useCase": "New project onboarding, context switching between projects, and ensuring AI assistants understand project conventions.",
+          "example": "1) Read README.md for overview 2) Load AI guidelines from CLAUDE.md 3) Analyze file structure 4) Review configuration files 5) Understand testing framework",
+          "tips": "Follow consistent priming sequence. Load project-specific AI instructions. Understand tech stack and conventions.",
+          "commonMistakes": "Skipping key configuration files. Not loading project-specific guidelines. Assuming standard conventions."
+        },
+        {
+          "id": "meta-prompt-improvement",
+          "name": "Meta-Prompt Improvement",
+          "description": "Systematic approach for continuously improving AI assistant prompts and rules based on emerging patterns, feedback, and performance metrics.",
+          "sources": [
+            "steipete/agent-rules Continuous Improvement",
+            "Prompt Engineering Research"
+          ],
+          "relatedTechniques": [
+            "self-improvement",
+            "continuous-improvement"
+          ],
+          "useCase": "Prompt engineering optimization, team knowledge management, and systematic capture of best practices.",
+          "example": "Monitor code patterns → Extract repeated workflows → Create rule templates → Test effectiveness → Gather feedback → Iterate improvements",
+          "tips": "Track rule usage metrics. Document pattern frequency. Create feedback loops. Version control rule changes.",
+          "commonMistakes": "Not measuring rule effectiveness. Creating overly complex rules. Not deprecating outdated patterns."
+        },
+        {
+          "id": "browser-automation-prompting",
+          "name": "Browser Automation Prompting",
+          "description": "Structured patterns for automating web browser interactions, including element selection, timing management, and error handling strategies.",
+          "sources": [
+            "steipete/agent-rules Safari Automation",
+            "Web Automation Best Practices"
+          ],
+          "relatedTechniques": [
+            "tool-use-agents",
+            "error-handling-patterns"
+          ],
+          "useCase": "Web testing automation, UI interaction scripting, and documentation capture workflows.",
+          "example": "1) Activate browser 2) Navigate to URL 3) Wait for page load 4) Select elements using robust selectors 5) Verify results 6) Handle errors gracefully",
+          "tips": "Use strategic delays after process launches. Implement robust element selection. Handle Shadow DOM when needed. Always verify results.",
+          "commonMistakes": "Insufficient timing delays. Fragile element selectors. Not handling dynamic content. Poor error recovery."
+        },
+        {
+          "id": "comprehensive-code-analysis",
+          "name": "Comprehensive Code Analysis",
+          "description": "Multi-faceted code inspection methodology covering knowledge graphs, quality metrics, performance, security, architecture, and test coverage.",
+          "sources": [
+            "steipete/agent-rules",
+            "Static Analysis Best Practices"
+          ],
+          "relatedTechniques": [
+            "code-analysis",
+            "multi-perspective-analysis"
+          ],
+          "useCase": "Code reviews, technical debt assessment, architecture evaluation, and quality improvement planning.",
+          "example": "Analysis Menu: 1) Knowledge Graph 2) Quality Metrics 3) Performance Analysis 4) Security Review 5) Architecture Review 6) Test Coverage → Generate comprehensive report with actionable recommendations",
+          "tips": "Select analysis type based on specific needs. Provide actionable recommendations. Prioritize improvements by impact.",
+          "commonMistakes": "Analyzing everything at once. Not prioritizing findings. Providing vague recommendations."
+        },
+        {
+          "id": "automated-screenshot-documentation",
+          "name": "Automated Screenshot Documentation",
+          "description": "Systematic capture of application states and UI elements for documentation, testing, and visual verification purposes.",
+          "sources": [
+            "steipete/agent-rules Screenshot Automation",
+            "Visual Documentation Practices"
+          ],
+          "relatedTechniques": [
+            "browser-automation-prompting",
+            "visual-documentation-generation"
+          ],
+          "useCase": "Documentation creation, visual regression testing, and application state verification.",
+          "example": "1) Identify application process 2) Configure window state 3) Capture with proper timing 4) Verify screenshot quality 5) Organize with naming conventions",
+          "tips": "Use robust process identification. Handle timing carefully. Verify screenshot creation. Consider Retina display scaling.",
+          "commonMistakes": "Insufficient timing delays. Poor process identification. Not verifying capture success. Inconsistent naming."
         }
       ]
     }
