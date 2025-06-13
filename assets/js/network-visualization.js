@@ -67,6 +67,23 @@ class TechniqueNetworkVisualization {
             
             console.log(`✅ Network Visualization: Successfully loaded complete taxonomy: ${this.categoriesData.categories.length} categories, ${TaxonomyDataUtils.countTechniques(this.techniquesData)} techniques`);
             
+            // Debug: Check if secure-agent-architectures category exists
+            const secureAgentCategory = this.categoriesData.categories.find(cat => cat.id === 'secure-agent-architectures');
+            if (secureAgentCategory) {
+                console.log(`🔒 Found Secure Agent Architectures category: ${secureAgentCategory.techniques.length} techniques`);
+                console.log(`🔒 Techniques:`, secureAgentCategory.techniques);
+            } else {
+                console.warn('⚠️ Secure Agent Architectures category not found in categoriesData');
+            }
+            
+            const secureAgentTechniquesCategory = this.techniquesData.categories.find(cat => cat.id === 'secure-agent-architectures');
+            if (secureAgentTechniquesCategory) {
+                console.log(`🔒 Found Secure Agent Architectures in techniquesData: ${secureAgentTechniquesCategory.techniques.length} techniques`);
+                console.log(`🔒 First technique:`, secureAgentTechniquesCategory.techniques[0]?.name);
+            } else {
+                console.warn('⚠️ Secure Agent Architectures category not found in techniquesData');
+            }
+            
             // Process data into nodes and links
             this.processData();
         } catch (error) {
@@ -438,6 +455,8 @@ class TechniqueNetworkVisualization {
     filterByCategory(categoryId) {
         this.selectedCategory = categoryId;
         
+        console.log(`🎯 Filtering by category: ${categoryId}`);
+        
         if (categoryId === 'all') {
             // Show all nodes and links
             this.node.style('display', 'block');
@@ -445,6 +464,8 @@ class TechniqueNetworkVisualization {
             
             // Show links that connect visible nodes
             this.link.style('display', d => 'block');
+            
+            console.log(`✅ Showing all ${this.nodes.length} nodes and ${this.links.length} links`);
         } else {
             // Show nodes in the selected category and their direct connections
             const connectedNodeIds = new Set();
@@ -456,6 +477,8 @@ class TechniqueNetworkVisualization {
                     categoryNodeIds.add(node.id);
                 }
             });
+            
+            console.log(`📊 Found ${categoryNodeIds.size} nodes in category "${categoryId}":`, Array.from(categoryNodeIds));
             
             // Second pass: add all nodes directly connected to the selected category
             this.links.forEach(link => {
@@ -473,12 +496,14 @@ class TechniqueNetworkVisualization {
             // Add all category nodes to connected nodes
             categoryNodeIds.forEach(id => connectedNodeIds.add(id));
             
+            console.log(`🔗 Total connected nodes (including category + related): ${connectedNodeIds.size}`);
+            
             // Show/hide nodes
-            this.node.style('display', d => 
+            this.node.style('display', d =>
                 connectedNodeIds.has(d.id) ? 'block' : 'none'
             );
             
-            this.nodeLabels.style('display', d => 
+            this.nodeLabels.style('display', d =>
                 connectedNodeIds.has(d.id) ? 'block' : 'none'
             );
             
@@ -489,6 +514,16 @@ class TechniqueNetworkVisualization {
                 
                 return connectedNodeIds.has(sourceId) && connectedNodeIds.has(targetId) ? 'block' : 'none';
             });
+            
+            // Count visible links
+            let visibleLinks = 0;
+            this.link.each(function(d) {
+                if (d3.select(this).style('display') !== 'none') {
+                    visibleLinks++;
+                }
+            });
+            
+            console.log(`👁️ Showing ${connectedNodeIds.size} nodes and ${visibleLinks} links for category "${categoryId}"`);
         }
         
         // Restart simulation with visible nodes only
