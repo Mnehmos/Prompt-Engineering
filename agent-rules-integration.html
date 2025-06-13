@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Assistant Workflow Techniques from steipete/agent-rules - Learn structured prompting patterns for team collaboration and development automation">
+    <meta name="keywords" content="AI assistant workflows, agent rules, MCP servers, prompt templates, development automation">
+    <title>AI Assistant Workflow Techniques | Agent Rules Integration</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <h1>Prompt Engineering Taxonomy</h1>
+            </div>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="reports/taxonomy-overview.html">Taxonomy</a>
+                <a href="reports/technique-relationships.html">Relationships</a>
+                <a href="prompt-builder.html">Prompt Builder</a>
+                <a href="sources.html">Sources</a>
+                <a href="agent-rules-integration.html" class="active">Agent Rules</a>
+                <a href="https://github.com/Mnehmos?tab=repositories" target="_blank">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>AI Assistant Workflow Techniques</h2>
+                <p>New prompting techniques from the steipete/agent-rules repository for structured AI assistant workflows and team collaboration</p>
+                <div class="hero-buttons">
+                    <a href="https://github.com/steipete/agent-rules" target="_blank" class="button primary">View Agent Rules Repository</a>
+                    <a href="reports/taxonomy-overview.html" class="button secondary">Browse All Techniques</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="overview-section">
+            <h2>About Agent Rules Integration</h2>
+            <p>We've integrated cutting-edge techniques from the <a href="https://github.com/steipete/agent-rules" target="_blank">steipete/agent-rules</a> repository, which provides a comprehensive collection of reusable rules and knowledge documents for AI coding assistants like Claude Code and Cursor. These techniques represent the latest in structured AI assistant workflows and team collaboration patterns.</p>
+
+            <div class="stat-cards">
+                <div class="stat-card">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">New Techniques</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Categories Enhanced</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">21</div>
+                    <div class="stat-label">Project Rules Available</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Documentation Files</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="feature-section">
+            <h2>New Techniques Overview</h2>
+            <p>These techniques enable teams to standardize AI assistant behavior, create reusable workflows, and implement sophisticated development automation.</p>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <div class="technique-category">Basic Concepts</div>
+                    <h3>Workflow Template Prompting (.mdc Pattern)</h3>
+                    <p>Using structured markdown templates with YAML frontmatter to create reusable, configurable AI assistant workflows that work across different AI platforms.</p>
+                    <div class="technique-details">
+                        <h4>Use Cases:</h4>
+                        <ul>
+                            <li>Standardizing AI assistant behavior across teams</li>
+                            <li>Creating reusable workflow automation</li>
+                            <li>Cross-platform AI tool compatibility</li>
+                        </ul>
+                        <h4>Example Structure:</h4>
+                        <pre><code>---
+description: Create well-structured GitHub issues
+globs: "*.md"
+alwaysApply: false
+---
+# GitHub Issue Creation
+You are tasked with creating well-structured GitHub issues...</code></pre>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-category">Multi-Agent Systems</div>
+                    <h3>AI Assistant Rule Systems</h3>
+                    <p>Implementing structured rule hierarchies with global and project-specific configurations to guide AI assistant behavior consistently.</p>
+                    <div class="technique-details">
+                        <h4>Use Cases:</h4>
+                        <ul>
+                            <li>Enterprise AI assistant deployments</li>
+                            <li>Consistent behavior across teams</li>
+                            <li>Quality standards enforcement</li>
+                        </ul>
+                        <h4>Hierarchy Example:</h4>
+                        <pre><code>Global Rule: "Always use conventional commit format"
+Project Rule: "Include JIRA ticket number"
+Result: "feat(auth): add OAuth support [PROJ-123]"</code></pre>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-category">Specialized Applications</div>
+                    <h3>Automated Development Workflows</h3>
+                    <p>Structured prompting patterns for common development tasks like commits, PR reviews, issue analysis, and code quality checks.</p>
+                    <div class="technique-details">
+                        <h4>Available Workflows:</h4>
+                        <ul>
+                            <li>Commit message generation</li>
+                            <li>Pull request reviews</li>
+                            <li>Issue analysis and planning</li>
+                            <li>Code quality assessments</li>
+                            <li>Changelog management</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-category">Agent & Tool Use</div>
+                    <h3>MCP Server Integration Patterns</h3>
+                    <p>Prompting techniques for integrating and orchestrating Model Context Protocol servers to extend AI capabilities with external tools and services.</p>
+                    <div class="technique-details">
+                        <h4>Key Features:</h4>
+                        <ul>
+                            <li>Standardized tool integration</li>
+                            <li>Error handling patterns</li>
+                            <li>Configuration management</li>
+                            <li>Service orchestration</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-category">Agent & Tool Use</div>
+                    <h3>GitHub Integration Prompting</h3>
+                    <p>Structured approaches for AI assistants to interact with GitHub repositories, issues, PRs, and project management through systematic research and action patterns.</p>
+                    <div class="technique-details">
+                        <h4>Workflow Steps:</h4>
+                        <ol>
+                            <li>Research repository conventions</li>
+                            <li>Analyze similar issues/PRs</li>
+                            <li>Structure according to templates</li>
+                            <li>Generate comprehensive descriptions</li>
+                            <li>Execute GitHub CLI commands</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-category">Multi-Agent Systems</div>
+                    <h3>Agent Configuration Management</h3>
+                    <p>Systematic approaches to managing AI agent configurations, including global settings, project-specific rules, and environment-specific adaptations.</p>
+                    <div class="technique-details">
+                        <h4>Configuration Layers:</h4>
+                        <ul>
+                            <li>Global: ~/.claude/CLAUDE.md</li>
+                            <li>Project: .cursor/rules/*.mdc</li>
+                            <li>Task-specific prompts</li>
+                            <li>Runtime context</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="implementation-section">
+            <h2>Implementation Guide</h2>
+            <p>Learn how to implement these techniques in your development workflow</p>
+            
+            <div class="implementation-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Set Up Global Configuration</h3>
+                    <p>Create a global AI assistant configuration directory and set up base rules that apply across all projects.</p>
+                    <pre><code>mkdir -p ~/.claude
+# Add global rules to ~/.claude/CLAUDE.md</code></pre>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Create Project Rules</h3>
+                    <p>Set up project-specific rules using the .mdc format with YAML frontmatter for configuration metadata.</p>
+                    <pre><code>mkdir -p .cursor/rules
+# Copy relevant .mdc files from agent-rules repository</code></pre>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Configure MCP Servers</h3>
+                    <p>Set up Model Context Protocol servers for external tool integration following the documented best practices.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Test and Iterate</h3>
+                    <p>Test your configuration with real development tasks and iterate based on team feedback and usage patterns.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="resources-section">
+            <h2>Additional Resources</h2>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <h3>Original Repository</h3>
+                    <p>Explore the complete steipete/agent-rules repository with all available rules and documentation.</p>
+                    <a href="https://github.com/steipete/agent-rules" target="_blank" class="button">View Repository →</a>
+                </div>
+                
+                <div class="resource-card">
+                    <h3>MCP Documentation</h3>
+                    <p>Learn about the Model Context Protocol and how to build your own MCP servers.</p>
+                    <a href="https://modelcontextprotocol.io/" target="_blank" class="button">MCP Docs →</a>
+                </div>
+                
+                <div class="resource-card">
+                    <h3>Cursor Rules</h3>
+                    <p>Understand how to use .mdc files with Cursor for AI-assisted development.</p>
+                    <a href="https://docs.cursor.com/" target="_blank" class="button">Cursor Docs →</a>
+                </div>
+                
+                <div class="resource-card">
+                    <h3>Claude Code</h3>
+                    <p>Learn about Claude Code integration and configuration patterns.</p>
+                    <a href="https://claude.ai/" target="_blank" class="button">Claude AI →</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Prompt Engineering Taxonomy</h3>
+                <p>A comprehensive collection of prompt engineering techniques including the latest AI assistant workflow patterns.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="reports/taxonomy-overview.html">Taxonomy</a></li>
+                    <li><a href="agent-rules-integration.html">Agent Rules</a></li>
+                    <li><a href="sources.html">Sources</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="https://github.com/steipete/agent-rules" target="_blank">Agent Rules Repository</a></li>
+                    <li><a href="https://modelcontextprotocol.io/" target="_blank">MCP Documentation</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Prompt Engineering Taxonomy Project. Agent Rules integration based on steipete/agent-rules repository.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/header-footer.js"></script>
+    <style>
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .technique-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .technique-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .technique-category {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        .technique-details {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .technique-details h4 {
+            margin-bottom: 0.5rem;
+            color: var(--gray-700);
+            font-size: 0.9rem;
+        }
+        
+        .technique-details ul, .technique-details ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        .technique-details li {
+            margin-bottom: 0.25rem;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+        
+        .technique-details pre {
+            background-color: var(--gray-100);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            margin: 0.5rem 0;
+        }
+        
+        .implementation-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .step {
+            text-align: center;
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 3rem;
+            height: 3rem;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        
+        .step pre {
+            text-align: left;
+            background-color: var(--gray-100);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .resource-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .resource-card .button {
+            margin-top: 1rem;
+            display: inline-block;
+        }
+    </style>
+</body>
+</html>

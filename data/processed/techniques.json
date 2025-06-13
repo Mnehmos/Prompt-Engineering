@@ -1369,6 +1369,108 @@
           ],
           "useCase": "Organizations and communities running AI systems that need to systematically capture, share, and learn from operational errors and edge cases.",
           "example": "Error: 'Semantic drift in Code mode' → Cause: 'Overly general system prompt' → Reproduction: 'Ask code mode to write poetry' → Solution: 'Add technical focus guardrail'"
+        },
+        {
+          "id": "workflow-template-prompting",
+          "name": "Workflow Template Prompting (.mdc Pattern)",
+          "description": "Using structured markdown templates with YAML frontmatter to create reusable, configurable AI assistant workflows that work across different AI platforms.",
+          "sources": [
+            "steipete/agent-rules",
+            "Cursor Rules Documentation"
+          ],
+          "relatedTechniques": [
+            "template-prompting",
+            "mode-based-specialization"
+          ],
+          "useCase": "Standardizing AI assistant behavior across teams and projects, creating reusable workflow automation.",
+          "example": "---\ndescription: Create well-structured GitHub issues\nglobs: \"*.md\"\nalwaysApply: false\n---\n# GitHub Issue Creation\nYou are tasked with creating well-structured GitHub issues...",
+          "tips": "Use YAML frontmatter for configuration metadata. Make templates generic enough for reuse. Include clear step-by-step instructions.",
+          "commonMistakes": "Making templates too project-specific. Not including proper error handling instructions. Forgetting to specify output formats."
+        },
+        {
+          "id": "ai-assistant-rule-systems",
+          "name": "AI Assistant Rule Systems",
+          "description": "Implementing structured rule hierarchies with global and project-specific configurations to guide AI assistant behavior consistently.",
+          "sources": [
+            "steipete/agent-rules",
+            "Claude Code Best Practices"
+          ],
+          "relatedTechniques": [
+            "workflow-template-prompting",
+            "semantic-guardrails"
+          ],
+          "useCase": "Enterprise AI assistant deployments requiring consistent behavior across teams and consistent quality standards.",
+          "example": "Global Rule: 'Always use conventional commit format'. Project Rule: 'Include JIRA ticket number in commits'. Combined: 'feat(auth): add OAuth support [PROJ-123]'",
+          "tips": "Establish clear rule hierarchy (global → project → task-specific). Use inheritance patterns. Document rule conflicts resolution.",
+          "commonMistakes": "Creating conflicting rules. Not providing examples. Making rules too rigid for edge cases."
+        },
+        {
+          "id": "automated-development-workflows",
+          "name": "Automated Development Workflows",
+          "description": "Structured prompting patterns for common development tasks like commits, PR reviews, issue analysis, and code quality checks.",
+          "sources": [
+            "steipete/agent-rules",
+            "vincenthopf/claude-code"
+          ],
+          "relatedTechniques": [
+            "workflow-template-prompting",
+            "chain-of-thought"
+          ],
+          "useCase": "Standardizing development processes through AI assistance, ensuring consistent quality and documentation.",
+          "example": "Commit Workflow: 1) Analyze changes 2) Categorize by conventional commit type 3) Generate clear, descriptive message 4) Add relevant emoji 5) Include breaking change notes if needed",
+          "tips": "Break complex workflows into clear steps. Include validation criteria. Provide fallback options for edge cases.",
+          "commonMistakes": "Skipping validation steps. Not handling merge conflicts. Assuming perfect git state."
+        },
+        {
+          "id": "mcp-server-integration-patterns",
+          "name": "MCP Server Integration Patterns",
+          "description": "Prompting techniques for integrating and orchestrating Model Context Protocol servers to extend AI capabilities with external tools and services.",
+          "sources": [
+            "steipete/agent-rules MCP Best Practices",
+            "Model Context Protocol Documentation"
+          ],
+          "relatedTechniques": [
+            "tool-use-agents",
+            "react"
+          ],
+          "useCase": "Building sophisticated AI systems that integrate with external APIs, databases, and services through standardized protocols.",
+          "example": "Tool Integration: 'Use the github MCP server to create an issue: {\"title\": \"Bug report\", \"body\": \"Detailed description\", \"labels\": [\"bug\"]}' → Server executes → Return results",
+          "tips": "Design for sensible defaults. Implement proper error handling. Use file-based logging. Validate configurations.",
+          "commonMistakes": "Not handling server failures gracefully. Ignoring stdio output restrictions. Poor error messages."
+        },
+        {
+          "id": "github-integration-prompting",
+          "name": "GitHub Integration Prompting",
+          "description": "Structured approaches for AI assistants to interact with GitHub repositories, issues, PRs, and project management through systematic research and action patterns.",
+          "sources": [
+            "steipete/agent-rules",
+            "@nityeshaga GitHub Best Practices"
+          ],
+          "relatedTechniques": [
+            "automated-development-workflows",
+            "mcp-server-integration-patterns"
+          ],
+          "useCase": "Automating GitHub workflow tasks like issue creation, PR reviews, and project management through AI assistance.",
+          "example": "Issue Creation Flow: 1) Research repository conventions 2) Analyze similar issues 3) Structure according to templates 4) Generate comprehensive description 5) Execute 'gh issue create' with proper metadata",
+          "tips": "Always research repository conventions first. Use templates when available. Include proper labeling and assignment.",
+          "commonMistakes": "Not researching existing conventions. Creating duplicate issues. Poor categorization."
+        },
+        {
+          "id": "agent-configuration-management",
+          "name": "Agent Configuration Management",
+          "description": "Systematic approaches to managing AI agent configurations, including global settings, project-specific rules, and environment-specific adaptations.",
+          "sources": [
+            "steipete/agent-rules",
+            "Commanding Your Claude Code Army"
+          ],
+          "relatedTechniques": [
+            "ai-assistant-rule-systems",
+            "mode-based-specialization"
+          ],
+          "useCase": "Managing complex AI assistant deployments across multiple projects, teams, and environments with consistent behavior.",
+          "example": "Configuration Hierarchy: ~/.claude/CLAUDE.md (global) → .cursor/rules/*.mdc (project) → task-specific prompts → runtime context",
+          "tips": "Use hierarchical configuration systems. Implement configuration validation. Provide clear inheritance rules.",
+          "commonMistakes": "Configuration conflicts. No validation. Poor documentation of precedence rules."
         }
       ]
     }

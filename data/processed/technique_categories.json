@@ -14,7 +14,8 @@
         "prefix-prompts",
         "template-prompting",
         "instructed-prompting",
-        "role-prompting"
+        "role-prompting",
+        "workflow-template-prompting"
       ]
     },
     {
@@ -53,7 +54,9 @@
         "gitm",
         "reflexion",
         "voyager",
-        "tora"
+        "tora",
+        "mcp-server-integration-patterns",
+        "github-integration-prompting"
       ]
     },
     {
@@ -140,7 +143,8 @@
         "chain-of-code",
         "modular-code-generation",
         "flow-engineering",
-        "test-based-iterative-flow"
+        "test-based-iterative-flow",
+        "automated-development-workflows"
       ]
     },
     {
@@ -152,7 +156,9 @@
         "mode-based-specialization",
         "semantic-guardrails",
         "task-boundary-enforcement",
-        "error-pattern-libraries"
+        "error-pattern-libraries",
+        "ai-assistant-rule-systems",
+        "agent-configuration-management"
       ]
     }
   ]
