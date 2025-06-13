@@ -834,7 +834,8 @@ class TaxonomyDataLoader {
             'prompt-optimization': 'fas fa-sliders-h',
             'multimodal-techniques': 'fas fa-images',
             'specialized-application': 'fas fa-cogs',
-            'multi-agent-systems': 'fas fa-users'
+            'multi-agent-systems': 'fas fa-users',
+            'secure-agent-architectures': 'fas fa-shield-alt'
         };
         
         return iconMap[categoryId] || 'fas fa-lightbulb';

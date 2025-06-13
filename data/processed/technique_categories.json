@@ -169,6 +169,25 @@
         "multi-perspective-analysis",
         "structured-commit-workflow"
       ]
+    },
+    {
+      "id": "secure-agent-architectures",
+      "name": "Secure Agent Architectures",
+      "description": "Architectural design patterns for building secure and resilient LLM agents against threats like prompt injection.",
+      "techniques": [
+        "action-selector-pattern",
+        "plan-then-execute-pattern",
+        "llm-map-reduce-pattern",
+        "dual-llm-pattern",
+        "code-then-execute-pattern-camel",
+        "context-minimization-pattern",
+        "universal-adversarial-triggers",
+        "role-playing-jailbreaks",
+        "multi-turn-jailbreaks",
+        "instruction-hierarchy-attacks",
+        "constitutional-ai-defense",
+        "adversarial-training-defense"
+      ]
     }
   ]
 }
