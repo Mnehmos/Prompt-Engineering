@@ -826,6 +826,9 @@ class TaxonomyDataLoader {
      */
     getCategoryIcon(categoryId) {
         const iconMap = {
+            'context-engineering': 'fas fa-brain',
+            'workflow-engineering': 'fas fa-project-diagram',
+            'agentic-frameworks': 'fas fa-robot',
             'basic-concepts': 'fas fa-book',
             'reasoning-frameworks': 'fas fa-brain',
             'agent-tool-use': 'fas fa-robot',
