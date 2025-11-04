@@ -11,283 +11,209 @@
       "id": "context-engineering",
       "name": "Context Engineering",
       "description": "Managing information flow and structure for optimal AI performance",
-      "color": "#3B82F6",
-      "icon": "🧠",
       "techniques": [
         {
           "id": "efficient-attention",
           "name": "Efficient Attention Mechanisms",
           "description": "Flash-Attention 3, sparse attention, and sub-quadratic scaling for processing massive contexts (200K+ tokens)",
           "example": "Using Flash-Attention 3 to enable 100K+ token contexts on consumer hardware",
-          "applications": [
-            "Long-document processing",
-            "Context window optimization",
-            "Memory-efficient inference"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "July 2025 Summary",
             "September 2025 Summary"
-          ]
+          ],
+          "useCase": "Long-document processing. Context window optimization. Memory-efficient inference.",
+          "relatedTechniques": []
         },
         {
           "id": "context-compression",
           "name": "Context Compression",
           "description": "Advanced compression techniques for storing and processing large contexts efficiently",
           "example": "Summarizing 10K tokens into 1K focused context windows while preserving key information",
-          "applications": [
-            "Long-context processing",
-            "Memory optimization",
-            "Information preservation"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "September 2025 Summary"
-          ]
+          ],
+          "useCase": "Long-context processing. Memory optimization. Information preservation.",
+          "relatedTechniques": []
         },
         {
           "id": "sparse-attention",
           "name": "Sparse Attention for 1M+ Tokens",
           "description": "Attention mechanisms that only compute on relevant tokens for ultra-long contexts",
           "example": "Processing 1M+ token documents using sparse attention patterns",
-          "applications": [
-            "Document analysis",
-            "Codebase understanding",
-            "Research paper analysis"
-          ],
-          "maturity": "emerging",
           "sources": [
             "September 2025 Summary",
             "October 2025 Summary"
-          ]
+          ],
+          "useCase": "Document analysis. Codebase understanding. Research paper analysis.",
+          "relatedTechniques": []
         },
         {
           "id": "dynamic-context-windowing",
           "name": "Dynamic Context Windowing",
           "description": "Variable context size optimization based on task requirements and efficiency needs",
           "example": "Adjusting context window from 4K to 100K tokens based on document complexity",
-          "applications": [
-            "Adaptive processing",
-            "Cost optimization",
-            "Performance tuning"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "July 2025 Summary",
             "August 2025 Summary"
-          ]
+          ],
+          "useCase": "Adaptive processing. Cost optimization. Performance tuning.",
+          "relatedTechniques": []
         },
         {
           "id": "memory-management",
           "name": "Memory Management Strategies",
           "description": "Systematic approaches to managing context memory across long interactions",
           "example": "Implementing sliding window memory with importance-weighted retention",
-          "applications": [
-            "Long conversations",
-            "Multi-session workflows",
-            "Context persistence"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "September 2025 Summary"
-          ]
+          ],
+          "useCase": "Long conversations. Multi-session workflows. Context persistence.",
+          "relatedTechniques": []
         },
         {
           "id": "cross-modal-fusion",
           "name": "Cross-Modal Context Fusion",
           "description": "Integrating information across text, image, audio, and action modalities",
           "example": "Combining visual scene understanding with textual instructions for robotics",
-          "applications": [
-            "Multimodal AI",
-            "Robotics",
-            "Vision-Language-Action models"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "July 2025 Summary",
             "August 2025 Summary"
-          ]
+          ],
+          "useCase": "Multimodal AI. Robotics. Vision-Language-Action models.",
+          "relatedTechniques": []
         },
         {
           "id": "context-layering",
           "name": "Context Layer Architecture",
           "description": "Organized context into persistent, session, immediate, and transient layers",
           "example": "Layer 1: Project architecture (persistent), Layer 2: Current task (session), Layer 3: Active files (immediate)",
-          "applications": [
-            "Multi-agent systems",
-            "Complex workflows",
-            "Context organization"
-          ],
-          "maturity": "established",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Multi-agent systems. Complex workflows. Context organization.",
+          "relatedTechniques": []
         },
         {
           "id": "context-prioritization",
           "name": "Context Prioritization",
           "description": "Intelligent ordering and filtering of context based on relevance and task requirements",
           "example": "Prioritizing API documentation over boilerplate code when debugging",
-          "applications": [
-            "Task-focused context",
-            "Information filtering",
-            "Attention optimization"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Task-focused context. Information filtering. Attention optimization.",
+          "relatedTechniques": []
         },
         {
           "id": "world-model-forecasting",
           "name": "World Model Forecasting",
           "description": "Predictive context generation using world models for anticipatory reasoning",
           "example": "DreamVLA predicting future states for improved decision-making in VLA models",
-          "applications": [
-            "Predictive AI",
-            "Planning",
-            "Autonomous systems"
-          ],
-          "maturity": "research",
           "sources": [
             "August 2025 Summary"
-          ]
+          ],
+          "useCase": "Predictive AI. Planning. Autonomous systems.",
+          "relatedTechniques": []
         },
         {
           "id": "continuous-representation",
           "name": "Continuous Representation",
           "description": "Moving from discrete token generation to continuous representations",
           "example": "Continuous Autoregressive Models for improved sequence modeling",
-          "applications": [
-            "Advanced generation",
-            "Sequence modeling",
-            "Quality improvement"
-          ],
-          "maturity": "research",
           "sources": [
             "October 2025 Summary"
-          ]
+          ],
+          "useCase": "Advanced generation. Sequence modeling. Quality improvement.",
+          "relatedTechniques": []
         },
         {
           "id": "context-compression-algorithms",
           "name": "Context Compression Algorithms",
           "description": "Algorithmic approaches to compressing context while preserving meaning",
           "example": "Semantic compression that maintains reasoning chains while reducing token count",
-          "applications": [
-            "Efficient storage",
-            "Transmission optimization",
-            "Quality preservation"
-          ],
-          "maturity": "emerging",
           "sources": [
             "September 2025 Summary",
             "October 2025 Summary"
-          ]
+          ],
+          "useCase": "Efficient storage. Transmission optimization. Quality preservation.",
+          "relatedTechniques": []
         },
         {
           "id": "higher-order-attention",
           "name": "Higher-Order Linear Attention",
           "description": "Advanced attention mechanisms that bridge linear and softmax attention efficiency",
           "example": "Higher-order attention providing softmax expressiveness with linear complexity",
-          "applications": [
-            "Efficiency optimization",
-            "Long-sequence processing",
-            "Attention mechanisms"
-          ],
-          "maturity": "research",
           "sources": [
             "October 2025 Summary"
-          ]
+          ],
+          "useCase": "Efficiency optimization. Long-sequence processing. Attention mechanisms.",
+          "relatedTechniques": []
         },
         {
           "id": "agentic-context-isolation",
           "name": "Agentic Environment Isolation",
           "description": "Bounded execution contexts for agents with specific tools and resources",
           "example": "OpenEnv architecture defining sandboxed contexts with specific capabilities",
-          "applications": [
-            "Agent safety",
-            "Deterministic execution",
-            "Resource management"
-          ],
-          "maturity": "established",
           "sources": [
             "November 2025 Summary"
-          ]
+          ],
+          "useCase": "Agent safety. Deterministic execution. Resource management.",
+          "relatedTechniques": []
         },
         {
           "id": "context-federation",
           "name": "Context Federation",
           "description": "Distributing and coordinating context across multiple agents and systems",
           "example": "MCP Context Forge managing context delivery across agent networks",
-          "applications": [
-            "Multi-agent systems",
-            "Context sharing",
-            "System interoperability"
-          ],
-          "maturity": "emerging",
           "sources": [
             "November 2025 Summary"
-          ]
+          ],
+          "useCase": "Multi-agent systems. Context sharing. System interoperability.",
+          "relatedTechniques": []
         },
         {
           "id": "keyframe-selection",
           "name": "Video Keyframe Selection",
           "description": "Efficient selection of important frames from long videos for multimodal processing",
           "example": "FOCUS algorithm selecting representative frames from hour-long videos",
-          "applications": [
-            "Video understanding",
-            "Multimodal AI",
-            "Efficient processing"
-          ],
-          "maturity": "research",
           "sources": [
             "October 2025 Summary"
-          ]
+          ],
+          "useCase": "Video understanding. Multimodal AI. Efficient processing.",
+          "relatedTechniques": []
         },
         {
           "id": "gradient-checkpointing",
           "name": "Memory-Efficient Transformers",
           "description": "Gradient checkpointing and activation recomputation for context optimization",
           "example": "Enabling large context windows through memory-efficient transformer architectures",
-          "applications": [
-            "Large models",
-            "Memory optimization",
-            "Context scaling"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "July 2025 Summary"
-          ]
+          ],
+          "useCase": "Large models. Memory optimization. Context scaling.",
+          "relatedTechniques": []
         },
         {
           "id": "speculative-context",
           "name": "Speculative Context Management",
           "description": "Anticipatory context loading based on predicted information needs",
           "example": "Pre-loading relevant documentation based on code analysis",
-          "applications": [
-            "Predictive loading",
-            "Workflow optimization",
-            "Response time improvement"
-          ],
-          "maturity": "emerging",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Predictive loading. Workflow optimization. Response time improvement.",
+          "relatedTechniques": []
         },
         {
           "id": "mcp-context-integration",
           "name": "Model Context Protocol Integration",
           "description": "Standardized protocol for context delivery and tool interoperability",
           "example": "MCP Gateway providing unified context access across different AI systems",
-          "applications": [
-            "System interoperability",
-            "Context standardization",
-            "Tool integration"
-          ],
-          "maturity": "standardizing",
           "sources": [
             "November 2025 Summary"
-          ]
+          ],
+          "useCase": "System interoperability. Context standardization. Tool integration.",
+          "relatedTechniques": []
         }
       ]
     },
@@ -295,303 +221,225 @@
       "id": "workflow-engineering",
       "name": "Workflow Engineering",
       "description": "Orchestrating multi-step agent interactions and task coordination",
-      "color": "#10B981",
-      "icon": "⚡",
       "techniques": [
         {
           "id": "boomerang-coordination",
           "name": "Boomerang Coordination Pattern",
           "description": "Distributed agent coordination with structured returns and validation",
           "example": "Orchestrator assigns task to specialist → Specialist executes → Returns structured result → Orchestrator validates",
-          "applications": [
-            "Multi-agent systems",
-            "Error recovery",
-            "Distributed coordination"
-          ],
-          "maturity": "core-pattern",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Multi-agent systems. Error recovery. Distributed coordination.",
+          "relatedTechniques": []
         },
         {
           "id": "multi-agent-state-management",
           "name": "Multi-Agent State Management",
           "description": "Persistent, shared state across multiple agents with isolation and validation",
           "example": "Event sourcing for state changes with snapshot recovery and conflict resolution",
-          "applications": [
-            "State persistence",
-            "Recovery mechanisms",
-            "Distributed systems"
-          ],
-          "maturity": "established",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "State persistence. Recovery mechanisms. Distributed systems.",
+          "relatedTechniques": []
         },
         {
           "id": "hierarchical-task-planning",
           "name": "Hierarchical Task Planning",
           "description": "Systematic decomposition across strategic, tactical, and operational layers",
           "example": "Strategy: Feature development → Tactics: Architecture design → Operations: Implementation",
-          "applications": [
-            "Complex workflows",
-            "Resource allocation",
-            "Parallel execution"
-          ],
-          "maturity": "established",
           "sources": [
             "Workflow Engineering Patterns",
             "September 2025 Summary"
-          ]
+          ],
+          "useCase": "Complex workflows. Resource allocation. Parallel execution.",
+          "relatedTechniques": []
         },
         {
           "id": "graph-based-optimization",
           "name": "Graph-Based Workflow Optimization",
           "description": "Workflow execution optimization using graph theory and dependency analysis",
           "example": "Critical path analysis for time optimization with parallelizable branch detection",
-          "applications": [
-            "Workflow optimization",
-            "Resource management",
-            "Performance tuning"
-          ],
-          "maturity": "established",
           "sources": [
             "Workflow Engineering Patterns",
             "September 2025 Summary"
-          ]
+          ],
+          "useCase": "Workflow optimization. Resource management. Performance tuning.",
+          "relatedTechniques": []
         },
         {
           "id": "speculative-execution",
           "name": "Speculative Execution",
           "description": "Proactive task execution based on predicted needs with rollback capabilities",
           "example": "Preparing test scaffolding while implementing features, rollback if approach changes",
-          "applications": [
-            "Latency reduction",
-            "Proactive optimization",
-            "Resource management"
-          ],
-          "maturity": "emerging",
           "sources": [
             "Workflow Engineering Patterns",
             "October 2025 Summary"
-          ]
+          ],
+          "useCase": "Latency reduction. Proactive optimization. Resource management.",
+          "relatedTechniques": []
         },
         {
           "id": "mixture-of-agents",
           "name": "Mixture-of-Agents Architecture",
           "description": "Specialized agents with intelligent routing and consensus mechanisms",
           "example": "VeriMoA framework with hardware design agents and code generation specialists",
-          "applications": [
-            "Domain specialization",
-            "Task routing",
-            "Consensus building"
-          ],
-          "maturity": "emerging",
           "sources": [
             "October 2025 Summary",
             "November 2025 Summary"
-          ]
+          ],
+          "useCase": "Domain specialization. Task routing. Consensus building.",
+          "relatedTechniques": []
         },
         {
           "id": "agent-specialization",
           "name": "Agent Specialization",
           "description": "Domain-specific agent development with capability-based routing",
           "example": "Code generation agents, architecture agents, testing agents with optimal capability matching",
-          "applications": [
-            "Domain expertise",
-            "Performance optimization",
-            "Capability specialization"
-          ],
-          "maturity": "established",
           "sources": [
             "Workflow Engineering Patterns",
             "Coding Assistant Comparison"
-          ]
+          ],
+          "useCase": "Domain expertise. Performance optimization. Capability specialization.",
+          "relatedTechniques": []
         },
         {
           "id": "multi-agent-orchestration",
           "name": "Multi-Agent Orchestration",
           "description": "Coordination frameworks for managing multiple specialized agents",
           "example": "LangGraph and AutoGen frameworks for stateful, multi-actor applications",
-          "applications": [
-            "Agent coordination",
-            "Workflow automation",
-            "System orchestration"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "August 2025 Summary",
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Agent coordination. Workflow automation. System orchestration.",
+          "relatedTechniques": []
         },
         {
           "id": "inter-agent-communication",
           "name": "Inter-Agent Communication",
           "description": "Structured communication protocols between agents with standardized formats",
           "example": "JSON payload schemas for agent handoffs with validation and error handling",
-          "applications": [
-            "Agent communication",
-            "Data exchange",
-            "System integration"
-          ],
-          "maturity": "established",
           "sources": [
             "Workflow Engineering Patterns",
             "August 2025 Summary"
-          ]
+          ],
+          "useCase": "Agent communication. Data exchange. System integration.",
+          "relatedTechniques": []
         },
         {
           "id": "adaptive-execution",
           "name": "Adaptive Execution",
           "description": "Dynamic workflow modification based on intermediate results and environmental changes",
           "example": "Adjusting execution paths based on API availability or performance metrics",
-          "applications": [
-            "Dynamic workflows",
-            "Error handling",
-            "Performance adaptation"
-          ],
-          "maturity": "emerging",
           "sources": [
             "Workflow Engineering Patterns",
             "September 2025 Summary"
-          ]
+          ],
+          "useCase": "Dynamic workflows. Error handling. Performance adaptation.",
+          "relatedTechniques": []
         },
         {
           "id": "agentic-rag",
           "name": "Agentic RAG",
           "description": "Autonomous retrieval-augmented generation with agent-driven retrieval strategies",
           "example": "Agents decide when and what to retrieve, adapt retrieval strategies dynamically",
-          "applications": [
-            "Autonomous retrieval",
-            "Dynamic RAG",
-            "Intelligent information access"
-          ],
-          "maturity": "established",
           "sources": [
             "September 2025 Summary"
-          ]
+          ],
+          "useCase": "Autonomous retrieval. Dynamic RAG. Intelligent information access.",
+          "relatedTechniques": []
         },
         {
           "id": "rdma-communication",
           "name": "RDMA Communication Infrastructure",
           "description": "High-performance remote direct memory access for distributed LLM systems",
           "example": "RDMA point-to-point communication for multi-node LLM training and inference",
-          "applications": [
-            "Distributed systems",
-            "Performance optimization",
-            "Infrastructure scaling"
-          ],
-          "maturity": "research",
           "sources": [
             "October 2025 Summary",
             "November 2025 Summary"
-          ]
+          ],
+          "useCase": "Distributed systems. Performance optimization. Infrastructure scaling.",
+          "relatedTechniques": []
         },
         {
           "id": "workflow-graph-analysis",
           "name": "Workflow Graph Analysis",
           "description": "Dependency analysis, critical path identification, and optimization using graph theory",
           "example": "Analyzing workflow graphs to identify bottlenecks and optimization opportunities",
-          "applications": [
-            "Performance analysis",
-            "Optimization",
-            "Resource planning"
-          ],
-          "maturity": "established",
           "sources": [
             "Workflow Engineering Patterns",
             "September 2025 Summary"
-          ]
+          ],
+          "useCase": "Performance analysis. Optimization. Resource planning.",
+          "relatedTechniques": []
         },
         {
           "id": "task-decomposition",
           "name": "Intelligent Task Decomposition",
           "description": "Automatic breaking down of complex tasks into manageable subtasks",
           "example": "Analyzing user requirements and automatically creating implementation subtasks",
-          "applications": [
-            "Task planning",
-            "Complexity management",
-            "Automation"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Task planning. Complexity management. Automation.",
+          "relatedTechniques": []
         },
         {
           "id": "resource-allocation",
           "name": "Dynamic Resource Allocation",
           "description": "Intelligent distribution of computational resources based on workflow needs",
           "example": "Allocating more context window to analysis tasks, less to simple transformations",
-          "applications": [
-            "Resource optimization",
-            "Cost management",
-            "Performance tuning"
-          ],
-          "maturity": "emerging",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Resource optimization. Cost management. Performance tuning.",
+          "relatedTechniques": []
         },
         {
           "id": "failure-recovery",
           "name": "Systematic Failure Recovery",
           "description": "Structured approaches to error handling and workflow recovery",
           "example": "Boomerang retry mechanisms with exponential backoff and state restoration",
-          "applications": [
-            "Error handling",
-            "System reliability",
-            "Workflow continuity"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Error handling. System reliability. Workflow continuity.",
+          "relatedTechniques": []
         },
         {
           "id": "parallel-execution",
           "name": "Parallel Workflow Execution",
           "description": "Identifying and executing independent tasks simultaneously",
           "example": "Running tests and documentation generation in parallel after core implementation",
-          "applications": [
-            "Performance optimization",
-            "Time reduction",
-            "Workflow efficiency"
-          ],
-          "maturity": "established",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Performance optimization. Time reduction. Workflow efficiency.",
+          "relatedTechniques": []
         },
         {
           "id": "workflow-validation",
           "name": "Workflow Validation",
           "description": "Systematic validation of workflow correctness and completeness",
           "example": "Schema validation for boomerang payloads and workflow state consistency checks",
-          "applications": [
-            "Quality assurance",
-            "Error prevention",
-            "Workflow verification"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Quality assurance. Error prevention. Workflow verification.",
+          "relatedTechniques": []
         },
         {
           "id": "execution-monitoring",
           "name": "Workflow Execution Monitoring",
           "description": "Real-time monitoring and optimization of workflow performance",
           "example": "Tracking execution times, resource usage, and success rates for optimization",
-          "applications": [
-            "Performance monitoring",
-            "Optimization",
-            "System health"
-          ],
-          "maturity": "emerging",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Performance monitoring. Optimization. System health.",
+          "relatedTechniques": []
         }
       ]
     },
@@ -599,408 +447,302 @@
       "id": "agentic-frameworks",
       "name": "Agentic Frameworks",
       "description": "Advanced autonomous agent architectures and multi-agent systems",
-      "color": "#8B5CF6",
-      "icon": "🤖",
       "techniques": [
         {
           "id": "vla-architectures",
           "name": "Vision-Language-Action Architectures",
           "description": "Unified architectures for multimodal understanding and action execution",
           "example": "Real-time robotics control with vision understanding and language instruction following",
-          "applications": [
-            "Robotics",
-            "Multimodal AI",
-            "Embodied AI"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "July 2025 Summary",
             "August 2025 Summary"
-          ]
+          ],
+          "useCase": "Robotics. Multimodal AI. Embodied AI.",
+          "relatedTechniques": []
         },
         {
           "id": "dual-system-vla",
           "name": "Dual-System VLA Designs",
           "description": "Two-system architectures separating perception from action planning",
           "example": "System 1: Fast visual recognition → System 2: Deliberate action planning",
-          "applications": [
-            "Robotics",
-            "Real-time systems",
-            "Dual-processing architectures"
-          ],
-          "maturity": "established",
           "sources": [
             "August 2025 Summary"
-          ]
+          ],
+          "useCase": "Robotics. Real-time systems. Dual-processing architectures.",
+          "relatedTechniques": []
         },
         {
           "id": "graph-based-reasoning",
           "name": "Graph-Based Chain-of-Thought",
           "description": "GraphCoT-VLA for complex spatial reasoning and instruction following",
           "example": "Using graph structures to represent spatial relationships and reasoning chains",
-          "applications": [
-            "Spatial reasoning",
-            "Complex instructions",
-            "Graph neural networks"
-          ],
-          "maturity": "research",
           "sources": [
             "August 2025 Summary"
-          ]
+          ],
+          "useCase": "Spatial reasoning. Complex instructions. Graph neural networks.",
+          "relatedTechniques": []
         },
         {
           "id": "continuous-autoregressive",
           "name": "Continuous Autoregressive Models",
           "description": "Paradigm shift from discrete to continuous token generation",
           "example": "Generating continuous embeddings instead of discrete tokens for improved quality",
-          "applications": [
-            "Advanced generation",
-            "Quality improvement",
-            "Sequence modeling"
-          ],
-          "maturity": "research",
           "sources": [
             "October 2025 Summary"
-          ]
+          ],
+          "useCase": "Advanced generation. Quality improvement. Sequence modeling.",
+          "relatedTechniques": []
         },
         {
           "id": "specattn",
           "name": "Speculative Sparse Attention",
           "description": "Combining speculative inference with sparse attention for efficiency",
           "example": "SpecAttn reducing computational costs while maintaining generation quality",
-          "applications": [
-            "Efficiency optimization",
-            "Inference acceleration",
-            "Cost reduction"
-          ],
-          "maturity": "research",
           "sources": [
             "October 2025 Summary",
             "November 2025 Summary"
-          ]
+          ],
+          "useCase": "Efficiency optimization. Inference acceleration. Cost reduction.",
+          "relatedTechniques": []
         },
         {
           "id": "open-hands-architecture",
           "name": "OpenHands Autonomous Learning",
           "description": "Full autonomous coding with system interaction and continuous learning",
           "example": "Agents that learn from interactions, modify code, test results, and adapt strategies",
-          "applications": [
-            "Autonomous coding",
-            "Continuous learning",
-            "System interaction"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "July 2025 Summary",
             "Coding Assistant Comparison"
-          ]
+          ],
+          "useCase": "Autonomous coding. Continuous learning. System interaction.",
+          "relatedTechniques": []
         },
         {
           "id": "continue-agentic-workflows",
           "name": "Continue Agentic Workflows",
           "description": "Multi-step reasoning with autonomous refactoring and project memory",
           "example": "IDE-integrated agents with project understanding and autonomous code improvements",
-          "applications": [
-            "IDE integration",
-            "Project memory",
-            "Autonomous refactoring"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "July 2025 Summary",
             "Coding Assistant Comparison"
-          ]
+          ],
+          "useCase": "IDE integration. Project memory. Autonomous refactoring.",
+          "relatedTechniques": []
         },
         {
           "id": "swarms-coordination",
           "name": "Swarms Multi-Agent Coordination",
           "description": "Large-scale multi-agent orchestration with tree-of-thoughts integration",
           "example": "Coordinating hundreds of specialized agents for complex enterprise tasks",
-          "applications": [
-            "Large-scale coordination",
-            "Enterprise automation",
-            "Complex problem solving"
-          ],
-          "maturity": "established",
           "sources": [
             "November 2025 Summary",
             "Coding Assistant Comparison"
-          ]
+          ],
+          "useCase": "Large-scale coordination. Enterprise automation. Complex problem solving.",
+          "relatedTechniques": []
         },
         {
           "id": "open-interpreter",
           "name": "Open Interpreter Natural Language Computing",
           "description": "Natural language control of computer systems with session-based context",
           "example": "Controlling computers through natural language with persistent session memory",
-          "applications": [
-            "Computer control",
-            "Natural language interfaces",
-            "System automation"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "Coding Assistant Comparison"
-          ]
+          ],
+          "useCase": "Computer control. Natural language interfaces. System automation.",
+          "relatedTechniques": []
         },
         {
           "id": "diffusion-policies",
           "name": "Diffusion Policy Integration",
           "description": "Combining diffusion models with autoregressive approaches for VLA",
           "example": "Using diffusion models for action planning combined with language understanding",
-          "applications": [
-            "Action planning",
-            "Robotics control",
-            "Multimodal reasoning"
-          ],
-          "maturity": "research",
           "sources": [
             "September 2025 Summary"
-          ]
+          ],
+          "useCase": "Action planning. Robotics control. Multimodal reasoning.",
+          "relatedTechniques": []
         },
         {
           "id": "embodied-ai",
           "name": "Embodied AI with Sim-to-Real Transfer",
           "description": "AI systems designed for physical world interaction with transfer learning",
           "example": "Training in simulation and deploying to real robots with safety guarantees",
-          "applications": [
-            "Robotics",
-            "Physical interaction",
-            "Safety-critical systems"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "September 2025 Summary"
-          ]
+          ],
+          "useCase": "Robotics. Physical interaction. Safety-critical systems.",
+          "relatedTechniques": []
         },
         {
           "id": "adaptive-control",
           "name": "Safety-Critical Adaptive Control",
           "description": "Adaptive control systems with safety guarantees for critical applications",
           "example": "Adaptive cruise control with safety verification and fail-safe mechanisms",
-          "applications": [
-            "Safety systems",
-            "Adaptive control",
-            "Critical infrastructure"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "September 2025 Summary"
-          ]
+          ],
+          "useCase": "Safety systems. Adaptive control. Critical infrastructure.",
+          "relatedTechniques": []
         },
         {
           "id": "tree-of-thoughts",
           "name": "Tree-of-Thoughts Integration",
           "description": "Advanced reasoning through exploring multiple thought branches",
           "example": "Exploring multiple solution paths simultaneously for complex problems",
-          "applications": [
-            "Complex reasoning",
-            "Problem solving",
-            "Decision making"
-          ],
-          "maturity": "established",
           "sources": [
             "November 2025 Summary"
-          ]
+          ],
+          "useCase": "Complex reasoning. Problem solving. Decision making.",
+          "relatedTechniques": []
         },
         {
           "id": "autonomous-decision-making",
           "name": "Autonomous Decision-Making",
           "description": "Agent-driven decision systems with minimal human oversight",
           "example": "Agents making procurement, resource allocation, and strategic decisions",
-          "applications": [
-            "Autonomous systems",
-            "Decision support",
-            "Strategic planning"
-          ],
-          "maturity": "emerging",
           "sources": [
             "September 2025 Summary"
-          ]
+          ],
+          "useCase": "Autonomous systems. Decision support. Strategic planning.",
+          "relatedTechniques": []
         },
         {
           "id": "mixture-experts",
           "name": "Mixture of Experts Architectures",
           "description": "Specialized expert networks with intelligent routing mechanisms",
           "example": "Code expert, math expert, reasoning expert with dynamic selection",
-          "applications": [
-            "Specialized processing",
-            "Efficiency optimization",
-            "Capability routing"
-          ],
-          "maturity": "established",
           "sources": [
             "October 2025 Summary"
-          ]
+          ],
+          "useCase": "Specialized processing. Efficiency optimization. Capability routing.",
+          "relatedTechniques": []
         },
         {
           "id": "agentic-synthetic-data",
           "name": "Agentic Synthetic Data Generation",
           "description": "Autonomous generation of training data using agent-driven quality assessment",
           "example": "Agents generating, evaluating, and improving synthetic datasets automatically",
-          "applications": [
-            "Data generation",
-            "Quality assessment",
-            "Training optimization"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "July 2025 Summary",
             "October 2025 Summary"
-          ]
+          ],
+          "useCase": "Data generation. Quality assessment. Training optimization.",
+          "relatedTechniques": []
         },
         {
           "id": "real-time-inference",
           "name": "Real-Time Agent Inference",
           "description": "Low-latency inference systems for real-time agent applications",
           "example": "7B models on-device with 4-bit quantization for real-time robotics",
-          "applications": [
-            "Real-time systems",
-            "Edge AI",
-            "Robotics"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "July 2025 Summary"
-          ]
+          ],
+          "useCase": "Real-time systems. Edge AI. Robotics.",
+          "relatedTechniques": []
         },
         {
           "id": "cross-modal-attention",
           "name": "Cross-Modal Attention Pooling",
           "description": "Attention mechanisms across different modalities for unified understanding",
           "example": "Vision-language-action models with cross-modal attention fusion",
-          "applications": [
-            "Multimodal fusion",
-            "Unified understanding",
-            "Attention mechanisms"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "July 2025 Summary"
-          ]
+          ],
+          "useCase": "Multimodal fusion. Unified understanding. Attention mechanisms.",
+          "relatedTechniques": []
         },
         {
           "id": "agent-memory-persistence",
           "name": "Agent Memory Persistence",
           "description": "Long-term memory systems for agents with learning and adaptation",
           "example": "Persistent project memory across sessions with learned preferences",
-          "applications": [
-            "Memory systems",
-            "Learning systems",
-            "Context persistence"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "Coding Assistant Comparison",
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Memory systems. Learning systems. Context persistence.",
+          "relatedTechniques": []
         },
         {
           "id": "multimodal-fusion",
           "name": "Multimodal Fusion Architectures",
           "description": "Unified architectures for processing and understanding multiple modalities",
           "example": "Unified processing of text, images, audio, and sensor data",
-          "applications": [
-            "Multimodal AI",
-            "Sensor fusion",
-            "Unified understanding"
-          ],
-          "maturity": "production-ready",
           "sources": [
             "July 2025 Summary",
             "August 2025 Summary"
-          ]
+          ],
+          "useCase": "Multimodal AI. Sensor fusion. Unified understanding.",
+          "relatedTechniques": []
         },
         {
           "id": "agent-tool-composition",
           "name": "Agent Tool Composition",
           "description": "Dynamic composition and chaining of tools by autonomous agents",
           "example": "Agents selecting and combining APIs, databases, and services dynamically",
-          "applications": [
-            "Tool integration",
-            "API orchestration",
-            "Dynamic composition"
-          ],
-          "maturity": "established",
           "sources": [
             "November 2025 Summary",
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Tool integration. API orchestration. Dynamic composition.",
+          "relatedTechniques": []
         },
         {
           "id": "speculative-inference",
           "name": "Speculative Inference Patterns",
           "description": "Anticipatory execution for improved performance in agent workflows",
           "example": "Pre-computing likely next actions based on current agent state",
-          "applications": [
-            "Performance optimization",
-            "Latency reduction",
-            "Predictive execution"
-          ],
-          "maturity": "research",
           "sources": [
             "October 2025 Summary",
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Performance optimization. Latency reduction. Predictive execution.",
+          "relatedTechniques": []
         },
         {
           "id": "agent-consensus-mechanisms",
           "name": "Agent Consensus Mechanisms",
           "description": "Coordination protocols for multiple agents reaching agreement",
           "example": "Weighted voting systems and priority-based specialist selection",
-          "applications": [
-            "Multi-agent coordination",
-            "Consensus building",
-            "Decision making"
-          ],
-          "maturity": "emerging",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Multi-agent coordination. Consensus building. Decision making.",
+          "relatedTechniques": []
         },
         {
           "id": "contextual-agent-routing",
           "name": "Contextual Agent Routing",
           "description": "Intelligent routing of tasks to appropriate agents based on context",
           "example": "Routing debugging tasks to diagnostic agents, planning tasks to strategy agents",
-          "applications": [
-            "Task routing",
-            "Agent optimization",
-            "Context matching"
-          ],
-          "maturity": "established",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Task routing. Agent optimization. Context matching.",
+          "relatedTechniques": []
         },
         {
           "id": "agent-fallback-systems",
           "name": "Agent Fallback Systems",
           "description": "Backup agent systems for handling degraded performance scenarios",
           "example": "Fallback to simpler agents when specialized agents are unavailable",
-          "applications": [
-            "System reliability",
-            "Degraded performance",
-            "Backup systems"
-          ],
-          "maturity": "emerging",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "System reliability. Degraded performance. Backup systems.",
+          "relatedTechniques": []
         },
         {
           "id": "agent-validation-protocols",
           "name": "Agent Validation Protocols",
           "description": "Cross-specialist validation for ensuring output quality and consistency",
           "example": "Architecture agents validating implementation agents' designs",
-          "applications": [
-            "Quality assurance",
-            "Output validation",
-            "Consistency checking"
-          ],
-          "maturity": "established",
           "sources": [
             "Workflow Engineering Patterns"
-          ]
+          ],
+          "useCase": "Quality assurance. Output validation. Consistency checking.",
+          "relatedTechniques": []
         }
       ]
     },
