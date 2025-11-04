@@ -1,0 +1,857 @@
+{
+  "meta": {
+    "version": "1.0",
+    "created": "2025-11-04",
+    "author": "Architect Mode",
+    "task_id": "2.2_orchestrator_prompt_design",
+    "description": "Machine-readable templates for orchestrator task delegation and workflow management"
+  },
+  "templates": {
+    "research_integration": {
+      "monthly_update": {
+        "template_id": "monthly_research_update",
+        "version": "1.0",
+        "task_type": "research_integration",
+        "complexity": "medium",
+        "automation_level": "high",
+        "estimated_duration_hours": 72,
+        "structure": {
+          "task_id_pattern": "research_update_{YYYY_MM}",
+          "origin_mode": "orchestrator",
+          "primary_modes": ["Research Specialist", "Content Strategist", "Data Integration Specialist", "Web Development Specialist", "DevOps Specialist"],
+          "phase_count": 5,
+          "requires_human_checkpoint": false,
+          "human_checkpoint_condition": "If more than 10 new items identified"
+        },
+        "subtasks": [
+          {
+            "subtask_id": "1_research_collection",
+            "sequence": 1,
+            "mode": "Research Specialist",
+            "dependencies": [],
+            "description": "Collect and synthesize research from target month using MCP servers",
+            "inputs": {
+              "time_period": "{Month YYYY}",
+              "mcp_servers": ["arXiv", "Brave Search"],
+              "focus_areas": ["prompt engineering", "workflow patterns", "multi-agent systems", "context engineering"]
+            },
+            "outputs": [
+              "research/synthesis/monthly_summary_{YYYY_MM}.md",
+              "research/synthesis/technique_candidates_{YYYY_MM}.json"
+            ],
+            "acceptance_criteria": [
+              "Minimum 5 research items identified",
+              "Each item has description, source, category, priority",
+              "Synthesis follows standard template",
+              "Citations properly formatted"
+            ],
+            "estimated_hours": 16
+          },
+          {
+            "subtask_id": "2_content_classification",
+            "sequence": 2,
+            "mode": "Content Strategist",
+            "dependencies": ["1_research_collection"],
+            "description": "Classify and prioritize new research items",
+            "inputs": {
+              "research_synthesis": "{output from subtask 1}",
+              "existing_content": "data/processed/techniques.json",
+              "priority_framework": "design/content_prioritization_matrix.json"
+            },
+            "outputs": [
+              "design/monthly_content_plan_{YYYY_MM}.md",
+              "design/monthly_priority_matrix_{YYYY_MM}.json"
+            ],
+            "acceptance_criteria": [
+              "All items classified (Direct Addition | Enhanced Merge | New Structure)",
+              "Priorities assigned (P0 | P1 | P2 | P3)",
+              "Integration pathways defined",
+              "Dependencies identified",
+              "Effort estimates provided"
+            ],
+            "estimated_hours": 12
+          },
+          {
+            "subtask_id": "3_integration_execution",
+            "sequence": 3,
+            "mode": "Data Integration Specialist",
+            "dependencies": ["2_content_classification"],
+            "description": "Integrate approved content into site data files",
+            "inputs": {
+              "content_plan": "{output from subtask 2}",
+              "priority_filter": "P0 and P1 only",
+              "validation_rules": "scripts/validation/content-schema.json"
+            },
+            "outputs": [
+              "data/processed/techniques.json (updated)",
+              "data/processed/patterns.json (if applicable)",
+              "integration_log_{YYYY_MM}.md"
+            ],
+            "acceptance_criteria": [
+              "Schema validation 100% pass",
+              "All relationships bidirectional",
+              "No duplicate IDs",
+              "Quality score > 90"
+            ],
+            "estimated_hours": 20
+          },
+          {
+            "subtask_id": "4_site_rebuild",
+            "sequence": 4,
+            "mode": "Web Development Specialist",
+            "dependencies": ["3_integration_execution"],
+            "description": "Rebuild site with new content",
+            "inputs": {
+              "updated_data": "data/processed/*.json",
+              "build_scripts": "scripts/build-site.sh"
+            },
+            "outputs": [
+              "Updated HTML pages",
+              "Refreshed search index",
+              "Updated visualizations"
+            ],
+            "acceptance_criteria": [
+              "Site builds without errors",
+              "All new content searchable",
+              "Visualizations render correctly",
+              "Performance < 2s load time"
+            ],
+            "estimated_hours": 12
+          },
+          {
+            "subtask_id": "5_validation_deployment",
+            "sequence": 5,
+            "mode": "DevOps Specialist",
+            "dependencies": ["4_site_rebuild"],
+            "description": "Validate and deploy to production",
+            "inputs": {
+              "built_site": "docs/",
+              "test_suite": "tests/integration/",
+              "deployment_target": "GitHub Pages"
+            },
+            "outputs": [
+              "Deployment report",
+              "Post-deployment validation results",
+              "Rollback plan (if needed)"
+            ],
+            "acceptance_criteria": [
+              "All tests pass",
+              "Visual regression tests pass",
+              "Accessibility score > 90",
+              "Deployment successful",
+              "Live site validated"
+            ],
+            "estimated_hours": 12
+          }
+        ],
+        "error_recovery": {
+          "schema_failure": {
+            "procedure": "schema_validation_recovery",
+            "action": "Rollback data files, fix validation, retry"
+          },
+          "build_failure": {
+            "procedure": "build_error_recovery",
+            "action": "Check logs, fix errors, rebuild"
+          },
+          "deployment_failure": {
+            "procedure": "deployment_rollback",
+            "action": "Rollback to last good state, investigate, redeploy"
+          }
+        }
+      },
+      "pattern_integration": {
+        "template_id": "pattern_integration",
+        "version": "1.0",
+        "task_type": "content_integration",
+        "complexity": "medium",
+        "estimated_duration_hours": 2,
+        "structure": {
+          "task_id_pattern": "integrate_pattern_{pattern_name}",
+          "origin_mode": "orchestrator",
+          "primary_modes": ["Architect", "Data Integration Specialist", "Web Development Specialist"],
+          "phase_count": 4,
+          "requires_human_checkpoint": false
+        },
+        "task_sequence": [
+          {
+            "step": "1_pattern_analysis",
+            "mode": "Architect",
+            "action": "Analyze pattern for architectural fit",
+            "outputs": ["Pattern ADR", "Integration impact assessment"],
+            "criteria": ["Aligns with architecture", "No conflicts with existing"]
+          },
+          {
+            "step": "2_schema_entry",
+            "mode": "Data Integration Specialist",
+            "action": "Create pattern entry in patterns.json",
+            "template_fields": {
+              "id": "pattern_XXX",
+              "name": "Pattern Name",
+              "status": "core | established | emerging",
+              "category": "orchestration | state_management | optimization",
+              "abstraction_level": "system | component | implementation",
+              "context": "Problem domain and scope",
+              "problem": "Challenges addressed",
+              "solution": "High-level approach",
+              "structure": {
+                "participants": ["Component list"],
+                "collaborations": "How components interact",
+                "implementation": "Technical guide"
+              },
+              "consequences": {
+                "positive": ["Benefits"],
+                "negative": ["Tradeoffs"],
+                "risks": ["Risks"]
+              },
+              "related_patterns": ["Pattern IDs"],
+              "related_techniques": ["Technique IDs"],
+              "metadata": {
+                "added_date": "YYYY-MM-DD",
+                "source": "Research reference",
+                "maturity": "production | research | emerging"
+              }
+            },
+            "validation": ["Schema compliance", "Required fields", "Valid relationships"]
+          },
+          {
+            "step": "3_content_page",
+            "mode": "Web Development Specialist",
+            "action": "Create pattern detail page",
+            "outputs": ["HTML page", "Updated navigation"],
+            "criteria": ["Renders correctly", "Examples clear", "Links work"]
+          },
+          {
+            "step": "4_relationship_mapping",
+            "mode": "Data Integration Specialist",
+            "action": "Update related techniques with pattern references",
+            "validation": ["Bidirectional relationships", "No orphans"]
+          }
+        ]
+      },
+      "technique_enhancement": {
+        "template_id": "technique_enhancement",
+        "version": "1.0",
+        "task_type": "content_enhancement",
+        "complexity": "low",
+        "estimated_duration_hours": 1.5,
+        "structure": {
+          "task_id_pattern": "enhance_{technique_id}",
+          "origin_mode": "orchestrator",
+          "primary_modes": ["Content Strategist", "Data Integration Specialist", "QA Testing Specialist"],
+          "phase_count": 3
+        },
+        "enhancement_types": {
+          "model_specific_guidance": {
+            "field": "model_specific",
+            "structure": {
+              "gpt4": "GPT-4 specific guidance",
+              "claude": "Claude specific guidance",
+              "gemini": "Gemini specific guidance"
+            }
+          },
+          "implementation_details": {
+            "field": "implementation.steps",
+            "action": "append or update steps"
+          },
+          "new_examples": {
+            "field": "implementation.example",
+            "action": "add or update example"
+          },
+          "best_practices": {
+            "field": "implementation.best_practices",
+            "action": "append practices"
+          },
+          "pattern_relationships": {
+            "field": "pattern_relationships",
+            "action": "add pattern IDs"
+          }
+        },
+        "workflow": [
+          {
+            "phase": "analysis",
+            "mode": "Content Strategist",
+            "action": "Determine enhancement approach",
+            "outputs": ["Enhancement specification", "Impact assessment"]
+          },
+          {
+            "phase": "implementation",
+            "mode": "Data Integration Specialist",
+            "action": "Apply enhancements",
+            "validation": ["Schema valid", "Backward compatible"]
+          },
+          {
+            "phase": "verification",
+            "mode": "QA Testing Specialist",
+            "action": "Verify quality",
+            "checks": ["Content accuracy", "Example functionality", "No regressions"]
+          }
+        ]
+      },
+      "schema_extension": {
+        "template_id": "schema_extension",
+        "version": "1.0",
+        "task_type": "architecture_change",
+        "complexity": "very_high",
+        "estimated_duration_hours": 24,
+        "requires_human_checkpoint": true,
+        "structure": {
+          "task_id_pattern": "extend_schema_{schema_name}",
+          "origin_mode": "orchestrator",
+          "primary_modes": ["Architect", "Technical Architect", "Data Integration Specialist", "Web Development Specialist", "Technical Writer"],
+          "phase_count": 5
+        },
+        "extension_process": [
+          {
+            "step": "1_design_approval",
+            "mode": "Architect",
+            "action": "Design schema extension with ADR",
+            "deliverables": ["ADR", "JSON Schema specification", "Migration plan", "Rollback plan"],
+            "criteria": ["Backward compatible", "Well-justified", "Clear benefits"],
+            "human_checkpoint": true
+          },
+          {
+            "step": "2_validation_rules",
+            "mode": "Technical Architect",
+            "action": "Update validation scripts",
+            "files": ["scripts/validation/content-schema.json", "scripts/validation/validate-content.js"],
+            "testing": "Validate against existing data first"
+          },
+          {
+            "step": "3_data_migration",
+            "mode": "Data Integration Specialist",
+            "action": "Migrate existing data if needed",
+            "safety": ["Backup files", "Test on copy", "Validate migrated data", "Keep backup 30 days"]
+          },
+          {
+            "step": "4_code_updates",
+            "mode": "Web Development Specialist",
+            "action": "Update frontend for new fields",
+            "testing": "Full regression test suite"
+          },
+          {
+            "step": "5_documentation",
+            "mode": "Technical Writer",
+            "action": "Document schema changes",
+            "outputs": ["Schema docs", "Migration guide", "Changelog"]
+          }
+        ],
+        "risk_mitigation": {
+          "risk": "Data corruption",
+          "mitigation": "Automated backups before changes",
+          "recovery": "Restore from backup < 5 minutes"
+        }
+      }
+    },
+    "site_update": {
+      "content_synthesis": {
+        "workflow_id": "content_synthesis",
+        "version": "1.0",
+        "trigger": "New research available",
+        "stages": [
+          {
+            "stage": "1_ingestion",
+            "description": "Collect and parse research",
+            "mode": "Research Specialist",
+            "inputs": ["research/jun-nov-2025/synthesis/*.md"],
+            "outputs": ["research/processed/{timestamp}_inventory.json"],
+            "quality_gates": ["All sources cited", "Properly formatted", "No duplicates"]
+          },
+          {
+            "stage": "2_analysis",
+            "description": "Analyze integration potential",
+            "mode": "Content Strategist",
+            "outputs": ["design/integration_analysis_{timestamp}.md"],
+            "quality_gates": ["All items classified", "Conflicts identified"]
+          },
+          {
+            "stage": "3_prioritization",
+            "description": "Assign priorities and plan",
+            "mode": "Content Strategist",
+            "outputs": ["design/execution_plan_{timestamp}.json"],
+            "quality_gates": ["Dependencies mapped", "Effort estimated"]
+          },
+          {
+            "stage": "4_human_checkpoint",
+            "description": "Present plan for approval",
+            "mode": "orchestrator",
+            "required_approvals": ["user"]
+          },
+          {
+            "stage": "5_integration_sprint",
+            "description": "Execute integration",
+            "mode": "orchestrator",
+            "sub_workflows": ["Pathway A", "Pathway B", "Pathway C"]
+          },
+          {
+            "stage": "6_validation",
+            "description": "Comprehensive validation",
+            "mode": "QA Testing Specialist",
+            "test_suites": ["schema", "integration", "visual_regression", "performance", "accessibility"]
+          }
+        ]
+      },
+      "schema_validation": {
+        "workflow_id": "schema_validation",
+        "version": "1.0",
+        "trigger": "Data file modified",
+        "automation": "Git hooks",
+        "validation_pipeline": [
+          {
+            "check": "json_syntax",
+            "tool": "jsonlint",
+            "failure_action": "block_commit"
+          },
+          {
+            "check": "schema_compliance",
+            "tool": "scripts/validation/validate-content.js",
+            "validates": ["required_fields", "data_types", "enum_values", "id_formats"],
+            "failure_action": "block_commit"
+          },
+          {
+            "check": "relationship_integrity",
+            "tool": "scripts/validation/check-relationships.js",
+            "validates": ["ids_exist", "bidirectional", "no_circular", "no_orphans"],
+            "failure_action": "block_commit"
+          },
+          {
+            "check": "content_quality",
+            "tool": "scripts/validation/quality-check.js",
+            "scores": ["description_length", "examples", "relationships", "attribution"],
+            "failure_action": "warning"
+          },
+          {
+            "check": "uniqueness",
+            "tool": "scripts/validation/duplicate-check.js",
+            "validates": ["no_duplicate_ids", "no_duplicate_names", "content_similarity"],
+            "failure_action": "block_commit"
+          }
+        ]
+      },
+      "deployment": {
+        "workflow_id": "production_deployment",
+        "version": "1.0",
+        "trigger": "Sprint complete",
+        "owner": "DevOps Specialist",
+        "phases": {
+          "pre_deployment": {
+            "steps": [
+              {
+                "action": "backup",
+                "what": "Current production site",
+                "where": "backups/production-{timestamp}.tar.gz",
+                "retention_days": 30
+              },
+              {
+                "action": "validation",
+                "requirement": "Full pipeline must pass"
+              },
+              {
+                "action": "build",
+                "command": "npm run build:production",
+                "artifacts": "docs/"
+              },
+              {
+                "action": "smoke_tests",
+                "suite": "tests/smoke/",
+                "critical_paths": ["homepage", "search", "visualizations", "navigation"]
+              }
+            ]
+          },
+          "deployment": {
+            "stages": [
+              {
+                "stage": "staging",
+                "target": "gh-pages (staging branch)",
+                "approval_required": true
+              },
+              {
+                "stage": "production",
+                "target": "gh-pages (main branch)",
+                "depends_on": "staging_approved",
+                "steps": ["checkout main", "merge staging", "push origin main"]
+              }
+            ]
+          },
+          "post_deployment": {
+            "verification": {
+              "wait_seconds": 60,
+              "checks": ["site_accessible", "assets_loading", "search_functional", "no_console_errors"],
+              "failure_action": "automatic_rollback"
+            },
+            "monitoring": {
+              "duration_hours": 24,
+              "metrics": ["page_load_times", "error_rates", "search_performance"],
+              "alert_threshold": "20% degradation"
+            }
+          }
+        },
+        "rollback_plan": {
+          "target_recovery_time_minutes": 5,
+          "procedure": ["stop_deployment", "git_revert", "git_push_force", "verify_rollback"]
+        }
+      },
+      "rollback": {
+        "workflow_id": "emergency_rollback",
+        "version": "1.0",
+        "trigger": "Critical production issue",
+        "severity": "CRITICAL",
+        "options": [
+          {
+            "option": "git_revert",
+            "preferred": true,
+            "when": "Git history intact",
+            "duration_minutes": 3,
+            "steps": ["identify_bad_commit", "git_revert", "git_push", "verify"]
+          },
+          {
+            "option": "restore_from_backup",
+            "when": "Git history corrupted",
+            "duration_minutes": 7,
+            "steps": ["locate_backup", "extract", "replace_docs", "git_commit", "git_push"]
+          },
+          {
+            "option": "previous_release_tag",
+            "when": "Multiple commits need reverting",
+            "duration_minutes": 10,
+            "steps": ["checkout_tag", "create_branch", "push_branch", "create_pr"]
+          }
+        ],
+        "post_rollback": {
+          "verification": ["site_loads", "functionality_works", "no_data_loss"],
+          "root_cause_analysis": {
+            "assign_to": "Debug Specialist",
+            "timeline_hours": 24,
+            "deliverable": "incident_report"
+          }
+        }
+      }
+    },
+    "mcp_operations": {
+      "arxiv_search": {
+        "operation_id": "arxiv_research_collection",
+        "mcp_server": "arxiv",
+        "delegation_mode": "Research Specialist",
+        "orchestrator_role": "delegates_only",
+        "use_cases": [
+          "Monthly research updates",
+          "Topic-specific research",
+          "Literature review for new features",
+          "Citation verification"
+        ],
+        "delegation_template": {
+          "task_id": "collect_{topic}_research",
+          "assigned_to": "Research Specialist",
+          "instructions": {
+            "mcp_tool": "search_papers",
+            "search_parameters": {
+              "query": "{topic}",
+              "category": "cs.AI, cs.CL, cs.LG",
+              "date_range": "Last 3 months",
+              "max_results": 20,
+              "sort_by": "submittedDate",
+              "sort_order": "descending"
+            },
+            "processing": [
+              "Extract: title, authors, abstract, arXiv ID, date",
+              "Assess relevance (1-10 scale)",
+              "Identify applicable techniques",
+              "Note integration points"
+            ],
+            "output_format": "research/synthesis/arxiv_collection_{timestamp}.md"
+          },
+          "autonomy": "full",
+          "expected_return": {
+            "artifacts": ["synthesis_document", "technique_candidates_json"],
+            "summary": "Papers reviewed, priorities identified",
+            "metrics": ["papers_reviewed", "high_priority", "medium_priority", "low_priority"]
+          }
+        }
+      },
+      "brave_community": {
+        "operation_id": "brave_community_insights",
+        "mcp_server": "brave-search",
+        "delegation_mode": "Research Specialist",
+        "use_cases": [
+          "Community usage patterns",
+          "Real-world examples",
+          "Common challenges",
+          "Trending topics"
+        ],
+        "search_strategy": {
+          "sources": ["Reddit r/LocalLLaMA", "HackerNews", "GitHub discussions", "Stack Overflow", "Technical blogs"],
+          "search_patterns": [
+            "{technique_name} implementation",
+            "{pattern_name} usage",
+            "multi-agent {concept}",
+            "{technique_name} challenges"
+          ]
+        },
+        "delegation_template": {
+          "task_id": "gather_{topic}_insights",
+          "assigned_to": "Research Specialist",
+          "instructions": {
+            "mcp_tool": "brave_web_search",
+            "search_strategy": "Multiple targeted searches",
+            "processing": [
+              "Filter duplicate sources",
+              "Assess credibility",
+              "Extract common themes",
+              "Synthesize structured summary"
+            ],
+            "output_format": "research/community/{topic}_insights_{timestamp}.md"
+          },
+          "expected_return": {
+            "artifacts": ["insights_document", "example_implementations_json"],
+            "sections": ["common_use_cases", "implementation_patterns", "challenges_solutions", "code_examples"]
+          }
+        }
+      }
+    }
+  },
+  "workflows": {
+    "full_research_cycle": {
+      "workflow_id": "complete_research_to_deployment",
+      "description": "End-to-end workflow from research collection to production deployment",
+      "estimated_duration_days": 14,
+      "phases": [
+        {
+          "phase": "Phase_1_Research",
+          "duration_days": 3,
+          "tasks": [
+            "arXiv research collection",
+            "Community insights gathering",
+            "Research synthesis"
+          ],
+          "deliverables": ["research_summary", "technique_candidates"]
+        },
+        {
+          "phase": "Phase_2_Planning",
+          "duration_days": 2,
+          "tasks": [
+            "Content classification",
+            "Priority assignment",
+            "Integration planning"
+          ],
+          "deliverables": ["content_plan", "priority_matrix", "execution_plan"],
+          "human_checkpoint": true
+        },
+        {
+          "phase": "Phase_3_Integration",
+          "duration_days": 5,
+          "tasks": [
+            "Direct additions (Pathway A)",
+            "Enhanced merges (Pathway B)",
+            "New structures (Pathway C)",
+            "Relationship mapping"
+          ],
+          "deliverables": ["updated_data_files", "integration_logs"]
+        },
+        {
+          "phase": "Phase_4_Validation",
+          "duration_days": 2,
+          "tasks": [
+            "Schema validation",
+            "Integration testing",
+            "Visual regression testing",
+            "Performance testing",
+            "Accessibility testing"
+          ],
+          "deliverables": ["test_reports", "validation_summary"]
+        },
+        {
+          "phase": "Phase_5_Deployment",
+          "duration_days": 2,
+          "tasks": [
+            "Staging deployment",
+            "Production deployment",
+            "Post-deployment validation",
+            "Monitoring setup"
+          ],
+          "deliverables": ["deployment_report", "live_site"],
+          "human_checkpoint": true
+        }
+      ],
+      "success_criteria": [
+        "All research integrated",
+        "All tests passing",
+        "Performance maintained",
+        "User acceptance achieved"
+      ]
+    },
+    "emergency_rollback": {
+      "workflow_id": "emergency_production_rollback",
+      "description": "Rapid rollback procedure for critical production issues",
+      "target_recovery_time_minutes": 5,
+      "severity": "CRITICAL",
+      "trigger_conditions": [
+        "Site unavailable",
+        "Critical functionality broken",
+        "Data corruption detected",
+        "User requests halt"
+      ],
+      "immediate_actions": [
+        "Alert orchestrator and user",
+        "Stop all ongoing deployments",
+        "Assess last known good state"
+      ],
+      "rollback_procedure": {
+        "step_1": {
+          "action": "Identify rollback method",
+          "options": ["git_revert", "restore_backup", "previous_tag"]
+        },
+        "step_2": {
+          "action": "Execute rollback",
+          "verification": "Site functional"
+        },
+        "step_3": {
+          "action": "Post-rollback validation",
+          "checks": ["site_loads", "core_functionality", "no_data_loss"]
+        },
+        "step_4": {
+          "action": "Root cause analysis",
+          "assign_to": "Debug Specialist",
+          "deliverable": "incident_report",
+          "timeline_hours": 24
+        },
+        "step_5": {
+          "action": "Prevention measures",
+          "update": "deployment_checklist",
+          "add": "validation_for_detected_issue"
+        }
+      },
+      "communication": {
+        "notify": ["orchestrator", "user", "stakeholders"],
+        "include": ["what_happened", "impact", "resolution", "prevention"]
+      }
+    },
+    "sprint_execution": {
+      "workflow_id": "sprint_parallel_execution",
+      "description": "Coordinated execution of sprint tasks with parallelization",
+      "optimization": "maximum_parallelization",
+      "coordination_pattern": {
+        "wave_based_execution": {
+          "wave_1": {
+            "description": "Foundation tasks that block others",
+            "parallel": false,
+            "example": "infrastructure_001 (Workflow Engineering category creation)"
+          },
+          "wave_2": {
+            "description": "Independent tasks that can run in parallel",
+            "parallel": true,
+            "groups": [
+              {
+                "group": "patterns",
+                "agent": "Architect",
+                "tasks": ["pattern_001", "pattern_002", "pattern_003", "pattern_004"]
+              },
+              {
+                "group": "techniques_a",
+                "agent": "Data Integration Specialist",
+                "tasks": ["tech_134", "tech_135", "tech_136"]
+              },
+              {
+                "group": "techniques_b",
+                "agent": "Data Integration Specialist",
+                "tasks": ["tech_137", "tech_138", "tech_139"]
+              }
+            ]
+          },
+          "wave_3": {
+            "description": "Sequential dependent tasks",
+            "parallel": false,
+            "dependencies": "Specific wave_2 completions",
+            "example": "pattern_005 depends on pattern_003"
+          }
+        },
+        "orchestrator_responsibilities": [
+          "Track wave completion",
+          "Validate dependencies met",
+          "Trigger next wave",
+          "Monitor resource allocation",
+          "Identify bottlenecks",
+          "Dynamic task re-routing"
+        ]
+      }
+    }
+  },
+  "validation_rules": {
+    "schema_compliance": {
+      "techniques": {
+        "required_fields": ["id", "name", "category", "description", "implementation", "metadata"],
+        "optional_fields": ["model_specific", "pattern_relationships", "related_techniques"],
+        "id_format": "^tech_[0-9]{3}$",
+        "quality_thresholds": {
+          "description_min_words": 100,
+          "min_examples": 1,
+          "min_relationships": 2
+        }
+      },
+      "patterns": {
+        "required_fields": ["id", "name", "status", "category", "context", "problem", "solution", "structure", "consequences", "metadata"],
+        "optional_fields": ["related_patterns", "related_techniques"],
+        "id_format": "^pattern_[0-9]{3}$",
+        "quality_thresholds": {
+          "context_min_words": 100,
+          "min_consequences": 2,
+          "min_relationships": 1
+        }
+      }
+    },
+    "relationship_integrity": {
+      "bidirectional": "All relationships must be bidirectional",
+      "valid_ids": "All referenced IDs must exist",
+      "no_orphans": "All items must have at least one relationship",
+      "no_circular": "No circular dependencies allowed"
+    },
+    "performance_thresholds": {
+      "page_load_time_seconds": 2,
+      "search_response_milliseconds": 500,
+      "build_time_minutes": 5,
+      "accessibility_score": 90
+    }
+  },
+  "error_handling": {
+    "schema_validation_failure": {
+      "severity": "BLOCKING",
+      "immediate_action": "Stop integration, preserve state",
+      "recovery_procedure": "schema_validation_recovery",
+      "escalation_threshold_minutes": 30
+    },
+    "deployment_failure": {
+      "severity": "HIGH",
+      "immediate_action": "Automatic rollback",
+      "recovery_procedure": "deployment_rollback",
+      "notification": ["orchestrator", "user"]
+    },
+    "state_corruption": {
+      "severity": "CRITICAL",
+      "recovery_levels": ["automatic", "reconstruction", "manual", "reset"],
+      "backup_location": ".roo/backups/state-*.json",
+      "recovery_procedure": "state_corruption_recovery"
+    }
+  },
+  "human_checkpoints": {
+    "phase_gate": {
+      "trigger": "Phase completion",
+      "presentation": {
+        "format": "markdown",
+        "sections": ["context", "completed_work", "artifacts", "decisions", "next_steps", "issues"],
+        "required_action": "Approval to proceed"
+      }
+    },
+    "critical_decision": {
+      "trigger": "Architectural change or high-risk operation",
+      "presentation": {
+        "include": ["decision_description", "alternatives_considered", "impact_assessment", "recommendation"],
+        "required_action": "Explicit approval"
+      }
+    },
+    "validation_failure": {
+      "trigger": "Critical test failures or data corruption",
+      "presentation": {
+        "include": ["failure_description", "impact", "proposed_resolution", "rollback_option"],
+        "required_action": "Direction to proceed or halt"
+      }
+    }
+  }
+}

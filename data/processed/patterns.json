@@ -1,0 +1,146 @@
+{
+  "patterns": [
+    {
+      "id": "pattern_001",
+      "name": "Boomerang Coordination Pattern",
+      "status": "core",
+      "category": "orchestration",
+      "abstraction_level": "system",
+      "context": "Complex AI workflows require coordination between multiple specialized agents, each with distinct capabilities and responsibilities. Traditional linear coordination patterns lead to single points of failure and difficulty in error recovery.",
+      "problem": "How to coordinate multiple agents in a way that maintains deterministic behavior, enables reliable error recovery, supports progressive complexity, and preserves context across agent boundaries.",
+      "solution": "Implement a boomerang coordination system where tasks originate from an Orchestrator with clear assignment parameters, specialist agents process assigned tasks within defined boundaries and return structured results, completed tasks boomerang back to the Orchestrator for verification and integration, and explicit mode transitions occur only through boomerang returns with structured JSON payloads.",
+      "structure": {
+        "participants": [
+          "Orchestrator - Coordinates task decomposition, assignment, and integration",
+          "Specialist Agents - Execute domain-specific tasks within bounded responsibilities",
+          "State Manager - Maintains workflow state and task tracking",
+          "Validation Layer - Ensures schema compliance and boundary enforcement"
+        ],
+        "collaborations": "The Orchestrator receives user requests and decomposes them into subtasks with clear boundaries. Each subtask is assigned to a specialist agent with complete context. Specialist agents execute within their domain and return structured JSON payloads. The Orchestrator validates returns, updates state, and triggers dependent tasks. All mode transitions flow through the Orchestrator, creating a boomerang pattern.",
+        "implementation": "Use structured JSON payloads with required fields: task_id, origin_mode, destination_mode, result, state, and error_handling. Store state in persistent storage (e.g., .roo/boomerang-state.json). Implement schema validation for all boomerang returns. Enforce boundary constraints preventing specialists from operating outside their domain. Enable automatic retry logic for failed boomerangs."
+      },
+      "consequences": {
+        "positive": [
+          "Eliminates single points of failure through distributed responsibility",
+          "Enables systematic error recovery and retry logic",
+          "Maintains deterministic behavior through explicit state transitions",
+          "Supports progressive complexity through bounded agent responsibilities",
+          "Provides clear separation of concerns between coordination and execution",
+          "Facilitates debugging through explicit state tracking"
+        ],
+        "negative": [
+          "Increased complexity in initial system design",
+          "Additional overhead for boomerang validation",
+          "Potential latency increases from coordination loops",
+          "Requires well-defined interfaces between agents"
+        ],
+        "risks": [
+          "Risk of infinite boomerang loops if validation fails",
+          "Risk of state inconsistency if boomerang payloads are malformed",
+          "Risk of coordination deadlock in complex multi-agent scenarios",
+          "Risk of context loss if delegation scope is too broad"
+        ]
+      },
+      "relationships": {
+        "related_patterns": [
+          "pattern_002",
+          "pattern_003",
+          "pattern_004"
+        ],
+        "related_techniques": [
+          "boomerang-task-delegation",
+          "mode-based-specialization",
+          "task-boundary-enforcement"
+        ],
+        "implements": [],
+        "implemented_by": [
+          "pattern_002"
+        ]
+      },
+      "implementation_guide": {
+        "current_state": "Roo already implements a variant of this pattern through its mode-switching architecture. The system supports multiple specialized modes (Architect, Builder, Guardian, Planner, Debug) with distinct capabilities.",
+        "target_state": "Enhanced boomerang coordination with formalized JSON payloads, persistent state tracking, automatic validation, and systematic retry logic for all mode transitions.",
+        "steps": [
+          "Create .roo/boomerang-state.json for persistent task tracking",
+          "Define boomerang payload schema with required fields (task_id, origin_mode, destination_mode, result, state, error_handling)",
+          "Standardize mode return formats with JSON schema validation",
+          "Implement boomerang validation in Orchestrator mode",
+          "Add automatic retry logic for failed boomerangs",
+          "Create mode coordination protocol documenting handoff procedures",
+          "Implement state snapshot mechanism for recovery",
+          "Add monitoring and logging for boomerang flow"
+        ],
+        "immediate_actions": [
+          "Add structured JSON returns to each mode's attempt_completion calls",
+          "Create .roo/boomerang-state.json with basic task tracking",
+          "Document current mode capabilities and boundaries"
+        ],
+        "prerequisites": [
+          "Multiple agent modes or specialists available",
+          "JSON-based communication capability",
+          "File system access for state persistence",
+          "Schema validation capability"
+        ],
+        "mode_adaptations": {
+          "roo": "Leverage existing multi-mode architecture. Store boomerang state in .roo/boomerang-state.json. Use mode-specific system prompts as specialist boundaries. Implement validation in Orchestrator mode's tool processing. Mode-specific returns: Architect returns design docs + ADRs, Builder returns implementation + tests, Guardian returns security analysis + recommendations, Planner returns user stories + acceptance criteria.",
+          "kilo": "Adapt state location to .kilo/boomerang-state.json. Use Kilo's existing task queue system for coordination. Leverage Kilo's mode structure with enhanced payload validation. Implement boomerang tracking in Kilo's orchestration layer.",
+          "general": "Store state in accessible persistent location. Define clear agent interfaces with capability matrices. Implement timeout handling for long-running tasks. Use structured logging for boomerang flow visibility. Create fallback mechanisms for coordination failures."
+        }
+      },
+      "examples": [
+        {
+          "name": "Multi-File Code Refactoring",
+          "description": "User requests refactoring of authentication system across 5 files. Orchestrator creates task map: 1) Architect analyzes current structure and designs new architecture, 2) Builder implements changes with tests, 3) Guardian reviews security implications. Each specialist completes their task and boomerangs back with structured results. Orchestrator validates each return before triggering the next phase.",
+          "code_snippet": "{\n  \"task_id\": \"auth-refactor-2025-11\",\n  \"origin_mode\": \"orchestrator\",\n  \"destination_mode\": \"architect\",\n  \"task_description\": \"Analyze and design improved authentication architecture\",\n  \"context_snapshot\": {\n    \"files\": [\"auth.ts\", \"user.ts\", \"session.ts\"],\n    \"current_issues\": [\"tight coupling\", \"no token refresh\"]\n  },\n  \"return_criteria\": {\n    \"deliverable\": \"architecture_design.md\",\n    \"validation\": [\"addresses coupling\", \"includes token refresh\"]\n  }\n}",
+          "outcome": "Successfully refactored authentication system with zero rework. Each specialist completed their bounded task. Full traceability through boomerang state tracking. Clean handoffs with validation at each stage."
+        },
+        {
+          "name": "Feature Development Pipeline",
+          "description": "Orchestrator receives feature request and creates pipeline: Planner defines user stories → Architect designs system changes → Builder implements → Guardian deploys. Each stage boomerangs back with artifacts. If validation fails at any stage, automatic retry with feedback.",
+          "outcome": "Feature delivered through coordinated specialist work. Automatic rollback when Guardian identified security issue. Re-delegation to Builder with specific guidance. Successful deployment on retry."
+        }
+      ],
+      "validation": {
+        "success_criteria": [
+          "All mode transitions use structured boomerang payloads",
+          "State remains consistent throughout execution",
+          "Boomerang validation catches malformed returns before state corruption",
+          "Retry logic successfully recovers from transient failures",
+          "Zero information loss during mode transitions",
+          "Specialist agents operate only within defined boundaries"
+        ],
+        "anti_patterns": [
+          "Orchestrator executing specialist work (violates separation of concerns)",
+          "Proceeding without validating boomerang returns",
+          "Specialists initiating mode switches directly (bypasses orchestrator)",
+          "Storing state in specialist modes rather than central orchestrator",
+          "Creating circular dependencies between modes"
+        ],
+        "testing_strategy": "Start with single delegation: create task, delegate to specialist, validate return. Progress to sequential chains: task A → task B → task C with validation at each boomerang. Test error recovery: introduce validation failures and verify retry logic. Test complex scenarios: parallel delegations, dependencies, rollback procedures. Monitor state consistency throughout all tests."
+      },
+      "metadata": {
+        "added_date": "2025-11-04",
+        "last_updated": "2025-11-04",
+        "source": "Workflow Engineering Pattern Library v1.0 - July-November 2025 Research Synthesis",
+        "source_url": "https://github.com/vario-ai/prompt-taxonomy",
+        "maturity": "production",
+        "adoption_level": "growing",
+        "community_resources": [
+          "https://github.com/vario-ai/roo-cline",
+          "https://github.com/vario-ai/prompt-taxonomy/tree/main/research"
+        ],
+        "tags": [
+          "orchestration",
+          "multi-agent",
+          "coordination",
+          "workflow",
+          "state-management",
+          "error-recovery"
+        ]
+      }
+    }
+  ],
+  "_schema_version": "1.0.0",
+  "_schema_description": "Workflow Engineering Pattern Schema",
+  "_last_updated": "2025-11-04"
+}

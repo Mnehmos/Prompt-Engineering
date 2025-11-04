@@ -188,6 +188,12 @@
         "constitutional-ai-defense",
         "adversarial-training-defense"
       ]
+    },
+    {
+      "id": "workflow-engineering",
+      "name": "Workflow Engineering",
+      "description": "Modern multi-agent workflow patterns that formalize theoretical foundations for coordinating AI systems, task decomposition, and structured collaboration frameworks.",
+      "techniques": []
     }
   ]
 }

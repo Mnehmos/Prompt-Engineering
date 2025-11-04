@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore modern multi-agent workflow engineering patterns that formalize theoretical foundations for coordinating AI systems and structured collaboration frameworks.">
+    <meta name="keywords" content="workflow engineering, multi-agent patterns, AI coordination, task decomposition, collaboration frameworks">
+    <title>Workflow Engineering Patterns | Prompt Engineering Guide</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        .category-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: var(--border-radius);
+            margin-bottom: 3rem;
+        }
+
+        .category-hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .category-hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        .category-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .patterns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .pattern-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            border-left: 4px solid #667eea;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pattern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .pattern-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pattern-card h3 i {
+            font-size: 1.5rem;
+        }
+
+        .pattern-card p {
+            flex-grow: 1;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        .pattern-card .pattern-meta {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .pattern-badge {
+            display: inline-block;
+            background-color: var(--gray-100);
+            color: var(--gray-700);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .coming-soon-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-left: 4px solid #667eea;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .coming-soon-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .coming-soon-card p {
+            color: var(--gray-600);
+        }
+
+        .overview-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+
+        .overview-section h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .overview-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .overview-section ul li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .overview-section ul li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin: 2rem 0;
+        }
+
+        .info-box h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .related-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .related-category-link {
+            display: block;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .related-category-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+        }
+
+        .related-category-link h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .related-category-link p {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .category-hero {
+                padding: 3rem 1.5rem;
+            }
+
+            .category-hero h2 {
+                font-size: 2rem;
+            }
+
+            .category-hero p {
+                font-size: 1rem;
+            }
+
+            .patterns-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <h1>Prompt Engineering Guide</h1>
+            </div>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="reports/taxonomy-overview.html">Taxonomy</a>
+                <a href="reports/technique-relationships.html">Relationships</a>
+                <a href="prompt-builder.html">Prompt Builder</a>
+                <a href="workflow-patterns.html" class="active">Workflow Engineering</a>
+                <a href="sources.html">Sources</a>
+                <a href="agent-rules-integration.html">Agent Rules</a>
+                <a href="https://github.com/Mnehmos?tab=repositories" target="_blank">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="category-hero">
+            <div class="category-icon">
+                <i class="fas fa-project-diagram"></i>
+            </div>
+            <h2>Workflow Engineering Patterns</h2>
+            <p>Modern multi-agent workflow patterns that formalize theoretical foundations for coordinating AI systems, task decomposition, and structured collaboration frameworks</p>
+        </div>
+
+        <section class="overview-section">
+            <h3>About Workflow Engineering</h3>
+            <p>Workflow Engineering represents the cutting edge of multi-agent AI coordination, emerging from 2025 research that formalizes how AI systems work together effectively. These patterns establish theoretical foundations for existing techniques and introduce new paradigms for:</p>
+            <ul>
+                <li>Systematic task decomposition and delegation</li>
+                <li>Inter-agent communication protocols</li>
+                <li>State management across distributed AI systems</li>
+                <li>Quality assurance and verification patterns</li>
+                <li>Error recovery and resilience mechanisms</li>
+                <li>Context preservation and knowledge transfer</li>
+                <li>Collaborative problem-solving frameworks</li>
+            </ul>
+        </section>
+
+        <div class="info-box">
+            <h4><i class="fas fa-info-circle"></i> Development Status</h4>
+            <p>This category is currently under active development as part of Phase 3 implementation. Seven foundational workflow patterns are being documented and integrated into the taxonomy. Each pattern will include detailed descriptions, implementation guidelines, use cases, and practical examples.</p>
+        </div>
+
+        <section>
+            <h2>Workflow Patterns</h2>
+            <p>The following patterns formalize modern approaches to multi-agent AI coordination:</p>
+            
+            <div class="patterns-grid">
+                <div class="pattern-card coming-soon-card">
+                    <i class="fas fa-hammer" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+                    <h3>Patterns Coming Soon</h3>
+                    <p>Seven foundational workflow engineering patterns are being documented and will be available shortly. These patterns represent the latest research in multi-agent coordination and will provide practical frameworks for implementing sophisticated AI workflows.</p>
+                    <div class="pattern-meta">
+                        <span class="pattern-badge"><i class="fas fa-cog"></i> In Development</span>
+                        <span class="pattern-badge"><i class="fas fa-calendar"></i> Sprint 1, Phase 3</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Related Categories</h2>
+            <p>Workflow Engineering builds upon and complements these existing categories:</p>
+            
+            <div class="related-categories">
+                <a href="reports/taxonomy-overview.html#multi-agent-systems" class="related-category-link">
+                    <h4><i class="fas fa-users-cog"></i> Multi-Agent Systems</h4>
+                    <p>Advanced techniques for organizing and coordinating multiple AI agents</p>
+                </a>
+                <a href="reports/taxonomy-overview.html#agent-tool-use" class="related-category-link">
+                    <h4><i class="fas fa-robot"></i> Agent & Tool Use</h4>
+                    <p>Techniques enabling LLMs to interact with external tools and environments</p>
+                </a>
+                <a href="reports/taxonomy-overview.html#specialized-application" class="related-category-link">
+                    <h4><i class="fas fa-code"></i> Specialized Applications</h4>
+                    <p>Domain-specific techniques including automated development workflows</p>
+                </a>
+                <a href="reports/taxonomy-overview.html#reasoning-frameworks" class="related-category-link">
+                    <h4><i class="fas fa-brain"></i> Reasoning Frameworks</h4>
+                    <p>Structured approaches to guide model reasoning and problem-solving</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="overview-section" style="margin-top: 3rem;">
+            <h3>Why Workflow Engineering Matters</h3>
+            <p>As AI systems become more sophisticated, the need for structured coordination patterns becomes critical. Workflow Engineering provides:</p>
+            <ul>
+                <li><strong>Reliability:</strong> Formalized patterns reduce errors and edge cases in complex AI systems</li>
+                <li><strong>Scalability:</strong> Standardized workflows enable teams to build larger, more capable AI applications</li>
+                <li><strong>Maintainability:</strong> Clear patterns make AI systems easier to understand, debug, and enhance</li>
+                <li><strong>Reusability:</strong> Established workflow patterns can be adapted across different projects and domains</li>
+                <li><strong>Best Practices:</strong> Codifies emerging best practices from cutting-edge AI development</li>
+            </ul>
+        </section>
+
+        <div class="quick-start-box" style="margin-top: 3rem;">
+            <h2>Explore More Prompt Engineering Techniques</h2>
+            <p>While workflow patterns are being finalized, explore our comprehensive collection of 133+ other techniques</p>
+            <div class="quick-start-buttons">
+                <a href="reports/taxonomy-overview.html" class="quick-start-button">
+                    <i class="fas fa-list-ul"></i> Browse All Techniques
+                </a>
+                <a href="reports/technique-relationships.html" class="quick-start-button">
+                    <i class="fas fa-network-wired"></i> View Relationships
+                </a>
+                <a href="prompt-builder.html" class="quick-start-button">
+                    <i class="fas fa-tools"></i> Build Custom Prompts
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Prompt Engineering Guide</h3>
+                <p>A comprehensive collection of prompt engineering techniques organized by category and relationship.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="reports/taxonomy-overview.html">Taxonomy</a></li>
+                    <li><a href="reports/technique-relationships.html">Relationships</a></li>
+                    <li><a href="prompt-builder.html">Prompt Builder</a></li>
+                    <li><a href="workflow-patterns.html">Workflow Engineering</a></li>
+                    <li><a href="sources.html">Sources</a></li>
+                    <li><a href="agent-rules-integration.html">Agent Rules</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="https://github.com/Mnehmos?tab=repositories" target="_blank">GitHub Repository</a></li>
+                    <li><a href="https://www.reddit.com/r/ChatGPTPro/comments/1k4iykr/i_distilled_17_research_papers_into_a_taxonomy_of/" target="_blank">Original Reddit Post</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Prompt Engineering Guide Project. Content based on research compilation by Background-Zombie869.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/header-footer.js"></script>
+</body>
+</html>
