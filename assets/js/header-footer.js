@@ -60,6 +60,7 @@ function injectHeader(basePath) {
                 <a href="${basePath}reports/technique-relationships.html" class="nav-relationships">Relationships</a>
                 <a href="${basePath}prompt-builder.html" class="nav-builder">Prompt Builder</a>
                 <a href="${basePath}sources.html" class="nav-sources">Sources</a>
+                <a href="${basePath}case-studies.html" class="nav-case-studies">Case Studies</a>
                 <a href="https://github.com/Mnehmos?tab=repositories" target="_blank" class="nav-github">GitHub</a>
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
                     <i class="fas fa-moon"></i>
@@ -174,5 +175,7 @@ function setActiveNavLink() {
         document.querySelector('.nav-builder')?.classList.add('active');
     } else if (currentPath.includes('sources.html')) {
         document.querySelector('.nav-sources')?.classList.add('active');
+    } else if (currentPath.includes('case-studies.html')) {
+        document.querySelector('.nav-case-studies')?.classList.add('active');
     }
 }
