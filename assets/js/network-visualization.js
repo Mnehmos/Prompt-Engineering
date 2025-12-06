@@ -314,9 +314,6 @@ class TechniqueNetworkVisualization {
     /**
      * Update details panel with selected node information
      */
-    /**
-     * Update details panel with selected node information
-     */
     updateDetailsPanel(node) {
         const detailsPanel = document.querySelector('.technique-detail-panel');
         const title = document.getElementById('detail-panel-title');
@@ -369,39 +366,97 @@ class TechniqueNetworkVisualization {
         
         details.innerHTML = content;
         
-        // Set related techniques
-        relatedList.innerHTML = '';
+        // Calculate bidirectional links
+        const linksTo = []; // Outgoing: this node links to these
+        const linkedFrom = []; // Incoming: these nodes link to this node
         
+        // Outgoing links (what this node explicitly references)
         if (node.relatedTechniques && node.relatedTechniques.length > 0) {
             node.relatedTechniques.forEach(relatedId => {
                 const relatedNode = this.nodes.find(n => n.id === relatedId);
                 if (relatedNode) {
-                    const relatedItem = document.createElement('div');
-                    relatedItem.className = 'related-item';
-                    relatedItem.dataset.id = relatedId;
-                    
-                    const colorDot = document.createElement('span');
-                    colorDot.className = 'related-color-dot';
-                    colorDot.style.backgroundColor = relatedNode.color;
-                    
-                    const relatedName = document.createElement('span');
-                    relatedName.className = 'related-name';
-                    relatedName.textContent = relatedNode.name;
-                    
-                    relatedItem.appendChild(colorDot);
-                    relatedItem.appendChild(relatedName);
-                    relatedList.appendChild(relatedItem);
-                    
-                    // Add click event
-                    relatedItem.addEventListener('click', () => {
-                        // Find and highlight node
-                        this.highlightNode(relatedId);
-                    });
+                    linksTo.push(relatedNode);
                 }
             });
-        } else {
-            relatedList.innerHTML = '<p class="empty-state">No related techniques.</p>';
         }
+        
+        // Incoming links (other nodes that reference this one)
+        this.nodes.forEach(otherNode => {
+            if (otherNode.id !== node.id && 
+                otherNode.relatedTechniques && 
+                otherNode.relatedTechniques.includes(node.id)) {
+                // Check if it's not already in linksTo (avoid duplicates in bidirectional)
+                if (!linksTo.find(n => n.id === otherNode.id)) {
+                    linkedFrom.push(otherNode);
+                }
+            }
+        });
+        
+        // Build related techniques section with bidirectional awareness
+        relatedList.innerHTML = '';
+        
+        // Links To section (outgoing)
+        if (linksTo.length > 0) {
+            const linksToSection = document.createElement('div');
+            linksToSection.className = 'links-to-section';
+            linksToSection.innerHTML = `<div class="related-section-header"><i class="fas fa-arrow-right"></i> Links to</div>`;
+            
+            linksTo.forEach(relatedNode => {
+                const relatedItem = this.createRelatedItem(relatedNode);
+                linksToSection.appendChild(relatedItem);
+            });
+            relatedList.appendChild(linksToSection);
+        }
+        
+        // Linked From section (incoming)
+        if (linkedFrom.length > 0) {
+            const linkedFromSection = document.createElement('div');
+            linkedFromSection.className = 'linked-from-section';
+            linkedFromSection.innerHTML = `<div class="related-section-header"><i class="fas fa-arrow-left"></i> Linked from</div>`;
+            
+            linkedFrom.forEach(relatedNode => {
+                const relatedItem = this.createRelatedItem(relatedNode);
+                linkedFromSection.appendChild(relatedItem);
+            });
+            relatedList.appendChild(linkedFromSection);
+        }
+        
+        // Empty state
+        if (linksTo.length === 0 && linkedFrom.length === 0) {
+            relatedList.innerHTML = '<p class="empty-state">No connections to other techniques.</p>';
+        }
+    }
+
+    /**
+     * Create a clickable related item element
+     */
+    createRelatedItem(relatedNode) {
+        const relatedItem = document.createElement('div');
+        relatedItem.className = 'related-item';
+        relatedItem.dataset.id = relatedNode.id;
+        
+        const colorDot = document.createElement('span');
+        colorDot.className = 'related-color-dot';
+        colorDot.style.backgroundColor = relatedNode.color;
+        
+        const relatedName = document.createElement('span');
+        relatedName.className = 'related-name';
+        relatedName.textContent = relatedNode.name;
+        
+        const navArrow = document.createElement('span');
+        navArrow.className = 'nav-arrow';
+        navArrow.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        
+        relatedItem.appendChild(colorDot);
+        relatedItem.appendChild(relatedName);
+        relatedItem.appendChild(navArrow);
+        
+        // Add click event
+        relatedItem.addEventListener('click', () => {
+            this.highlightNode(relatedNode.id);
+        });
+        
+        return relatedItem;
     }
 
     /**

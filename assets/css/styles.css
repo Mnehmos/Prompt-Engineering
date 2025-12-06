@@ -1100,15 +1100,17 @@ footer {
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
-  color: #666;
+  color: var(--text-muted);
 }
 
 #technique-search {
   width: 100%;
   padding: 10px 10px 10px 35px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 14px;
+  background: var(--bg-card);
+  color: var(--text-main);
 }
 
 .control-buttons {
@@ -1119,7 +1121,7 @@ footer {
 
 .node-tooltip {
   position: absolute;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.9);
   color: white;
   padding: 8px 12px;
   border-radius: 4px;
@@ -1133,23 +1135,110 @@ footer {
 .technique-detail-panel {
   max-height: 80vh;
   overflow-y: auto;
+  background: var(--bg-card);
+  color: var(--text-main);
+  border-left: 1px solid var(--border-color);
+}
+
+.technique-detail-panel h3,
+.technique-detail-panel h4 {
+  color: var(--text-main);
+}
+
+.technique-detail-panel p,
+.technique-detail-panel .description {
+  color: var(--text-muted);
+}
+
+.technique-detail-panel .detail-section h4 {
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.technique-detail-panel .example-code {
+  background: var(--bg-body);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+/* Related Techniques Navigation */
+.related-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.related-section-header i {
+  color: var(--primary);
+}
+
+.links-to-section,
+.linked-from-section {
+  margin-bottom: 1rem;
 }
 
 .related-item {
-  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+  cursor: pointer;
+  background: transparent;
 }
 
 .related-item:hover {
-  background-color: #f0f0f0;
-  cursor: pointer;
+  background-color: var(--bg-card-hover);
+}
+
+.related-color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.related-name {
+  color: var(--text-main);
+  font-size: 0.9rem;
+}
+
+.related-item .nav-arrow {
+  margin-left: auto;
+  color: var(--text-light);
+  font-size: 0.75rem;
+}
+
+.related-item:hover .nav-arrow {
+  color: var(--primary);
+}
+
+.empty-state {
+  color: var(--text-light);
+  font-style: italic;
+  font-size: 0.9rem;
 }
 
 /* Visualization container improvements */
 .visualization-container {
   position: relative;
-  border: 1px solid var(--gray-300);
+  border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   overflow: hidden;
+  background: var(--bg-card);
 }
 
 /* Responsive adjustments */
