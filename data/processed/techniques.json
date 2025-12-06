@@ -24,7 +24,10 @@
           "useCase": "Long-document processing. Context window optimization. Memory-efficient inference.",
           "tips": "Use Flash-Attention 3 for sequences > 2048 tokens to see significant gains. Implement chunking strategies alongside attention mechanisms for optimal retrieval.",
           "commonMistakes": "Assuming linear scaling without verification. Ignoring hardware compatibility requirements (e.g., specific CUDA versions).",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "sparse-attention",
+            "context-compression"
+          ]
         },
         {
           "id": "context-compression",
@@ -37,7 +40,10 @@
           "useCase": "Long-context processing. Memory optimization. Information preservation.",
           "tips": "Focus on semantic density rather than just token reduction. Use chain-of-thought summarization to preserve reasoning steps.",
           "commonMistakes": "Over-compressing lossy data (dates, specific IDs). compressing context without retaining key entity relationships.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "context-compression-algorithms",
+            "efficient-attention"
+          ]
         },
         {
           "id": "sparse-attention",
@@ -51,7 +57,10 @@
           "useCase": "Document analysis. Codebase understanding. Research paper analysis.",
           "tips": "Combine sparse attention with sliding windows for local context retention. Tune the sparsity pattern based on the data structure (e.g., code vs. prose).",
           "commonMistakes": "Applying aggressive sparsity to tasks requiring dense global reasoning. Neglecting the 'lost in the middle' phenomenon.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "efficient-attention",
+            "dynamic-context-windowing"
+          ]
         },
         {
           "id": "dynamic-context-windowing",
@@ -65,7 +74,10 @@
           "useCase": "Adaptive processing. Cost optimization. Performance tuning.",
           "tips": "Implement dynamic windowing at the *request* level, not just the model level. Monitor latency metrics to balance context size vs. speed.",
           "commonMistakes": "Setting a static 'safe' window that underutilizes model capabilities. Ignoring the compute cost of re-processing large static prefixes.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "memory-management",
+            "sparse-attention"
+          ]
         },
         {
           "id": "memory-management",
@@ -78,7 +90,10 @@
           "useCase": "Long conversations. Multi-session workflows. Context persistence.",
           "tips": "Use vector stores for long-term memory and sliding windows for short-term. Tag memories with metadata (timestamp, user sentiment) for better retrieval.",
           "commonMistakes": "Allowing the 'context' to grow indefinitely without a forgetting mechanism. Treating all memories as equally important.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "context-layering",
+            "dynamic-context-windowing"
+          ]
         },
         {
           "id": "cross-modal-fusion",
@@ -92,7 +107,10 @@
           "useCase": "Multimodal AI. Robotics. Vision-Language-Action models.",
           "tips": "Align timestamped data across modalities (e.g., video frames + audio logs). Use cross-attention layers specifically trained for modality fusion.",
           "commonMistakes": "Ignoring the bandwidth differences between modalities (text vs. video). Poor synchronization leading to causal confusion.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "vla-architectures",
+            "keyframe-selection"
+          ]
         },
         {
           "id": "context-layering",
@@ -105,7 +123,10 @@
           "useCase": "Multi-agent systems. Complex workflows. Context organization.",
           "tips": "Use immutable structures for persistent layers to prevent drift. Implement strict access controls for modifying the 'persistent' layer.",
           "commonMistakes": "Mixing session-volatile data into persistent layers, causing hallucinations across sessions. Failing to clear transient layers after task completion.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "memory-management",
+            "context-prioritization"
+          ]
         },
         {
           "id": "context-prioritization",
@@ -118,7 +139,10 @@
           "useCase": "Task-focused context. Information filtering. Attention optimization.",
           "tips": "Use semantic similarity scoring to re-rank chunks before injection. Implement a 'decay' factor for older context unless explicitly pinned.",
           "commonMistakes": "Prioritizing solely by recency rather than relevance. Over-filtering context leading to loss of necessary background information.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "context-layering",
+            "retrieval-augmented-generation"
+          ]
         },
         {
           "id": "world-model-forecasting",
@@ -131,7 +155,10 @@
           "useCase": "Predictive AI. Planning. Autonomous systems.",
           "tips": "Verify predicted states against ground truth periodically to calibrate the model. Use ensemble forecasting for critical decision nodes.",
           "commonMistakes": "Relying on long-horizon forecasts without intermediate validation steps. Ignoring uncertainty metrics in the model's output.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "speculative-context",
+            "chain-of-thought"
+          ]
         },
         {
           "id": "continuous-representation",
@@ -144,7 +171,9 @@
           "useCase": "Advanced generation. Sequence modeling. Quality improvement.",
           "tips": "Fine-tune on domain-specific embeddings for better alignment. Use continuous representations for tasks requiring high-precision numerical reasoning.",
           "commonMistakes": "Attempting interpretability analysis on raw continuous vectors without decoding tools. Incompatible tokenizer alignments.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "context-compression"
+          ]
         },
         {
           "id": "context-compression-algorithms",
@@ -158,7 +187,9 @@
           "useCase": "Efficient storage. Transmission optimization. Quality preservation.",
           "tips": "Use hierarchical summarization for better structure retention. Always keep code snippets and mathematical formulas verbatim.",
           "commonMistakes": "Compressing code snippets leading to syntax errors. recursive compression losing the original semantic nuance.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "context-compression"
+          ]
         },
         {
           "id": "higher-order-attention",
@@ -171,7 +202,9 @@
           "useCase": "Efficiency optimization. Long-sequence processing. Attention mechanisms.",
           "tips": "Use for 'haystack' retrieval tasks where standard attention is too expensive. Verify precision on recall-heavy tasks.",
           "commonMistakes": "Expecting exact-match recall parity with quadratic attention in all scenarios. Ignoring numeric stability issues in specific implementations.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "efficient-attention"
+          ]
         },
         {
           "id": "agentic-context-isolation",
@@ -184,7 +217,10 @@
           "useCase": "Agent safety. Deterministic execution. Resource management.",
           "tips": "Define strict interface contracts between isolated environments. Use containerization for robust tool execution sandboxing.",
           "commonMistakes": "Leaking environment variables or global state between agent contexts. Under-resourcing isolated containers leading to timeouts.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "task-boundary-enforcement",
+            "secure-agent-architectures"
+          ]
         },
         {
           "id": "context-federation",
@@ -197,7 +233,9 @@
           "useCase": "Multi-agent systems. Context sharing. System interoperability.",
           "tips": "Use a centralized schema registry for shared context objects. Implement versioning for shared context data structures.",
           "commonMistakes": "Inconsistent naming conventions across federated nodes leading to data silos. Race conditions when updating shared context.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "multi-agent-state-management"
+          ]
         },
         {
           "id": "keyframe-selection",
@@ -210,7 +248,9 @@
           "useCase": "Video understanding. Multimodal AI. Efficient processing.",
           "tips": "Prioritize frames with text overlays or high motion entropy. Use audio cues (e.g., loudness spikes) to assist keyframe selection.",
           "commonMistakes": "Uniform sampling (e.g., every Nth frame) misses critical momentary actions. Ignoring scene transitions.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "cross-modal-fusion"
+          ]
         },
         {
           "id": "gradient-checkpointing",
@@ -223,7 +263,9 @@
           "useCase": "Large models. Memory optimization. Context scaling.",
           "tips": "Use selective checkpointing on attention layers for the best speed/memory trade-off. Combine with mixed-precision training.",
           "commonMistakes": "Checkpointing lightweight layers (like LayerNorm) where recomputation is cheap. Ignoring the impact on training time.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "efficient-attention"
+          ]
         },
         {
           "id": "speculative-context",
@@ -236,7 +278,9 @@
           "useCase": "Predictive loading. Workflow optimization. Response time improvement.",
           "tips": "Prefetch context during user 'think time' to reduce perceived latency. Cache common context patterns.",
           "commonMistakes": "Aggressive prefetching that saturates bandwidth/memory limits. Prefetching stale or irrelevant data.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "speculative-execution"
+          ]
         },
         {
           "id": "mcp-context-integration",
@@ -316,7 +360,10 @@
           "useCase": "State persistence. Recovery mechanisms. Distributed systems.",
           "tips": "Use CRDTs (Conflict-free Replicated Data Types) for high-availability distributed state. Snapshot frequently.",
           "commonMistakes": "Using a single locked database file for high-concurrency agent writes. Assuming state consistency without explicit synchronization barriers.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "context-federation",
+            "multi-agent-orchestration"
+          ]
         },
         {
           "id": "hierarchical-task-planning",
@@ -330,7 +377,10 @@
           "useCase": "Complex workflows. Resource allocation. Parallel execution.",
           "tips": "Allow 'bubbling up' of exceptions from operational to strategic layers for plan revision. Keep layers loosely coupled.",
           "commonMistakes": "Making the strategic layer too granular, effectively micromanaging operational agents. Ignoring feedback loops from lower layers.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "boomerang-task-delegation",
+            "plan-and-solve-prompting"
+          ]
         },
         {
           "id": "graph-based-optimization",
@@ -344,7 +394,10 @@
           "useCase": "Workflow optimization. Resource management. Performance tuning.",
           "tips": "Visualize the dependency graph to identify 'long poles' (critical paths). Cache intermediate results at graph nodes.",
           "commonMistakes": "Optimizing non-critical paths while the main bottleneck remains. Creating cyclic dependencies in the workflow graph.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "graph-of-thoughts",
+            "multi-agent-orchestration"
+          ]
         },
         {
           "id": "speculative-execution",
@@ -396,7 +449,11 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Agent coordination. Workflow automation. System orchestration.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "boomerang-task-delegation",
+            "task-boundary-enforcement",
+            "agent-tool-use"
+          ]
         },
         {
           "id": "inter-agent-communication",
@@ -586,7 +643,10 @@
             "August 2025 Summary"
           ],
           "useCase": "Robotics. Multimodal AI. Embodied AI.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "cross-modal-fusion",
+            "world-model-forecasting"
+          ]
         },
         {
           "id": "dual-system-vla",
@@ -597,7 +657,9 @@
             "August 2025 Summary"
           ],
           "useCase": "Robotics. Real-time systems. Dual-processing architectures.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "vla-architectures"
+          ]
         },
         {
           "id": "graph-based-reasoning",
@@ -608,7 +670,10 @@
             "August 2025 Summary"
           ],
           "useCase": "Spatial reasoning. Complex instructions. Graph neural networks.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "graph-of-thoughts",
+            "vla-architectures"
+          ]
         },
         {
           "id": "continuous-autoregressive",
@@ -619,7 +684,9 @@
             "October 2025 Summary"
           ],
           "useCase": "Advanced generation. Quality improvement. Sequence modeling.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "continuous-representation"
+          ]
         },
         {
           "id": "specattn",
@@ -631,7 +698,10 @@
             "November 2025 Summary"
           ],
           "useCase": "Efficiency optimization. Inference acceleration. Cost reduction.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "sparse-attention",
+            "speculative-execution"
+          ]
         },
         {
           "id": "open-hands-architecture",
@@ -643,7 +713,10 @@
             "Coding Assistant Comparison"
           ],
           "useCase": "Autonomous coding. Continuous learning. System interaction.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "chain-of-code",
+            "code-generation-agents"
+          ]
         },
         {
           "id": "continue-agentic-workflows",
@@ -655,7 +728,10 @@
             "Coding Assistant Comparison"
           ],
           "useCase": "IDE integration. Project memory. Autonomous refactoring.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "automated-development-workflows",
+            "context-priming"
+          ]
         },
         {
           "id": "swarms-coordination",
@@ -667,7 +743,10 @@
             "Coding Assistant Comparison"
           ],
           "useCase": "Large-scale coordination. Enterprise automation. Complex problem solving.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "multi-agent-orchestration",
+            "context-federation"
+          ]
         },
         {
           "id": "open-interpreter",
@@ -678,7 +757,10 @@
             "Coding Assistant Comparison"
           ],
           "useCase": "Computer control. Natural language interfaces. System automation.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "tool-use-agents",
+            "code-generation-agents"
+          ]
         },
         {
           "id": "diffusion-policies",
@@ -689,7 +771,10 @@
             "September 2025 Summary"
           ],
           "useCase": "Action planning. Robotics control. Multimodal reasoning.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "cross-modal-fusion",
+            "vla-architectures"
+          ]
         },
         {
           "id": "embodied-ai",
@@ -700,7 +785,10 @@
             "September 2025 Summary"
           ],
           "useCase": "Robotics. Physical interaction. Safety-critical systems.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "vla-architectures",
+            "diffusion-policies"
+          ]
         },
         {
           "id": "adaptive-control",
@@ -711,19 +799,11 @@
             "September 2025 Summary"
           ],
           "useCase": "Safety systems. Adaptive control. Critical infrastructure.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "semantic-guardrails"
+          ]
         },
-        {
-          "id": "tree-of-thoughts",
-          "name": "Tree-of-Thoughts Integration",
-          "description": "Advanced reasoning through exploring multiple thought branches",
-          "example": "Exploring multiple solution paths simultaneously for complex problems",
-          "sources": [
-            "November 2025 Summary"
-          ],
-          "useCase": "Complex reasoning. Problem solving. Decision making.",
-          "relatedTechniques": []
-        },
+
         {
           "id": "autonomous-decision-making",
           "name": "Autonomous Decision-Making",
@@ -733,7 +813,10 @@
             "September 2025 Summary"
           ],
           "useCase": "Autonomous systems. Decision support. Strategic planning.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "multi-agent-orchestration",
+            "system-2-thinking"
+          ]
         },
         {
           "id": "mixture-experts",
@@ -744,7 +827,10 @@
             "October 2025 Summary"
           ],
           "useCase": "Specialized processing. Efficiency optimization. Capability routing.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "multi-agent-orchestration",
+            "context-federation"
+          ]
         },
         {
           "id": "agentic-synthetic-data",
@@ -756,7 +842,10 @@
             "October 2025 Summary"
           ],
           "useCase": "Data generation. Quality assessment. Training optimization.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "self-correction",
+            "chain-of-thought"
+          ]
         },
         {
           "id": "real-time-inference",
@@ -767,7 +856,10 @@
             "July 2025 Summary"
           ],
           "useCase": "Real-time systems. Edge AI. Robotics.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "efficient-attention",
+            "quantization"
+          ]
         },
         {
           "id": "cross-modal-attention",
@@ -778,7 +870,10 @@
             "July 2025 Summary"
           ],
           "useCase": "Multimodal fusion. Unified understanding. Attention mechanisms.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "cross-modal-fusion",
+            "vla-architectures"
+          ]
         },
         {
           "id": "agent-memory-persistence",
@@ -790,7 +885,10 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Memory systems. Learning systems. Context persistence.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "memory-management",
+            "context-layering"
+          ]
         },
         {
           "id": "multimodal-fusion",
@@ -802,7 +900,9 @@
             "August 2025 Summary"
           ],
           "useCase": "Multimodal AI. Sensor fusion. Unified understanding.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "cross-modal-fusion"
+          ]
         },
         {
           "id": "agent-tool-composition",
@@ -814,7 +914,10 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Tool integration. API orchestration. Dynamic composition.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "tool-use-agents",
+            "react"
+          ]
         },
         {
           "id": "speculative-inference",
@@ -826,7 +929,9 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Performance optimization. Latency reduction. Predictive execution.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "speculative-execution"
+          ]
         },
         {
           "id": "agent-consensus-mechanisms",
@@ -837,7 +942,10 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Multi-agent coordination. Consensus building. Decision making.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "multi-agent-orchestration",
+            "multi-perspective-analysis"
+          ]
         },
         {
           "id": "contextual-agent-routing",
@@ -848,7 +956,10 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Task routing. Agent optimization. Context matching.",
-          "relatedTechniques": []
+          "relatedTechniques": [
+            "mixture-experts",
+            "multi-agent-orchestration"
+          ]
         },
         {
           "id": "agent-fallback-systems",

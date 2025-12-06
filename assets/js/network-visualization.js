@@ -13,8 +13,8 @@ class TechniqueNetworkVisualization {
         this.node = null;
         this.width = 0;
         this.height = 0;
-        this.linkStrength = 0.5;
-        this.nodeDistance = 150;
+        this.linkStrength = 0.3;
+        this.nodeDistance = 250;
         this.selectedCategory = 'all';
         this.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
         this.selectedNode = null;
@@ -265,7 +265,7 @@ class TechniqueNetworkVisualization {
         // Create force simulation
         this.simulation = d3.forceSimulation(this.nodes)
             .force('link', d3.forceLink(this.links).id(d => d.id).distance(this.nodeDistance))
-            .force('charge', d3.forceManyBody().strength(-100))
+            .force('charge', d3.forceManyBody().strength(-400))
             .force('center', d3.forceCenter(this.width / 2, this.height / 2))
             .force('x', d3.forceX(this.width / 2).strength(0.01))
             .force('y', d3.forceY(this.height / 2).strength(0.01))
