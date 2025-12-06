@@ -581,7 +581,6 @@ class TaxonomyDataLoader {
         if (technique.example) {
             exampleContent.textContent = technique.example;
             exampleSection.style.display = 'block';
-            exampleSection.querySelector('h4').innerHTML = '<i class="fas fa-code"></i> Example';
         } else {
             exampleSection.style.display = 'none';
         }
@@ -590,9 +589,8 @@ class TaxonomyDataLoader {
         const useCaseSection = document.getElementById('modal-usecase-section');
         const useCaseContent = document.getElementById('modal-technique-usecase');
         if (technique.useCase) {
-            useCaseContent.innerHTML = `<div class="modal-when-to-use">${technique.useCase}</div>`;
+            useCaseContent.textContent = technique.useCase;
             useCaseSection.style.display = 'block';
-            useCaseSection.querySelector('h4').innerHTML = '<i class="fas fa-lightbulb"></i> When to Use';
         } else {
             useCaseSection.style.display = 'none';
         }
@@ -602,7 +600,7 @@ class TaxonomyDataLoader {
         if (tipsSection) {
             const tipsContent = document.getElementById('modal-technique-tips');
             if (technique.tips) {
-                tipsContent.innerHTML = `<div class="modal-tips-block">${technique.tips}</div>`;
+                tipsContent.innerHTML = technique.tips;
                 tipsSection.style.display = 'block';
             } else {
                 tipsSection.style.display = 'none';
@@ -614,7 +612,7 @@ class TaxonomyDataLoader {
         if (mistakesSection) {
             const mistakesContent = document.getElementById('modal-technique-mistakes');
             if (technique.commonMistakes) {
-                mistakesContent.innerHTML = `<div class="modal-common-mistakes">${technique.commonMistakes}</div>`;
+                mistakesContent.innerHTML = technique.commonMistakes;
                 mistakesSection.style.display = 'block';
             } else {
                 mistakesSection.style.display = 'none';

@@ -697,6 +697,7 @@ footer {
 }
 
 /* Technique Details Modal */
+/* Glassmorphism Modal */
 .modal {
   display: none;
   position: fixed;
@@ -705,54 +706,130 @@ footer {
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5);
+  overflow: hidden; /* Prevent body scroll interaction */
+  background-color: rgba(15, 23, 42, 0.6); /* Slate-900 with opacity */
+  backdrop-filter: blur(8px); /* Blur the background content */
+  -webkit-backdrop-filter: blur(8px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-content {
-  background-color: white;
-  margin: 10% auto;
-  padding: 2rem;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  max-width: 800px;
+  background: rgba(255, 255, 255, 0.95);
+  margin: 3% auto;
+  padding: 0;
+  border-radius: 24px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  max-width: 1000px;
+  width: 90%;
+  height: 85vh; /* Fixed height for scrollable internal body */
   position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Modal Header */
+.modal-header {
+  padding: 1.5rem 2.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0.4)
+  );
+  backdrop-filter: blur(4px);
+  flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.modal-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-main);
+  letter-spacing: -0.025em;
 }
 
 .close {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.05);
+  transition: all 0.2s;
+  color: var(--text-muted);
   font-size: 1.5rem;
-  color: var(--gray-500);
   cursor: pointer;
+  line-height: 1;
 }
 
 .close:hover {
-  color: var(--gray-900);
+  background: rgba(220, 38, 38, 0.1);
+  transform: rotate(90deg);
+  color: #dc2626; /* Red-600 */
 }
 
-.technique-meta {
-  margin-bottom: 1.5rem;
+/* Modal Body - Grid Layout */
+.modal-body {
+  padding: 0;
+  overflow: hidden; /* Hide scrollbar of container, use internal scroll */
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  flex: 1; /* Take remaining space */
+  min-height: 0; /* Essential for nested scrolling in flex item */
 }
 
-.technique-category {
-  display: inline-block;
-  background-color: var(--gray-200);
-  color: var(--gray-700);
-  font-size: 0.85rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 1rem;
+.modal-main-column {
+  padding: 2.5rem;
+  overflow-y: auto;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+.technique-meta-sidebar {
+  padding: 2.5rem;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Modal Sections */
 .modal-section {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .modal-section h4 {
-  margin-bottom: 0.75rem;
-  color: var(--gray-700);
-  font-size: 1.1rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -760,69 +837,187 @@ footer {
 
 .modal-section h4 i {
   color: var(--primary);
+  font-size: 0.9em;
 }
 
-.modal-when-to-use {
-  background-color: var(--gray-100);
-  border-left: 3px solid var(--primary);
-  padding: 1rem;
-  margin-top: 0.5rem;
-  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+.description-section p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--text-main);
+}
+
+/* Grid for Tips & Mistakes */
+.tips-mistakes-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.modal-tips-block,
+.modal-common-mistakes {
+  padding: 1.25rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 .modal-tips-block {
-  background-color: var(--gray-100);
-  border-left: 3px solid var(--success);
-  padding: 1rem;
-  margin-top: 0.5rem;
-  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  background: rgba(16, 185, 129, 0.08); /* Emerald tint */
+  border-left: 4px solid #10b981;
+  color: var(--text-main);
 }
 
 .modal-common-mistakes {
-  background-color: var(--gray-100);
-  border-left: 3px solid var(--warning);
-  padding: 1rem;
-  margin-top: 0.5rem;
-  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  background: rgba(245, 158, 11, 0.08); /* Amber tint */
+  border-left: 4px solid #f59e0b;
+  color: var(--text-main);
 }
 
-.modal-technique-sources {
-  list-style: none;
+/* Metadata Styling */
+.technique-meta-sidebar .modal-section {
+  margin-bottom: 2.5rem;
 }
 
-.modal-technique-sources li {
-  margin-bottom: 0.5rem;
+.technique-category {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg-card);
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
 }
 
+/* Related Techniques */
 #modal-related-techniques {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .related-technique {
-  background-color: var(--gray-200);
-  color: var(--gray-700);
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--border-radius);
-  font-size: 0.875rem;
+  display: block;
+  background: white;
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
-  transition: var(--transition);
+  text-decoration: none;
 }
 
 .related-technique:hover {
-  background-color: var(--primary);
+  transform: translateX(3px);
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+/* Example Code Block */
+.example-code {
+  background: #1e293b; /* Slate-800 */
+  color: #e2e8f0;
+  padding: 1.5rem;
+  border-radius: 12px;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+/* Sources List */
+.modal-technique-sources {
+  list-style: none;
+  padding: 0;
+}
+
+.modal-technique-sources li {
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-technique-sources li:last-child {
+  border-bottom: none;
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] .modal-content {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .modal-header {
+  background: linear-gradient(
+    to right,
+    rgba(30, 41, 59, 0.9),
+    rgba(30, 41, 59, 0.5)
+  );
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .modal-main-column {
+  border-right-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .technique-meta-sidebar {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .related-technique {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .related-technique:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--primary);
   color: white;
 }
 
-.example-code {
-  background-color: var(--gray-100);
-  padding: 1rem;
-  border-radius: var(--border-radius);
-  margin-top: 0.5rem;
-  font-family: var(--font-mono);
-  white-space: pre-wrap;
-  font-size: 0.9rem;
+[data-theme="dark"] .modal-tips-block {
+  background: rgba(16, 185, 129, 0.1);
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .modal-common-mistakes {
+  background: rgba(245, 158, 11, 0.1);
+  color: #e2e8f0;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .modal-body {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  .modal-content {
+    height: auto;
+    max-height: 95vh;
+  }
+
+  .modal-main-column {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .technique-meta-sidebar {
+    max-height: none;
+    overflow-y: visible;
+  }
 }
 
 /* No Results */

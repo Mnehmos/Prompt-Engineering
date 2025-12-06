@@ -79,49 +79,63 @@
         <!-- Technique details modal -->
         <div id="technique-modal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2 id="modal-technique-name">Technique Name</h2>
-                <div class="technique-meta">
-                    <span class="technique-category" id="modal-technique-category">Category</span>
+                <div class="modal-header">
+                    <h2 id="modal-technique-name">Technique Name</h2>
+                    <span class="close">&times;</span>
                 </div>
                 
-                <div class="modal-section">
-                    <p id="modal-technique-description">Description loading...</p>
-                </div>
-                
-                <div class="modal-section" id="modal-aliases-section">
-                    <h4>Also Known As</h4>
-                    <p id="modal-technique-aliases"></p>
-                </div>
-                
-                <div class="modal-section" id="modal-usecase-section">
-                    <h4>Use Case</h4>
-                    <p id="modal-technique-usecase"></p>
-                </div>
-                
-                <div class="modal-section" id="modal-example-section">
-                    <h4>Example</h4>
-                    <div class="example-code" id="modal-technique-example"></div>
-                </div>
-                
-                <div class="modal-section" id="modal-tips-section">
-                    <h4>Tips & Tricks</h4>
-                    <p id="modal-technique-tips"></p>
-                </div>
-                
-                <div class="modal-section" id="modal-mistakes-section">
-                    <h4>Common Mistakes</h4>
-                    <p id="modal-technique-mistakes"></p>
-                </div>
-                
-                <div class="modal-section" id="modal-sources-section">
-                    <h4>Sources</h4>
-                    <ul id="modal-technique-sources" class="modal-technique-sources"></ul>
-                </div>
-                
-                <div class="modal-section" id="modal-related-section">
-                    <h4>Related Techniques</h4>
-                    <div id="modal-related-techniques"></div>
+                <div class="modal-body">
+                    <!-- Left Column: Main Content -->
+                    <div class="modal-main-column">
+                        <div class="modal-section description-section">
+                            <p id="modal-technique-description">Description loading...</p>
+                        </div>
+
+                        <div class="modal-section" id="modal-example-section">
+                            <h4><i class="fas fa-code"></i> Example</h4>
+                            <div class="example-code" id="modal-technique-example"></div>
+                        </div>
+
+                        <div class="tips-mistakes-grid">
+                            <div class="modal-section" id="modal-tips-section">
+                                <h4><i class="fas fa-lightbulb"></i> Tips & Tricks</h4>
+                                <div id="modal-technique-tips" class="modal-tips-block"></div>
+                            </div>
+                            
+                            <div class="modal-section" id="modal-mistakes-section">
+                                <h4><i class="fas fa-exclamation-triangle"></i> Common Mistakes</h4>
+                                <div id="modal-technique-mistakes" class="modal-common-mistakes"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Meta Data -->
+                    <div class="technique-meta-sidebar">
+                        <div class="modal-section meta-section">
+                            <h4>Category</h4>
+                            <span class="technique-category" id="modal-technique-category">Category</span>
+                        </div>
+
+                        <div class="modal-section meta-section" id="modal-usecase-section">
+                            <h4><i class="fas fa-bullseye"></i> Use Case</h4>
+                            <p id="modal-technique-usecase"></p>
+                        </div>
+                        
+                        <div class="modal-section meta-section" id="modal-aliases-section">
+                            <h4><i class="fas fa-tag"></i> Also Known As</h4>
+                            <p id="modal-technique-aliases"></p>
+                        </div>
+
+                        <div class="modal-section meta-section" id="modal-related-section">
+                            <h4><i class="fas fa-link"></i> Related Techniques</h4>
+                            <div id="modal-related-techniques"></div>
+                        </div>
+
+                        <div class="modal-section meta-section" id="modal-sources-section">
+                            <h4><i class="fas fa-book"></i> Sources</h4>
+                            <ul id="modal-technique-sources" class="modal-technique-sources"></ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

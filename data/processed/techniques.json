@@ -22,6 +22,8 @@
             "September 2025 Summary"
           ],
           "useCase": "Long-document processing. Context window optimization. Memory-efficient inference.",
+          "tips": "Use Flash-Attention 3 for sequences > 2048 tokens to see significant gains. Implement chunking strategies alongside attention mechanisms for optimal retrieval.",
+          "commonMistakes": "Assuming linear scaling without verification. Ignoring hardware compatibility requirements (e.g., specific CUDA versions).",
           "relatedTechniques": []
         },
         {
@@ -33,6 +35,8 @@
             "September 2025 Summary"
           ],
           "useCase": "Long-context processing. Memory optimization. Information preservation.",
+          "tips": "Focus on semantic density rather than just token reduction. Use chain-of-thought summarization to preserve reasoning steps.",
+          "commonMistakes": "Over-compressing lossy data (dates, specific IDs). compressing context without retaining key entity relationships.",
           "relatedTechniques": []
         },
         {
@@ -45,6 +49,8 @@
             "October 2025 Summary"
           ],
           "useCase": "Document analysis. Codebase understanding. Research paper analysis.",
+          "tips": "Combine sparse attention with sliding windows for local context retention. Tune the sparsity pattern based on the data structure (e.g., code vs. prose).",
+          "commonMistakes": "Applying aggressive sparsity to tasks requiring dense global reasoning. Neglecting the 'lost in the middle' phenomenon.",
           "relatedTechniques": []
         },
         {
@@ -57,6 +63,8 @@
             "August 2025 Summary"
           ],
           "useCase": "Adaptive processing. Cost optimization. Performance tuning.",
+          "tips": "Implement dynamic windowing at the *request* level, not just the model level. Monitor latency metrics to balance context size vs. speed.",
+          "commonMistakes": "Setting a static 'safe' window that underutilizes model capabilities. Ignoring the compute cost of re-processing large static prefixes.",
           "relatedTechniques": []
         },
         {
@@ -68,6 +76,8 @@
             "September 2025 Summary"
           ],
           "useCase": "Long conversations. Multi-session workflows. Context persistence.",
+          "tips": "Use vector stores for long-term memory and sliding windows for short-term. Tag memories with metadata (timestamp, user sentiment) for better retrieval.",
+          "commonMistakes": "Allowing the 'context' to grow indefinitely without a forgetting mechanism. Treating all memories as equally important.",
           "relatedTechniques": []
         },
         {
@@ -80,6 +90,8 @@
             "August 2025 Summary"
           ],
           "useCase": "Multimodal AI. Robotics. Vision-Language-Action models.",
+          "tips": "Align timestamped data across modalities (e.g., video frames + audio logs). Use cross-attention layers specifically trained for modality fusion.",
+          "commonMistakes": "Ignoring the bandwidth differences between modalities (text vs. video). Poor synchronization leading to causal confusion.",
           "relatedTechniques": []
         },
         {
@@ -91,6 +103,8 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Multi-agent systems. Complex workflows. Context organization.",
+          "tips": "Use immutable structures for persistent layers to prevent drift. Implement strict access controls for modifying the 'persistent' layer.",
+          "commonMistakes": "Mixing session-volatile data into persistent layers, causing hallucinations across sessions. Failing to clear transient layers after task completion.",
           "relatedTechniques": []
         },
         {
@@ -102,6 +116,8 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Task-focused context. Information filtering. Attention optimization.",
+          "tips": "Use semantic similarity scoring to re-rank chunks before injection. Implement a 'decay' factor for older context unless explicitly pinned.",
+          "commonMistakes": "Prioritizing solely by recency rather than relevance. Over-filtering context leading to loss of necessary background information.",
           "relatedTechniques": []
         },
         {
@@ -113,6 +129,8 @@
             "August 2025 Summary"
           ],
           "useCase": "Predictive AI. Planning. Autonomous systems.",
+          "tips": "Verify predicted states against ground truth periodically to calibrate the model. Use ensemble forecasting for critical decision nodes.",
+          "commonMistakes": "Relying on long-horizon forecasts without intermediate validation steps. Ignoring uncertainty metrics in the model's output.",
           "relatedTechniques": []
         },
         {
@@ -124,6 +142,8 @@
             "October 2025 Summary"
           ],
           "useCase": "Advanced generation. Sequence modeling. Quality improvement.",
+          "tips": "Fine-tune on domain-specific embeddings for better alignment. Use continuous representations for tasks requiring high-precision numerical reasoning.",
+          "commonMistakes": "Attempting interpretability analysis on raw continuous vectors without decoding tools. Incompatible tokenizer alignments.",
           "relatedTechniques": []
         },
         {
@@ -136,6 +156,8 @@
             "October 2025 Summary"
           ],
           "useCase": "Efficient storage. Transmission optimization. Quality preservation.",
+          "tips": "Use hierarchical summarization for better structure retention. Always keep code snippets and mathematical formulas verbatim.",
+          "commonMistakes": "Compressing code snippets leading to syntax errors. recursive compression losing the original semantic nuance.",
           "relatedTechniques": []
         },
         {
@@ -147,6 +169,8 @@
             "October 2025 Summary"
           ],
           "useCase": "Efficiency optimization. Long-sequence processing. Attention mechanisms.",
+          "tips": "Use for 'haystack' retrieval tasks where standard attention is too expensive. Verify precision on recall-heavy tasks.",
+          "commonMistakes": "Expecting exact-match recall parity with quadratic attention in all scenarios. Ignoring numeric stability issues in specific implementations.",
           "relatedTechniques": []
         },
         {
@@ -158,6 +182,8 @@
             "November 2025 Summary"
           ],
           "useCase": "Agent safety. Deterministic execution. Resource management.",
+          "tips": "Define strict interface contracts between isolated environments. Use containerization for robust tool execution sandboxing.",
+          "commonMistakes": "Leaking environment variables or global state between agent contexts. Under-resourcing isolated containers leading to timeouts.",
           "relatedTechniques": []
         },
         {
@@ -169,6 +195,8 @@
             "November 2025 Summary"
           ],
           "useCase": "Multi-agent systems. Context sharing. System interoperability.",
+          "tips": "Use a centralized schema registry for shared context objects. Implement versioning for shared context data structures.",
+          "commonMistakes": "Inconsistent naming conventions across federated nodes leading to data silos. Race conditions when updating shared context.",
           "relatedTechniques": []
         },
         {
@@ -180,6 +208,8 @@
             "October 2025 Summary"
           ],
           "useCase": "Video understanding. Multimodal AI. Efficient processing.",
+          "tips": "Prioritize frames with text overlays or high motion entropy. Use audio cues (e.g., loudness spikes) to assist keyframe selection.",
+          "commonMistakes": "Uniform sampling (e.g., every Nth frame) misses critical momentary actions. Ignoring scene transitions.",
           "relatedTechniques": []
         },
         {
@@ -191,6 +221,8 @@
             "July 2025 Summary"
           ],
           "useCase": "Large models. Memory optimization. Context scaling.",
+          "tips": "Use selective checkpointing on attention layers for the best speed/memory trade-off. Combine with mixed-precision training.",
+          "commonMistakes": "Checkpointing lightweight layers (like LayerNorm) where recomputation is cheap. Ignoring the impact on training time.",
           "relatedTechniques": []
         },
         {
@@ -202,6 +234,8 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Predictive loading. Workflow optimization. Response time improvement.",
+          "tips": "Prefetch context during user 'think time' to reduce perceived latency. Cache common context patterns.",
+          "commonMistakes": "Aggressive prefetching that saturates bandwidth/memory limits. Prefetching stale or irrelevant data.",
           "relatedTechniques": []
         },
         {
@@ -213,6 +247,8 @@
             "November 2025 Summary"
           ],
           "useCase": "System interoperability. Context standardization. Tool integration.",
+          "tips": "Standardize tool definitions to allow 'hot-swapping' of backend providers. Use robust error handling for remote context fetch failures.",
+          "commonMistakes": "Hardcoding provider-specific logic within the MCP client layer. Ignoring rate limits of connected services.",
           "relatedTechniques": []
         }
       ]
@@ -231,6 +267,8 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Multi-agent systems. Error recovery. Distributed coordination.",
+          "tips": "Use unique correlation IDs to match requests with returning responses. Implement exponential backoff for retries.",
+          "commonMistakes": "Forgetting to implement a timeout on the orchestrator side for 'lost at sea' agents. Validation logic assuming happy-path returns.",
           "relatedTechniques": []
         },
         {
@@ -242,6 +280,8 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "State persistence. Recovery mechanisms. Distributed systems.",
+          "tips": "Use CRDTs (Conflict-free Replicated Data Types) for high-availability distributed state. Snapshot frequently.",
+          "commonMistakes": "Using a single locked database file for high-concurrency agent writes. Assuming state consistency without explicit synchronization barriers.",
           "relatedTechniques": []
         },
         {
@@ -254,6 +294,8 @@
             "September 2025 Summary"
           ],
           "useCase": "Complex workflows. Resource allocation. Parallel execution.",
+          "tips": "Allow 'bubbling up' of exceptions from operational to strategic layers for plan revision. Keep layers loosely coupled.",
+          "commonMistakes": "Making the strategic layer too granular, effectively micromanaging operational agents. Ignoring feedback loops from lower layers.",
           "relatedTechniques": []
         },
         {
@@ -266,6 +308,8 @@
             "September 2025 Summary"
           ],
           "useCase": "Workflow optimization. Resource management. Performance tuning.",
+          "tips": "Visualize the dependency graph to identify 'long poles' (critical paths). Cache intermediate results at graph nodes.",
+          "commonMistakes": "Optimizing non-critical paths while the main bottleneck remains. Creating cyclic dependencies in the workflow graph.",
           "relatedTechniques": []
         },
         {
@@ -278,6 +322,8 @@
             "October 2025 Summary"
           ],
           "useCase": "Latency reduction. Proactive optimization. Resource management.",
+          "tips": "Use 'shadow mode' to test new agent versions without affecting production output. Set strict resource caps on speculative branches.",
+          "commonMistakes": "Not having a clean rollback mechanism when speculation fails validation. Consuming more resources on speculation than the latency savings justify.",
           "relatedTechniques": []
         },
         {
@@ -290,6 +336,8 @@
             "November 2025 Summary"
           ],
           "useCase": "Domain specialization. Task routing. Consensus building.",
+          "tips": "Use a lightweight 'router' agent to dispatch tasks to heavy experts. Train the router on historical success rates.",
+          "commonMistakes": "Using heavy experts for simple queries where a cheap generalist would suffice. Ignoring communication overhead between experts.",
           "relatedTechniques": []
         },
         {
@@ -384,6 +432,8 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Task planning. Complexity management. Automation.",
+          "tips": "Use recursive decomposition until leaves are atomic tool calls. Maintain parent-child linkage for status reporting.",
+          "commonMistakes": "Breaking tasks down based on time rather than logical dependencies. Losing context depth in deeply nested subtasks.",
           "relatedTechniques": []
         },
         {
@@ -395,6 +445,8 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Resource optimization. Cost management. Performance tuning.",
+          "tips": "Implement a 'budget' per request to prevent one run-away agent from draining quotas. Scale resources based on input token count.",
+          "commonMistakes": "Static allocation that doesn't scale with input complexity. Ignoring rate-limit headers from providers.",
           "relatedTechniques": []
         },
         {
@@ -406,6 +458,8 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Error handling. System reliability. Workflow continuity.",
+          "tips": "Distinguish between transient (network) and permanent (logic) errors for retry strategies. Use circuit breakers for failing services.",
+          "commonMistakes": "Infinite retry loops on 400 Bad Request (permanent) errors. Retrying without state rollback.",
           "relatedTechniques": []
         },
         {
@@ -417,6 +471,8 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Performance optimization. Time reduction. Workflow efficiency.",
+          "tips": "Run independent subtasks (e.g., searching + writing code) in parallel. Aggregate results using a map-reduce pattern.",
+          "commonMistakes": "Parallelizing dependent tasks, leading to race conditions. Over-parallelizing causing rate-limit throttling.",
           "relatedTechniques": []
         },
         {
@@ -428,6 +484,8 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Quality assurance. Error prevention. Workflow verification.",
+          "tips": "Validate data shapes at every hand-off point between agents. Use rigid schemas (Zod/Pydantic) for agent outputs.",
+          "commonMistakes": "'Trusting' the output of an LLM agent without schema verification. Validating only at the end of a long workflow.",
           "relatedTechniques": []
         },
         {
@@ -439,6 +497,8 @@
             "Workflow Engineering Patterns"
           ],
           "useCase": "Performance monitoring. Optimization. System health.",
+          "tips": "Log 'thought traces' alongside API inputs/outputs for debugging logic errors. Create visualization dashboards for agent interaction graphs.",
+          "commonMistakes": "Only logging errors, making it impossible to diagnose logic drift in successful runs. Logging sensitive data in plain text.",
           "relatedTechniques": []
         }
       ]
