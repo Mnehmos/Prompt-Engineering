@@ -61,12 +61,49 @@ function injectHeader(basePath) {
                 <a href="${basePath}prompt-builder.html" class="nav-builder">Prompt Builder</a>
                 <a href="${basePath}sources.html" class="nav-sources">Sources</a>
                 <a href="https://github.com/Mnehmos?tab=repositories" target="_blank" class="nav-github">GitHub</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
             </nav>
         </div>
     `;
     
     // Replace the existing header content
     existingHeader.innerHTML = headerHTML;
+    existingHeader.classList.add('glass'); // Add glassmorphism to header
+
+    // Initialize theme toggle logic
+    initializeThemeToggle();
+}
+
+/**
+ * Initialize dark mode toggle logic
+ */
+function initializeThemeToggle() {
+    const toggleBtn = document.getElementById('theme-toggle');
+    if (!toggleBtn) return;
+    
+    // Check saved preference or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+    
+    toggleBtn.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        // Update icon
+        toggleBtn.innerHTML = newTheme === 'dark' 
+            ? '<i class="fas fa-sun"></i>' 
+            : '<i class="fas fa-moon"></i>';
+    });
 }
 
 /**

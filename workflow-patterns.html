@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Explore modern multi-agent workflow engineering patterns that formalize theoretical foundations for coordinating AI systems and structured collaboration frameworks.">
-    <meta name="keywords" content="workflow engineering, multi-agent patterns, AI coordination, task decomposition, collaboration frameworks">
+    <meta name="keywords" content="workflow engineering, multi-agent patterns, AI coordination, task decomposition, collaboration frameworks, boomerang pattern">
     <title>Workflow Engineering Patterns | Prompt Engineering Guide</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -38,108 +38,140 @@
             opacity: 0.9;
         }
 
-        .patterns-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .pattern-card {
+        /* Pattern Detail Styles */
+        .pattern-detail {
             background-color: white;
             border-radius: var(--border-radius);
-            padding: 2rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: var(--transition);
-            border-left: 4px solid #667eea;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 3rem;
+            overflow: hidden;
         }
 
-        .pattern-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        .pattern-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
         }
 
-        .pattern-card h3 {
-            color: #667eea;
-            margin-bottom: 1rem;
+        .pattern-header h2 {
+            color: white;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
 
-        .pattern-card h3 i {
-            font-size: 1.5rem;
-        }
-
-        .pattern-card p {
-            flex-grow: 1;
-            color: var(--gray-700);
-            line-height: 1.6;
-        }
-
-        .pattern-card .pattern-meta {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--gray-200);
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .pattern-badge {
+        .pattern-status {
             display: inline-block;
-            background-color: var(--gray-100);
-            color: var(--gray-700);
+            background-color: rgba(255,255,255,0.2);
             padding: 0.25rem 0.75rem;
             border-radius: 1rem;
             font-size: 0.85rem;
             font-weight: 500;
         }
 
-        .coming-soon-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            border-left: 4px solid #667eea;
-            text-align: center;
-            padding: 3rem 2rem;
+        .pattern-status.core { background-color: #28a745; }
+        .pattern-status.experimental { background-color: #ffc107; color: #333; }
+
+        .pattern-meta-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
-        .coming-soon-card h3 {
-            color: #667eea;
-            margin-bottom: 1rem;
+        .pattern-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
 
-        .coming-soon-card p {
-            color: var(--gray-600);
-        }
-
-        .overview-section {
-            background-color: white;
-            border-radius: var(--border-radius);
+        .pattern-body {
             padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 3rem;
         }
 
-        .overview-section h3 {
+        .pattern-section {
+            margin-bottom: 2rem;
+        }
+
+        .pattern-section h3 {
             color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
             margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .overview-section ul {
+        .pattern-section h4 {
+            color: var(--gray-700);
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        /* Collapsible Sections */
+        .collapsible-section {
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .collapsible-header {
+            background-color: var(--gray-100);
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+
+        .collapsible-header:hover {
+            background-color: var(--gray-200);
+        }
+
+        .collapsible-header h4 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #667eea;
+        }
+
+        .collapsible-icon {
+            transition: transform 0.3s;
+        }
+
+        .collapsible-section.open .collapsible-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            display: none;
+            padding: 1rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .collapsible-section.open .collapsible-content {
+            display: block;
+        }
+
+        /* Lists with icons */
+        .icon-list {
             list-style: none;
             padding: 0;
         }
 
-        .overview-section ul li {
+        .icon-list li {
             padding: 0.5rem 0;
-            padding-left: 1.5rem;
+            padding-left: 1.75rem;
             position: relative;
         }
 
-        .overview-section ul li::before {
+        .icon-list li::before {
             content: "→";
             position: absolute;
             left: 0;
@@ -147,6 +179,94 @@
             font-weight: bold;
         }
 
+        .icon-list.positive li::before { content: "✓"; color: #28a745; }
+        .icon-list.negative li::before { content: "✗"; color: #dc3545; }
+        .icon-list.warning li::before { content: "⚠"; color: #ffc107; }
+        .icon-list.numbered li { counter-increment: step; }
+        .icon-list.numbered li::before { content: counter(step) "."; color: #667eea; }
+
+        /* Code blocks with copy button */
+        .code-block-container {
+            position: relative;
+            margin: 1rem 0;
+        }
+
+        .code-block {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: rgba(255,255,255,0.1);
+            color: #d4d4d4;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .copy-btn.copied {
+            background-color: #28a745;
+            color: white;
+        }
+
+        /* Example cards */
+        .example-card {
+            background-color: var(--gray-100);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .example-card h5 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .example-outcome {
+            background-color: rgba(40, 167, 69, 0.1);
+            border-left: 3px solid #28a745;
+            padding: 0.75rem;
+            margin-top: 1rem;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        /* Tags */
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background-color: var(--gray-200);
+            color: var(--gray-700);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* Info boxes */
         .info-box {
             background-color: #f0f4ff;
             border-left: 4px solid #667eea;
@@ -155,11 +275,86 @@
             margin: 2rem 0;
         }
 
+        .info-box.success { background-color: #f0fff4; border-color: #28a745; }
+        .info-box.warning { background-color: #fffbf0; border-color: #ffc107; }
+        .info-box.danger { background-color: #fff5f5; border-color: #dc3545; }
+
         .info-box h4 {
             color: #667eea;
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
+        .info-box.success h4 { color: #28a745; }
+        .info-box.warning h4 { color: #b38600; }
+        .info-box.danger h4 { color: #dc3545; }
+
+        /* Tabs for mode-specific content */
+        .tabs-container {
+            margin: 1rem 0;
+        }
+
+        .tabs-nav {
+            display: flex;
+            border-bottom: 2px solid var(--gray-200);
+            gap: 0;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray-600);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: #667eea;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 1.5rem 0;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Validation checklist */
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .checklist li i {
+            color: #28a745;
+            margin-top: 0.2rem;
+        }
+
+        .checklist li.antipattern i {
+            color: #dc3545;
+        }
+
+        /* Related categories */
         .related-categories {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -195,6 +390,12 @@
         .related-category-link p {
             color: var(--gray-600);
             font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Quick start box override */
+        .quick-start-box {
+            background-color: #667eea;
         }
 
         @media (max-width: 768px) {
@@ -210,8 +411,21 @@
                 font-size: 1rem;
             }
 
-            .patterns-grid {
-                grid-template-columns: 1fr;
+            .pattern-header {
+                padding: 1.5rem;
+            }
+
+            .pattern-body {
+                padding: 1.5rem;
+            }
+
+            .tabs-nav {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -244,42 +458,310 @@
             <p>Modern multi-agent workflow patterns that formalize theoretical foundations for coordinating AI systems, task decomposition, and structured collaboration frameworks</p>
         </div>
 
-        <section class="overview-section">
-            <h3>About Workflow Engineering</h3>
-            <p>Workflow Engineering represents the cutting edge of multi-agent AI coordination, emerging from 2025 research that formalizes how AI systems work together effectively. These patterns establish theoretical foundations for existing techniques and introduce new paradigms for:</p>
-            <ul>
-                <li>Systematic task decomposition and delegation</li>
-                <li>Inter-agent communication protocols</li>
-                <li>State management across distributed AI systems</li>
-                <li>Quality assurance and verification patterns</li>
-                <li>Error recovery and resilience mechanisms</li>
-                <li>Context preservation and knowledge transfer</li>
-                <li>Collaborative problem-solving frameworks</li>
-            </ul>
-        </section>
-
-        <div class="info-box">
-            <h4><i class="fas fa-info-circle"></i> Development Status</h4>
-            <p>This category is currently under active development as part of Phase 3 implementation. Seven foundational workflow patterns are being documented and integrated into the taxonomy. Each pattern will include detailed descriptions, implementation guidelines, use cases, and practical examples.</p>
-        </div>
-
-        <section>
-            <h2>Workflow Patterns</h2>
-            <p>The following patterns formalize modern approaches to multi-agent AI coordination:</p>
-            
-            <div class="patterns-grid">
-                <div class="pattern-card coming-soon-card">
-                    <i class="fas fa-hammer" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
-                    <h3>Patterns Coming Soon</h3>
-                    <p>Seven foundational workflow engineering patterns are being documented and will be available shortly. These patterns represent the latest research in multi-agent coordination and will provide practical frameworks for implementing sophisticated AI workflows.</p>
-                    <div class="pattern-meta">
-                        <span class="pattern-badge"><i class="fas fa-cog"></i> In Development</span>
-                        <span class="pattern-badge"><i class="fas fa-calendar"></i> Sprint 1, Phase 3</span>
-                    </div>
+        <!-- Boomerang Coordination Pattern -->
+        <article class="pattern-detail" id="boomerang-coordination">
+            <div class="pattern-header">
+                <h2>
+                    <i class="fas fa-sync-alt"></i>
+                    Boomerang Coordination Pattern
+                    <span class="pattern-status core">Core</span>
+                </h2>
+                <p>A systematic approach to multi-agent coordination where tasks originate from an Orchestrator, are processed by specialists, and reliably return with structured results.</p>
+                <div class="pattern-meta-bar">
+                    <span class="pattern-meta-item"><i class="fas fa-layer-group"></i> System-level abstraction</span>
+                    <span class="pattern-meta-item"><i class="fas fa-tag"></i> Orchestration</span>
+                    <span class="pattern-meta-item"><i class="fas fa-check-circle"></i> Production maturity</span>
+                    <span class="pattern-meta-item"><i class="fas fa-calendar"></i> Updated Nov 2025</span>
                 </div>
             </div>
-        </section>
 
+            <div class="pattern-body">
+                <!-- Context -->
+                <section class="pattern-section">
+                    <h3><i class="fas fa-info-circle"></i> Context</h3>
+                    <p>Complex AI workflows require coordination between multiple specialized agents, each with distinct capabilities and responsibilities. Traditional linear coordination patterns lead to single points of failure and difficulty in error recovery.</p>
+                </section>
+
+                <!-- Problem -->
+                <section class="pattern-section">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Problem</h3>
+                    <p>How to coordinate multiple agents in a way that:</p>
+                    <ul class="icon-list">
+                        <li>Maintains deterministic behavior</li>
+                        <li>Enables reliable error recovery</li>
+                        <li>Supports progressive complexity</li>
+                        <li>Preserves context across agent boundaries</li>
+                    </ul>
+                </section>
+
+                <!-- Solution -->
+                <section class="pattern-section">
+                    <h3><i class="fas fa-lightbulb"></i> Solution</h3>
+                    <p>Implement a boomerang coordination system where:</p>
+                    <ul class="icon-list numbered">
+                        <li>Tasks originate from an Orchestrator with clear assignment parameters</li>
+                        <li>Specialist agents process assigned tasks within defined boundaries and return structured results</li>
+                        <li>Completed tasks "boomerang" back to the Orchestrator for verification and integration</li>
+                        <li>Explicit mode transitions occur only through boomerang returns with structured JSON payloads</li>
+                    </ul>
+                </section>
+
+                <!-- Structure - Collapsible -->
+                <div class="collapsible-section open">
+                    <div class="collapsible-header" onclick="toggleSection(this)">
+                        <h4><i class="fas fa-sitemap"></i> Structure & Participants</h4>
+                        <i class="fas fa-chevron-down collapsible-icon"></i>
+                    </div>
+                    <div class="collapsible-content">
+                        <h4>Participants</h4>
+                        <ul class="icon-list">
+                            <li><strong>Orchestrator</strong> - Coordinates task decomposition, assignment, and integration</li>
+                            <li><strong>Specialist Agents</strong> - Execute domain-specific tasks within bounded responsibilities</li>
+                            <li><strong>State Manager</strong> - Maintains workflow state and task tracking</li>
+                            <li><strong>Validation Layer</strong> - Ensures schema compliance and boundary enforcement</li>
+                        </ul>
+
+                        <h4>Collaborations</h4>
+                        <p>The Orchestrator receives user requests and decomposes them into subtasks with clear boundaries. Each subtask is assigned to a specialist agent with complete context. Specialist agents execute within their domain and return structured JSON payloads. The Orchestrator validates returns, updates state, and triggers dependent tasks. All mode transitions flow through the Orchestrator, creating a boomerang pattern.</p>
+
+                        <h4>Implementation</h4>
+                        <ul class="icon-list">
+                            <li>Use structured JSON payloads with required fields: <code>task_id</code>, <code>origin_mode</code>, <code>destination_mode</code>, <code>result</code>, <code>state</code>, and <code>error_handling</code></li>
+                            <li>Store state in persistent storage (e.g., <code>.roo/boomerang-state.json</code>)</li>
+                            <li>Implement schema validation for all boomerang returns</li>
+                            <li>Enforce boundary constraints preventing specialists from operating outside their domain</li>
+                            <li>Enable automatic retry logic for failed boomerangs</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Consequences - Collapsible -->
+                <div class="collapsible-section">
+                    <div class="collapsible-header" onclick="toggleSection(this)">
+                        <h4><i class="fas fa-balance-scale"></i> Consequences</h4>
+                        <i class="fas fa-chevron-down collapsible-icon"></i>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="info-box success">
+                            <h4><i class="fas fa-plus-circle"></i> Benefits</h4>
+                            <ul class="icon-list positive">
+                                <li>Eliminates single points of failure through distributed responsibility</li>
+                                <li>Enables systematic error recovery and retry logic</li>
+                                <li>Maintains deterministic behavior through explicit state transitions</li>
+                                <li>Supports progressive complexity through bounded agent responsibilities</li>
+                                <li>Provides clear separation of concerns between coordination and execution</li>
+                                <li>Facilitates debugging through explicit state tracking</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box warning">
+                            <h4><i class="fas fa-minus-circle"></i> Trade-offs</h4>
+                            <ul class="icon-list negative">
+                                <li>Increased complexity in initial system design</li>
+                                <li>Additional overhead for boomerang validation</li>
+                                <li>Potential latency increases from coordination loops</li>
+                                <li>Requires well-defined interfaces between agents</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box danger">
+                            <h4><i class="fas fa-exclamation-circle"></i> Risks</h4>
+                            <ul class="icon-list warning">
+                                <li>Risk of infinite boomerang loops if validation fails</li>
+                                <li>Risk of state inconsistency if boomerang payloads are malformed</li>
+                                <li>Risk of coordination deadlock in complex multi-agent scenarios</li>
+                                <li>Risk of context loss if delegation scope is too broad</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Implementation Guide - Collapsible -->
+                <div class="collapsible-section">
+                    <div class="collapsible-header" onclick="toggleSection(this)">
+                        <h4><i class="fas fa-code"></i> Implementation Guide</h4>
+                        <i class="fas fa-chevron-down collapsible-icon"></i>
+                    </div>
+                    <div class="collapsible-content">
+                        <h4>Current State</h4>
+                        <p>Roo already implements a variant of this pattern through its mode-switching architecture. The system supports multiple specialized modes (Architect, Builder, Guardian, Planner, Debug) with distinct capabilities.</p>
+
+                        <h4>Target State</h4>
+                        <p>Enhanced boomerang coordination with formalized JSON payloads, persistent state tracking, automatic validation, and systematic retry logic for all mode transitions.</p>
+
+                        <h4>Implementation Steps</h4>
+                        <ol class="icon-list numbered">
+                            <li>Create <code>.roo/boomerang-state.json</code> for persistent task tracking</li>
+                            <li>Define boomerang payload schema with required fields</li>
+                            <li>Standardize mode return formats with JSON schema validation</li>
+                            <li>Implement boomerang validation in Orchestrator mode</li>
+                            <li>Add automatic retry logic for failed boomerangs</li>
+                            <li>Create mode coordination protocol documenting handoff procedures</li>
+                            <li>Implement state snapshot mechanism for recovery</li>
+                            <li>Add monitoring and logging for boomerang flow</li>
+                        </ol>
+
+                        <h4>Prerequisites</h4>
+                        <ul class="icon-list">
+                            <li>Multiple agent modes or specialists available</li>
+                            <li>JSON-based communication capability</li>
+                            <li>File system access for state persistence</li>
+                            <li>Schema validation capability</li>
+                        </ul>
+
+                        <!-- Mode-specific tabs -->
+                        <div class="tabs-container">
+                            <div class="tabs-nav">
+                                <button class="tab-btn active" onclick="showTab(event, 'tab-roo')">Roo Mode</button>
+                                <button class="tab-btn" onclick="showTab(event, 'tab-kilo')">Kilo Mode</button>
+                                <button class="tab-btn" onclick="showTab(event, 'tab-general')">General</button>
+                            </div>
+                            <div id="tab-roo" class="tab-content active">
+                                <p>Leverage existing multi-mode architecture. Store boomerang state in <code>.roo/boomerang-state.json</code>. Use mode-specific system prompts as specialist boundaries. Implement validation in Orchestrator mode's tool processing.</p>
+                                <p><strong>Mode-specific returns:</strong></p>
+                                <ul class="icon-list">
+                                    <li><strong>Architect</strong> returns design docs + ADRs</li>
+                                    <li><strong>Builder</strong> returns implementation + tests</li>
+                                    <li><strong>Guardian</strong> returns security analysis + recommendations</li>
+                                    <li><strong>Planner</strong> returns user stories + acceptance criteria</li>
+                                </ul>
+                            </div>
+                            <div id="tab-kilo" class="tab-content">
+                                <p>Adapt state location to <code>.kilo/boomerang-state.json</code>. Use Kilo's existing task queue system for coordination. Leverage Kilo's mode structure with enhanced payload validation. Implement boomerang tracking in Kilo's orchestration layer.</p>
+                            </div>
+                            <div id="tab-general" class="tab-content">
+                                <ul class="icon-list">
+                                    <li>Store state in accessible persistent location</li>
+                                    <li>Define clear agent interfaces with capability matrices</li>
+                                    <li>Implement timeout handling for long-running tasks</li>
+                                    <li>Use structured logging for boomerang flow visibility</li>
+                                    <li>Create fallback mechanisms for coordination failures</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Examples - Collapsible -->
+                <div class="collapsible-section">
+                    <div class="collapsible-header" onclick="toggleSection(this)">
+                        <h4><i class="fas fa-flask"></i> Examples</h4>
+                        <i class="fas fa-chevron-down collapsible-icon"></i>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="example-card">
+                            <h5>Example 1: Multi-File Code Refactoring</h5>
+                            <p>User requests refactoring of authentication system across 5 files. Orchestrator creates task map:</p>
+                            <ol>
+                                <li>Architect analyzes current structure and designs new architecture</li>
+                                <li>Builder implements changes with tests</li>
+                                <li>Guardian reviews security implications</li>
+                            </ol>
+                            <p>Each specialist completes their task and boomerangs back with structured results. Orchestrator validates each return before triggering the next phase.</p>
+
+                            <div class="code-block-container">
+                                <pre class="code-block">{
+  "task_id": "auth-refactor-2025-11",
+  "origin_mode": "orchestrator",
+  "destination_mode": "architect",
+  "task_description": "Analyze and design improved authentication architecture",
+  "context_snapshot": {
+    "files": ["auth.ts", "user.ts", "session.ts"],
+    "current_issues": ["tight coupling", "no token refresh"]
+  },
+  "return_criteria": {
+    "deliverable": "architecture_design.md",
+    "validation": ["addresses coupling", "includes token refresh"]
+  }
+}</pre>
+                                <button class="copy-btn" onclick="copyCode(this)">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+
+                            <div class="example-outcome">
+                                <strong>Outcome:</strong> Successfully refactored authentication system with zero rework. Each specialist completed their bounded task. Full traceability through boomerang state tracking. Clean handoffs with validation at each stage.
+                            </div>
+                        </div>
+
+                        <div class="example-card">
+                            <h5>Example 2: Feature Development Pipeline</h5>
+                            <p>Orchestrator receives feature request and creates pipeline: Planner defines user stories → Architect designs system changes → Builder implements → Guardian deploys. Each stage boomerangs back with artifacts. If validation fails at any stage, automatic retry with feedback.</p>
+
+                            <div class="example-outcome">
+                                <strong>Outcome:</strong> Feature delivered through coordinated specialist work. Automatic rollback when Guardian identified security issue. Re-delegation to Builder with specific guidance. Successful deployment on retry.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Validation - Collapsible -->
+                <div class="collapsible-section">
+                    <div class="collapsible-header" onclick="toggleSection(this)">
+                        <h4><i class="fas fa-check-double"></i> Validation Criteria</h4>
+                        <i class="fas fa-chevron-down collapsible-icon"></i>
+                    </div>
+                    <div class="collapsible-content">
+                        <h4>Success Criteria</h4>
+                        <ul class="checklist">
+                            <li><i class="fas fa-check-circle"></i> All mode transitions use structured boomerang payloads</li>
+                            <li><i class="fas fa-check-circle"></i> State remains consistent throughout execution</li>
+                            <li><i class="fas fa-check-circle"></i> Boomerang validation catches malformed returns before state corruption</li>
+                            <li><i class="fas fa-check-circle"></i> Retry logic successfully recovers from transient failures</li>
+                            <li><i class="fas fa-check-circle"></i> Zero information loss during mode transitions</li>
+                            <li><i class="fas fa-check-circle"></i> Specialist agents operate only within defined boundaries</li>
+                        </ul>
+
+                        <h4>Anti-Patterns to Avoid</h4>
+                        <ul class="checklist">
+                            <li class="antipattern"><i class="fas fa-times-circle"></i> Orchestrator executing specialist work (violates separation of concerns)</li>
+                            <li class="antipattern"><i class="fas fa-times-circle"></i> Proceeding without validating boomerang returns</li>
+                            <li class="antipattern"><i class="fas fa-times-circle"></i> Specialists initiating mode switches directly (bypasses orchestrator)</li>
+                            <li class="antipattern"><i class="fas fa-times-circle"></i> Storing state in specialist modes rather than central orchestrator</li>
+                            <li class="antipattern"><i class="fas fa-times-circle"></i> Creating circular dependencies between modes</li>
+                        </ul>
+
+                        <h4>Testing Strategy</h4>
+                        <ol class="icon-list numbered">
+                            <li><strong>Start with single delegation:</strong> Create task, delegate to specialist, validate return</li>
+                            <li><strong>Progress to sequential chains:</strong> Task A → Task B → Task C with validation at each boomerang</li>
+                            <li><strong>Test error recovery:</strong> Introduce validation failures and verify retry logic</li>
+                            <li><strong>Test complex scenarios:</strong> Parallel delegations, dependencies, rollback procedures</li>
+                            <li><strong>Monitor state consistency:</strong> Throughout all tests</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Tags -->
+                <section class="pattern-section">
+                    <h3><i class="fas fa-tags"></i> Tags</h3>
+                    <div class="tags-container">
+                        <span class="tag">orchestration</span>
+                        <span class="tag">multi-agent</span>
+                        <span class="tag">coordination</span>
+                        <span class="tag">workflow</span>
+                        <span class="tag">state-management</span>
+                        <span class="tag">error-recovery</span>
+                    </div>
+                </section>
+            </div>
+        </article>
+
+        <!-- More Patterns Coming Soon -->
+        <div class="info-box">
+            <h4><i class="fas fa-hammer"></i> More Patterns Coming Soon</h4>
+            <p>Additional workflow engineering patterns are being documented, including:</p>
+            <ul class="icon-list">
+                <li>Hierarchical Task Decomposition Pattern</li>
+                <li>Context Window Management Pattern</li>
+                <li>Collaborative Verification Pattern</li>
+                <li>Graceful Degradation Pattern</li>
+                <li>State Checkpoint & Recovery Pattern</li>
+                <li>Parallel Execution Coordination Pattern</li>
+            </ul>
+        </div>
+
+        <!-- Related Categories -->
         <section>
             <h2>Related Categories</h2>
             <p>Workflow Engineering builds upon and complements these existing categories:</p>
@@ -304,21 +786,9 @@
             </div>
         </section>
 
-        <section class="overview-section" style="margin-top: 3rem;">
-            <h3>Why Workflow Engineering Matters</h3>
-            <p>As AI systems become more sophisticated, the need for structured coordination patterns becomes critical. Workflow Engineering provides:</p>
-            <ul>
-                <li><strong>Reliability:</strong> Formalized patterns reduce errors and edge cases in complex AI systems</li>
-                <li><strong>Scalability:</strong> Standardized workflows enable teams to build larger, more capable AI applications</li>
-                <li><strong>Maintainability:</strong> Clear patterns make AI systems easier to understand, debug, and enhance</li>
-                <li><strong>Reusability:</strong> Established workflow patterns can be adapted across different projects and domains</li>
-                <li><strong>Best Practices:</strong> Codifies emerging best practices from cutting-edge AI development</li>
-            </ul>
-        </section>
-
         <div class="quick-start-box" style="margin-top: 3rem;">
             <h2>Explore More Prompt Engineering Techniques</h2>
-            <p>While workflow patterns are being finalized, explore our comprehensive collection of 133+ other techniques</p>
+            <p>Discover our comprehensive collection of 182+ techniques across 13 categories</p>
             <div class="quick-start-buttons">
                 <a href="reports/taxonomy-overview.html" class="quick-start-button">
                     <i class="fas fa-list-ul"></i> Browse All Techniques
@@ -366,5 +836,41 @@
 
     <script src="assets/js/main.js"></script>
     <script src="assets/js/header-footer.js"></script>
+    <script>
+        // Collapsible sections
+        function toggleSection(header) {
+            const section = header.parentElement;
+            section.classList.toggle('open');
+        }
+
+        // Tab switching
+        function showTab(event, tabId) {
+            // Remove active class from all buttons and content
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding content
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Copy to clipboard
+        function copyCode(button) {
+            const codeBlock = button.previousElementSibling;
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                button.classList.add('copied');
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    button.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+    </script>
 </body>
 </html>
