@@ -250,6 +250,40 @@
           "tips": "Standardize tool definitions to allow 'hot-swapping' of backend providers. Use robust error handling for remote context fetch failures.",
           "commonMistakes": "Hardcoding provider-specific logic within the MCP client layer. Ignoring rate limits of connected services.",
           "relatedTechniques": []
+        },
+        {
+          "id": "context-caching",
+          "name": "Context Caching",
+          "description": "Caching pre-computed states of the context window (prefix caching) to reduce latency and cost for repeated queries.",
+          "example": "Caching the 'System Prompt' and 'Few-Shot Examples' prefix so only the new user query is computed.",
+          "sources": [
+            "Gemini 1.5 Documentation",
+            "Anthropic Prompt Engineering"
+          ],
+          "useCase": "High-volume chat applications, repetitive document analysis, complex system prompts.",
+          "tips": "Structure prompts with static content (rules, examples) *first* to maximize cache hit rates. Use consistent ordering.",
+          "commonMistakes": "Frequently changing the strict prefix, which invalidates the cache. Not monitoring cache hit ratios.",
+          "relatedTechniques": [
+            "context-optimization",
+            "efficient-attention"
+          ]
+        },
+        {
+          "id": "agentic-rag",
+          "name": "Agentic RAG",
+          "description": "Autonomous retrieval where an agent formulates queries, critiques results, and iteratively searches based on findings.",
+          "example": "Agent searches for 'Apple stock', realizes results are outdated, then refines search to 'Apple stock price 2024'.",
+          "sources": [
+            "LangChain Agent RAG",
+            "LlamaIndex Strategies"
+          ],
+          "useCase": "Complex Q&A requiring multi-step verification or deeper research than simple semantic search.",
+          "tips": "Implement a 'grader' step where the LLM evaluates relevance of retrieved chunk. Allow the agent to rewrite queries.",
+          "commonMistakes": "Single-shot RAG without fallback. Not giving the agent tools to filter/sort results.",
+          "relatedTechniques": [
+            "rag",
+            "react"
+          ]
         }
       ]
     },
@@ -500,6 +534,40 @@
           "tips": "Log 'thought traces' alongside API inputs/outputs for debugging logic errors. Create visualization dashboards for agent interaction graphs.",
           "commonMistakes": "Only logging errors, making it impossible to diagnose logic drift in successful runs. Logging sensitive data in plain text.",
           "relatedTechniques": []
+        },
+        {
+          "id": "reflection-loops",
+          "name": "Reflection & Feedback Loops",
+          "description": "Explicit workflow steps where the agent critiques its own output or intermediate state before proceeding.",
+          "example": "Draft Email -> Criticize Tone/Clarity -> Revise Email -> Final Output",
+          "sources": [
+            "Reflexion Paper (Shinn et al.)",
+            "Self-Refine"
+          ],
+          "useCase": "Quality-critical tasks like code generation, content writing, and complex reasoning.",
+          "tips": "Separate the generator and critic roles (or models) to avoid bias. Be specific in critique instructions.",
+          "commonMistakes": "Endless loops without a stop condition (max iterations). Critic being too reliable/agreeable.",
+          "relatedTechniques": [
+            "self-refine",
+            "chain-of-thought"
+          ]
+        },
+        {
+          "id": "dynamic-routing",
+          "name": "Semantic/Dynamic Routing",
+          "description": "Using a router (LLM or classifier) to dispatch queries to the most efficient model or specialized agent.",
+          "example": "Router sends 'Calculate 2+2' to Calculator Tool, but 'Explain quantum physics' to GPT-4.",
+          "sources": [
+            "Mixture of Experts",
+            "RouteLLM"
+          ],
+          "useCase": "Cost optimization, latency reduction, and utilizing specialized expert models.",
+          "tips": "Use a smaller/faster model (or embedding classifier) as the router. Define clear boundaries for each route.",
+          "commonMistakes": "Router latency exceeding the savings of the specialized route. Overlapping route definitions.",
+          "relatedTechniques": [
+            "mixture-of-agents",
+            "classification"
+          ]
         }
       ]
     },
@@ -803,6 +871,64 @@
           ],
           "useCase": "Quality assurance. Output validation. Consistency checking.",
           "relatedTechniques": []
+        }
+      ]
+    },
+    {
+      "id": "advanced-prompting-strategies",
+      "name": "Advanced Prompting Strategies",
+      "description": "Sophisticated prompting techniques involving complex reasoning structures and meta-learning.",
+      "techniques": [
+        {
+          "id": "graph-of-thoughts",
+          "name": "Graph of Thoughts (GoT)",
+          "description": "Modeling reasoning as a graph where thoughts are nodes, allowing for non-linear exploration and combination.",
+          "example": "Solving a complex coding problem by exploring multiple solution branches, merging the best parts of each.",
+          "sources": [
+            "Graph of Thoughts Paper (Besta et al.)",
+            "Zurich Research"
+          ],
+          "useCase": "Complex reasoning, creative writing, solving multi-faceted problems.",
+          "tips": "Use strictly when linear thinking (CoT) fails. Visualize the graph structure for debugging.",
+          "commonMistakes": "Over-engineering simple problems with GoT. Failing to define clear 'aggregation' operations for merging thoughts.",
+          "relatedTechniques": [
+            "chain-of-thought",
+            "tree-of-thoughts"
+          ]
+        },
+        {
+          "id": "meta-prompting",
+          "name": "Meta-Prompting",
+          "description": "Using a 'meta-model' or higher-level prompt to orchestrate multiple sub-models or generate task-specific prompts.",
+          "example": "A master prompt that analyzes a user request and generates the perfect role and instructions for a worker agent.",
+          "sources": [
+            "OpenAI Meta-Prompting",
+            "Prompt Engineering Guide"
+          ],
+          "useCase": "Building autonomous agent systems, dynamic task adaptation.",
+          "tips": "The meta-prompt should focus on 'how to solve' rather than solving directly. Use structured output for the generated sub-prompts.",
+          "commonMistakes": "Meta-prompt becoming too rigid. Infinite recursion if the meta-prompt calls itself without limits.",
+          "relatedTechniques": [
+            "automated-prompt-optimization",
+            "role-prompting"
+          ]
+        },
+        {
+          "id": "recursive-refinement",
+          "name": "Recursive Self-Refinement",
+          "description": "Iteratively improving an output by feeding it back into the model with specific critique instructions.",
+          "example": "Generate Code -> 'List 3 bugs' -> Fix bugs -> 'Optimize for speed' -> Final Code.",
+          "sources": [
+            "Self-Refine",
+            "Recursively Criticizes and Improves"
+          ],
+          "useCase": "Code generation, mathematical proofs, high-quality content creation.",
+          "tips": "Set a clear stopping condition (max loops or quality threshold). Differentiate between 'critique' and 'refine' steps.",
+          "commonMistakes": "Model hallucinating errors to fix. Loss of original intent after multiple aggressive refinings.",
+          "relatedTechniques": [
+            "self-refine",
+            "chain-of-thought"
+          ]
         }
       ]
     },
