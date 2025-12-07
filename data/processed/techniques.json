@@ -1277,7 +1277,8 @@
             "Wei et al.",
             "Schulhoff et al.",
             "Vatsal & Dubey",
-            "Wang et al. - Self-Consistency"
+            "Wang et al. - Self-Consistency",
+            "Anthropic Prompt Engineering Interactive Tutorial"
           ],
           "relatedTechniques": [
             "zero-shot-cot",
@@ -2928,6 +2929,72 @@
           "example": "Training a model on datasets that include jailbreak attempts, prompt injections, and adversarial triggers, teaching it to recognize and refuse such inputs appropriately.",
           "tips": "Include diverse adversarial examples covering multiple attack types. Balance adversarial training with maintaining model utility and helpfulness. Regularly update adversarial training sets with new attack patterns. Combine with other defense techniques for layered security.",
           "commonMistakes": "Training only on a narrow set of known attacks. Over-training on adversarial examples leading to reduced helpfulness. Not keeping adversarial training datasets updated with emerging threats."
+        }
+      ]
+    },
+    {
+      "id": "prompt-structure-engineering",
+      "name": "Prompt Structure & Engineering",
+      "description": "Techniques for structuring prompts and engineering the context for optimal model performance.",
+      "techniques": [
+        {
+          "id": "response-prefilling",
+          "name": "Response Prefilling",
+          "description": "Starting the model's response with a specific string to guide its output format and content.",
+          "sources": [
+            "Anthropic Claude Cookbooks",
+            "Anthropic Prompt Engineering Interactive Tutorial"
+          ],
+          "relatedTechniques": [
+            "xml-tagging",
+            "one-shot-learning"
+          ],
+          "useCase": "Enforcing JSON format, specific tone, or continuing a specific thought process.",
+          "example": "User: Extract names. Assistant: Here are the names:\n1."
+        },
+        {
+          "id": "xml-tagging",
+          "name": "XML Tagging / Structured Prompting",
+          "description": "Using XML tags to clearly separate different parts of the prompt (instructions, data, examples) to prevent confusion.",
+          "sources": [
+            "Anthropic Claude Cookbooks",
+            "Anthropic Prompt Engineering Interactive Tutorial"
+          ],
+          "relatedTechniques": [
+            "response-prefilling",
+            "system-prompting"
+          ],
+          "useCase": "Complex prompts with multiple documents, instructions, or strict formatting requirements.",
+          "example": "Please analyze the document in the <document> tags."
+        },
+        {
+          "id": "system-prompting",
+          "name": "System Prompts",
+          "description": "Using the system role to set the overall behavior, persona, and constraints of the model before user interaction.",
+          "sources": [
+            "Anthropic Claude Cookbooks",
+            "OpenAI API Documentation"
+          ],
+          "relatedTechniques": [
+            "role-prompting",
+            "context-engineering"
+          ],
+          "useCase": "Defining enduring agent personas, security constraints, and global formatting rules.",
+          "example": "System: You are a helpful coding assistant that only speaks in JSON."
+        },
+        {
+          "id": "context-engineering",
+          "name": "Context Engineering",
+          "description": "Strategically organizing and optimizing the information provided in the context window to maximize relevance and model comprehension.",
+          "sources": [
+            "Anthropic Prompt Engineering Interactive Tutorial"
+          ],
+          "relatedTechniques": [
+            "rag",
+            "context-priming"
+          ],
+          "useCase": "Long-context tasks where positioning of key information affects performance.",
+          "example": "Placing instructions at the end of a long context window to prevent 'lost in the middle' phenomenon."
         }
       ]
     }
