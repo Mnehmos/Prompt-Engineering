@@ -194,6 +194,14 @@ const categoryColorsJson = JSON.stringify(categoryColors);
 
     try {
       graphController = initializeGraph(container, graphData, categoryColors);
+      
+      // Delay resize and refit to ensure container has final dimensions
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          graphController.resize();
+          graphController.zoomToFit();
+        }, 100);
+      });
     } catch (err) {
       console.error('Failed to initialize graph:', err);
       return;
@@ -340,8 +348,11 @@ const categoryColorsJson = JSON.stringify(categoryColors);
   }
 
   .graph-viewport {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 
   /* Floating Panel */

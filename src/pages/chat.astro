@@ -8,16 +8,16 @@ import Layout from '@/layouts/Layout.astro';
 ---
 
 <Layout 
-  title="Search Techniques - Mnehmos Prompt Research" 
-  description="Search our knowledge base of 192 prompt engineering techniques using AI-powered semantic search"
+  title="AI Research Assistant - Mnehmos Prompt Research" 
+  description="Ask our AI assistant about 192 prompt engineering techniques"
 >
   <div class="search-page">
     <header class="page-header">
       <h1 class="page-title">
-        <span class="text-gradient">Ask</span> About Techniques
+        <span class="text-gradient">Chat</span> with Our AI
       </h1>
       <p class="page-subtitle">
-        Search our knowledge base of 192 prompt engineering techniques
+        Ask questions about prompt engineering techniques
       </p>
     </header>
     
@@ -73,12 +73,11 @@ import Layout from '@/layouts/Layout.astro';
               <line x1="22" y1="2" x2="11" y2="13"/>
               <polygon points="22 2 15 22 11 13 2 9 22 2"/>
             </svg>
-            <span class="btn-text">Search</span>
+            <span class="btn-text">Send</span>
           </button>
         </div>
-        <p class="input-hint">
-          <span class="demo-badge">Demo Mode</span>
-          Showing example responses • Connect backend for full search
+        <p class="input-hint" id="status-hint">
+          Powered by RAG • Responses stream in real-time
         </p>
       </form>
     </div>
@@ -87,8 +86,8 @@ import Layout from '@/layouts/Layout.astro';
   <!-- Chat configuration (can be overridden by backend) -->
   <script id="chat-config" type="application/json">
     {
-      "demoMode": true,
-      "apiEndpoint": null
+      "demoMode": false,
+      "apiEndpoint": "https://rag-server-production-376d.up.railway.app/chat"
     }
   </script>
 </Layout>

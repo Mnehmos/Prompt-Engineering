@@ -95,6 +95,12 @@ const totalCount = getTechniqueCount(data);
       <div class="container">
         <div class="techniques-header">
           <h2 class="section-title" id="techniques-heading">All Techniques ({totalCount})</h2>
+          <button id="clear-filter-section" class="clear-filter-btn" data-testid="clear-filter-section" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+            Clear Filter
+          </button>
           <span class="results-count" id="results-count">{totalCount} techniques</span>
         </div>
         
@@ -119,26 +125,15 @@ const totalCount = getTechniqueCount(data);
     hidden
     aria-hidden="true"
   >
+    <!-- Left Navigation Arrow -->
+    <button class="nav-arrow nav-prev" data-testid="modal-prev" aria-label="Previous technique">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6" />
+      </svg>
+    </button>
+    
     <div class="modal glass-card" role="dialog" aria-labelledby="modal-title" aria-modal="true">
-      <!-- Navigation Header -->
-      <div class="modal-nav-header">
-        <button class="nav-btn nav-prev" data-testid="modal-prev" aria-label="Previous technique">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-          Prev
-        </button>
-        
-        <span class="nav-position" id="modal-position">1 of 192</span>
-        
-        <button class="nav-btn nav-next" data-testid="modal-next" aria-label="Next technique">
-          Next
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </button>
-      </div>
-      
+      <!-- Close button -->
       <button
         class="modal-close"
         data-testid="modal-close"
@@ -148,6 +143,9 @@ const totalCount = getTechniqueCount(data);
           <path d="M18 6L6 18M6 6l12 12" />
         </svg>
       </button>
+      
+      <!-- Position indicator -->
+      <span class="nav-position" id="modal-position">1 of 192</span>
       
       <div class="modal-content">
         <div class="modal-header">
@@ -193,6 +191,13 @@ const totalCount = getTechniqueCount(data);
         </div>
       </div>
     </div>
+    
+    <!-- Right Navigation Arrow -->
+    <button class="nav-arrow nav-next" data-testid="modal-next" aria-label="Next technique">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18l6-6-6-6" />
+      </svg>
+    </button>
   </div>
 </Layout>
 
@@ -265,15 +270,18 @@ const totalCount = getTechniqueCount(data);
       // Update heading based on filter state
       const heading = document.getElementById('techniques-heading');
       const clearBtnInline = document.getElementById('clear-filter-inline');
+      const clearBtnSection = document.getElementById('clear-filter-section');
       const selectedOption = categorySelect?.options[categorySelect.selectedIndex];
       
       if (heading) {
         if (currentCategory && selectedOption) {
           heading.textContent = selectedOption.text; // "Category Name (N)"
           if (clearBtnInline) clearBtnInline.hidden = false;
+          if (clearBtnSection) clearBtnSection.hidden = false;
         } else {
           heading.textContent = `All Techniques (${totalCount})`;
           if (clearBtnInline) clearBtnInline.hidden = true;
+          if (clearBtnSection) clearBtnSection.hidden = true;
         }
       }
     }
@@ -299,21 +307,64 @@ const totalCount = getTechniqueCount(data);
           currentCategory = categoryId;
           filterTechniques();
           
-          // Scroll to techniques section
-          document.querySelector('.techniques-section')?.scrollIntoView({ behavior: 'smooth' });
+          // Smart scroll - only scroll if techniques section isn't visible at all
+          const techniquesSection = document.querySelector('.techniques-section');
+          if (techniquesSection) {
+            const rect = techniquesSection.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            
+            // Check if the section is already visible in the viewport
+            const isVisible = rect.top < viewportHeight && rect.bottom > 0;
+            
+            // Only scroll if the section is not visible at all
+            if (!isVisible) {
+              // Custom slow scroll (1200ms instead of default ~600ms)
+              const targetY = window.scrollY + rect.top;
+              const startY = window.scrollY;
+              const distance = targetY - startY;
+              const duration = 900;
+              let startTime: number | null = null;
+              
+              // Disable CSS smooth scroll temporarily
+              document.documentElement.style.scrollBehavior = 'auto';
+              
+              function animateScroll(currentTime: number) {
+                if (startTime === null) startTime = currentTime;
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Linear scroll - consistent speed throughout
+                window.scrollTo(0, startY + distance * progress);
+                
+                if (progress < 1) {
+                  requestAnimationFrame(animateScroll);
+                } else {
+                  // Re-enable CSS smooth scroll
+                  document.documentElement.style.scrollBehavior = '';
+                }
+              }
+              
+              requestAnimationFrame(animateScroll);
+            }
+          }
         }
       });
     });
     
-    // Clear filter button handler (inline)
+    // Clear filter button handlers
     const clearFilterBtnInline = document.getElementById('clear-filter-inline');
-    clearFilterBtnInline?.addEventListener('click', () => {
+    const clearFilterBtnSection = document.getElementById('clear-filter-section');
+    
+    function clearCategoryFilter() {
       if (categorySelect) {
         categorySelect.value = '';
         currentCategory = '';
         filterTechniques();
       }
-    });
+    }
+    
+    clearFilterBtnInline?.addEventListener('click', clearCategoryFilter);
+    clearFilterBtnSection?.addEventListener('click', clearCategoryFilter);
     
     // Update modal position indicator
     function updateModalPosition() {
@@ -699,6 +750,41 @@ const totalCount = getTechniqueCount(data);
     color: var(--text-muted);
   }
 
+  /* Clear Filter Button (in techniques section) */
+  .clear-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: var(--copper);
+    border: none;
+    border-radius: var(--radius-lg);
+    color: white;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .clear-filter-btn:hover {
+    background: var(--copper-dark, #A06228);
+    transform: scale(1.02);
+  }
+
+  .clear-filter-btn:focus-visible {
+    outline: 2px solid var(--interactive-focus);
+    outline-offset: 2px;
+  }
+
+  .clear-filter-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .clear-filter-btn[hidden] {
+    display: none;
+  }
+
   .techniques-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -740,58 +826,61 @@ const totalCount = getTechniqueCount(data);
     padding-top: var(--space-4);
   }
 
-  /* Modal Navigation Header */
-  .modal-nav-header {
+  /* Large Navigation Arrows (outside modal) */
+  .nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 56px;
+    height: 56px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: var(--space-3) var(--space-4);
-    padding-right: var(--space-14);
-    border-bottom: 1px solid var(--border-muted);
-    margin: calc(-1 * var(--space-4)) calc(-1 * var(--space-8)) var(--space-4);
-    margin-top: 0;
-    background: var(--bg-muted);
-    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
-  }
-
-  .nav-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
-    background: transparent;
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-lg);
-    color: var(--text-muted);
-    font-size: var(--text-sm);
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--border-default);
+    border-radius: var(--radius-full);
+    color: white;
     cursor: pointer;
     transition: all var(--transition-fast);
+    z-index: 100;
   }
 
-  .nav-btn:hover:not(:disabled) {
-    border-color: var(--interactive-default);
-    color: var(--interactive-default);
+  .nav-arrow:hover {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: var(--copper);
+    color: var(--copper);
+    transform: translateY(-50%) scale(1.1);
   }
 
-  .nav-btn:focus-visible {
+  .nav-arrow:focus-visible {
     outline: 2px solid var(--interactive-focus);
-    outline-offset: 2px;
+    outline-offset: 4px;
   }
 
-  .nav-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  .nav-arrow svg {
+    width: 28px;
+    height: 28px;
   }
 
-  .nav-btn svg {
-    width: 16px;
-    height: 16px;
+  .nav-prev {
+    left: calc(50% - 350px - 56px - var(--space-3));
+  }
+
+  .nav-next {
+    right: calc(50% - 350px - 56px - var(--space-3));
   }
 
   .nav-position {
+    position: absolute;
+    top: var(--space-4);
+    left: 50%;
+    transform: translateX(-50%);
     font-size: var(--text-sm);
     color: var(--text-muted);
     font-weight: var(--font-medium);
+    background: var(--bg-muted);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
   }
 
   .modal-close {
@@ -829,7 +918,8 @@ const totalCount = getTechniqueCount(data);
 
   .modal-header {
     margin-bottom: var(--space-6);
-    padding-right: var(--space-12);
+    padding-right: var(--space-24);
+    padding-top: var(--space-2);
   }
 
   .modal-title {
@@ -966,23 +1056,41 @@ const totalCount = getTechniqueCount(data);
       border-radius: 0;
     }
 
-    .modal-nav-header {
-      margin: calc(-1 * var(--space-4)) calc(-1 * var(--space-6)) var(--space-4);
-      border-radius: 0;
+    .nav-arrow {
+      width: 44px;
+      height: 44px;
     }
 
-    .nav-btn {
-      padding: var(--space-2);
-      font-size: var(--text-xs);
+    .nav-arrow svg {
+      width: 22px;
+      height: 22px;
     }
 
-    .nav-btn svg {
-      width: 14px;
-      height: 14px;
+    .nav-prev {
+      left: var(--space-2);
+    }
+
+    .nav-next {
+      right: var(--space-2);
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
     }
 
     .nav-position {
       font-size: var(--text-xs);
+    }
+
+    .techniques-header {
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .clear-filter-btn {
+      order: 3;
+      width: 100%;
     }
   }
 
