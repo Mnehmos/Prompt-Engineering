@@ -863,6 +863,11 @@ ${context || "No relevant documents found."}${conversationHistory}`;
       for (const line of lines) {
         totalLinesParsed++;
         
+        // Log first few lines for debugging
+        if (totalLinesParsed <= 3) {
+          console.error(`[DEBUG] Line ${totalLinesParsed}: ${line.substring(0, 200)}`);
+        }
+        
         if (line.startsWith("data: ")) {
           if (line === "data: [DONE]") {
             console.error(`[DEBUG] Stream completed. Chunks: ${chunkCount}, Finish reason: ${finishReason}, Lines parsed: ${totalLinesParsed}`);
@@ -879,13 +884,19 @@ ${context || "No relevant documents found."}${conversationHistory}`;
               console.error(`[DEBUG] First content chunk received: "${content.substring(0, 50)}${content.length > 50 ? '...' : ''}"`);
             }
             
+            // Also check for non-streaming response format
+            const messageContent = data.choices?.[0]?.message?.content;
+            if (messageContent && !content) {
+              console.error(`[DEBUG] Non-streaming response detected, message content length: ${messageContent.length}`);
+            }
+            
             if (content) {
               res.write(`data: ${JSON.stringify({ type: "delta", text: content })}\n\n`);
               contentStreamed = true;
               chunkCount++;
             }
-          } catch {
-            // Skip unparseable lines
+          } catch (parseErr) {
+            console.error(`[DEBUG] Parse error: ${parseErr}`);
           }
         }
       }
