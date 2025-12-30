@@ -239,11 +239,16 @@ class ChatController {
   }
 
   private appendSources(contentEl: HTMLElement, sources: SearchResult[]): void {
-    // Extract a searchable term from source text (first few meaningful words)
+    // Extract a searchable term from source text (meaningful words, not generic names)
     const getSearchTerm = (s: SearchResult): string => {
-      const text = s.source_name || s.text;
-      // Extract first 3-4 words as a search term
-      const words = text.split(/\s+/).slice(0, 4).join(' ');
+      // Use text content, not source_name (which is often generic like "prompts-research-content")
+      const text = s.text;
+      // Extract first 3-4 meaningful words (skip common words)
+      const skipWords = new Set(['the', 'a', 'an', 'is', 'are', 'was', 'were', 'for', 'to', 'of', 'and', 'in', 'on']);
+      const words = text.split(/\s+/)
+        .filter(w => w.length > 2 && !skipWords.has(w.toLowerCase()))
+        .slice(0, 3)
+        .join(' ');
       return encodeURIComponent(words);
     };
 
