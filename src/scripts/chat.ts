@@ -3,12 +3,7 @@
  * Connects to Railway RAG server via SSE streaming
  */
 
-interface SearchResult {
-  text: string;
-  score: number;
-  chunk_id: string;
-  source_name?: string;
-}
+
 
 interface ChatConfig {
   apiEndpoint?: string | null;
@@ -153,7 +148,6 @@ class ChatController {
       const decoder = new TextDecoder();
       let buffer = "";
       let fullContent = "";
-      let sources: SearchResult[] = [];
 
       while (true) {
         const { done, value } = await reader.read();
@@ -172,10 +166,7 @@ class ChatController {
               const data = JSON.parse(jsonStr);
               // console.log("Received chunk:", data.type); // Debug log
 
-              if (data.type === "sources") {
-                sources = data.sources || [];
-                // console.log("Sources received:", sources.length);
-              } else if (data.type === "delta") {
+              if (data.type === "delta") {
                 if (data.text) {
                   fullContent += data.text;
                   contentEl.innerHTML = this.formatMarkdown(fullContent);
@@ -218,9 +209,7 @@ class ChatController {
       }
 
       // Add sources after streaming completes
-      if (sources.length > 0 && fullContent) {
-        this.appendSources(contentEl, sources);
-      }
+      // Sources feature removed
     } catch (error) {
       console.error("Chat error:", error);
       
@@ -263,8 +252,7 @@ class ChatController {
 
   private addMessage(
     role: "user" | "assistant",
-    content: string,
-    sources?: SearchResult[]
+    content: string
   ): void {
     const messageEl = document.createElement("div");
     messageEl.className = `message ${role}`;
@@ -288,9 +276,6 @@ class ChatController {
     contentEl.className = "message-content";
     contentEl.innerHTML = this.formatMarkdown(content);
 
-    if (role === "assistant" && sources && sources.length > 0) {
-      this.appendSources(contentEl, sources);
-    }
 
     messageEl.appendChild(avatarEl);
     messageEl.appendChild(contentEl);
@@ -298,47 +283,17 @@ class ChatController {
     this.scrollToBottom();
   }
 
-  private appendSources(contentEl: HTMLElement, sources: SearchResult[]): void {
-    const sourcesHtml = `
-      <details class="sources">
-        <summary>📚 Sources (${sources.length})</summary>
-        <ul>
-          ${sources
-            .slice(0, 5)
-            .map(
-              (s) => `
-            <li>
-              <span class="score">${Math.round(s.score * 100)}%</span>
-              <span class="source-text">${this.escapeHtml(s.text.slice(0, 150).replace(/\s+/g, ' '))}...</span>
-            </li>
-          `
-            )
-            .join("")}
-        </ul>
-      </details>
-    `;
-    contentEl.insertAdjacentHTML("beforeend", sourcesHtml);
-  }
-
   private formatMarkdown(text: string): string {
     return text
       .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-      .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
       .replace(/`([^`]+)`/g, "<code>$1</code>")
-      .replace(/\n/g, "<br>");
-  }
-
-  private escapeHtml(text: string): string {
-    const div = document.createElement("div");
-    div.textContent = text;
-    return div.innerHTML;
+      .replace(/\n/g, "<br>")
+      .replace(/- (.*?)<br>/g, "<li>$1</li>")
+      .replace(/(<li>.*<\/li>)/g, "<ul>$1</ul>");
   }
 
   private scrollToBottom(): void {
-    this.messagesContainer.scrollTo({
-      top: this.messagesContainer.scrollHeight,
-      behavior: "smooth",
-    });
+    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
   }
 
   private setLoading(loading: boolean): void {

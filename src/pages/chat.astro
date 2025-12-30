@@ -5,81 +5,113 @@
  * Supports demo mode (no backend) and API mode (with backend endpoint)
  */
 import Layout from '@/layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { getAllTechniques, getCategories } from '@/lib/techniques';
+import type { TechniquesData } from '@/types/techniques';
+
+// Load taxonomy data for sidebar
+const techniquesCollection = await getCollection('techniques');
+const data = techniquesCollection[0].data as TechniquesData;
+const categories = getCategories(data);
 ---
 
 <Layout 
   title="AI Research Assistant - Mnehmos Prompt Research" 
   description="Ask our AI assistant about 192 prompt engineering techniques"
 >
-  <div class="search-page">
-    <header class="page-header">
-      <h1 class="page-title">
-        <span class="text-gradient">Chat</span> with Our AI
-      </h1>
-      <p class="page-subtitle">
-        Ask questions about prompt engineering techniques
-      </p>
-    </header>
-    
-    <div class="chat-container glass-card">
-      <!-- Chat messages area -->
-      <div data-testid="chat-messages" class="messages" role="log" aria-live="polite" aria-label="Chat messages">
-        <!-- Welcome message -->
-        <div class="message assistant">
-          <div class="message-avatar">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-              <line x1="9" y1="9" x2="9.01" y2="9"/>
-              <line x1="15" y1="9" x2="15.01" y2="9"/>
-            </svg>
-          </div>
-          <div class="message-content">
-            <p>👋 Ask me anything about prompt engineering techniques! Try:</p>
-            <ul class="suggestion-list">
-              <li>
-                <button type="button" class="suggestion-btn" data-suggestion="What is chain of thought prompting?">
-                  "What is chain of thought prompting?"
-                </button>
-              </li>
-              <li>
-                <button type="button" class="suggestion-btn" data-suggestion="How do I use few-shot learning?">
-                  "How do I use few-shot learning?"
-                </button>
-              </li>
-              <li>
-                <button type="button" class="suggestion-btn" data-suggestion="What techniques work best for code generation?">
-                  "What techniques work best for code generation?"
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div>
+  <div class="chat-layout">
+    <!-- Sidebar -->
+    <aside class="chat-sidebar glass-card">
+      <div class="sidebar-header">
+        <h2>Taxonomy</h2>
+        <button id="random-technique-btn" class="random-btn" title="Get a random technique idea">
+          🎲 Random
+        </button>
       </div>
       
-      <!-- Chat input form -->
-      <form data-testid="chat-form" class="chat-form">
-        <div class="input-wrapper">
-          <input 
-            type="text" 
-            data-testid="chat-input"
-            class="chat-input"
-            placeholder="Ask about prompt engineering techniques..."
-            autocomplete="off"
-            aria-label="Your question"
-          />
-          <button type="submit" data-testid="chat-submit" class="submit-btn btn-primary" aria-label="Send message">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13"/>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-            </svg>
-            <span class="btn-text">Send</span>
-          </button>
-        </div>
-        <p class="input-hint" id="status-hint">
-          Powered by RAG • Responses stream in real-time
+      <div class="categories-list">
+        {categories.map(cat => (
+          <div class="category-item">
+            <button class="category-btn" data-suggestion={`Tell me about ${cat.name} techniques`}>
+              {cat.name}
+            </button>
+            <span class="count">{cat.count}</span>
+          </div>
+        ))}
+      </div>
+    </aside>
+
+    <!-- Main Chat Area -->
+    <div class="chat-main">
+      <header class="page-header">
+        <h1 class="page-title">
+          <span class="text-gradient">Chat</span> with Our AI
+        </h1>
+        <p class="page-subtitle">
+          Ask questions about prompt engineering techniques
         </p>
-      </form>
+      </header>
+      
+      <div class="chat-container glass-card">
+        <!-- Chat messages area -->
+        <div data-testid="chat-messages" class="messages" role="log" aria-live="polite" aria-label="Chat messages">
+          <!-- Welcome message -->
+          <div class="message assistant">
+            <div class="message-avatar">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                <line x1="9" y1="9" x2="9.01" y2="9"/>
+                <line x1="15" y1="9" x2="15.01" y2="9"/>
+              </svg>
+            </div>
+            <div class="message-content">
+              <p>👋 Ask me anything about prompt engineering techniques! Try:</p>
+              <ul class="suggestion-list">
+                <li>
+                  <button type="button" class="suggestion-btn" data-suggestion="What is chain of thought prompting?">
+                    "What is chain of thought prompting?"
+                  </button>
+                </li>
+                <li>
+                  <button type="button" class="suggestion-btn" data-suggestion="How do I use few-shot learning?">
+                    "How do I use few-shot learning?"
+                  </button>
+                </li>
+                <li>
+                  <button type="button" class="suggestion-btn" data-suggestion="What techniques work best for code generation?">
+                    "What techniques work best for code generation?"
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Chat input form -->
+        <form data-testid="chat-form" class="chat-form">
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              data-testid="chat-input"
+              class="chat-input"
+              placeholder="Ask about prompt engineering techniques..."
+              autocomplete="off"
+              aria-label="Your question"
+            />
+            <button type="submit" data-testid="chat-submit" class="submit-btn btn-primary" aria-label="Send message">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+              <span class="btn-text">Send</span>
+            </button>
+          </div>
+          <p class="input-hint" id="status-hint">
+            Powered by RAG • Responses stream in real-time
+          </p>
+        </form>
+      </div>
     </div>
   </div>
   
@@ -96,54 +128,167 @@ import Layout from '@/layouts/Layout.astro';
   import '../scripts/chat';
 </script>
 
+<script define:vars={{ techniqueNames: allTechniques.map(t => t.name) }}>
+  const randomBtn = document.getElementById('random-technique-btn');
+  const chatInput = document.querySelector('.chat-input');
+  
+  if (randomBtn && chatInput) {
+    randomBtn.addEventListener('click', () => {
+      const random = techniqueNames[Math.floor(Math.random() * techniqueNames.length)];
+      chatInput.value = `Tell me about "${random}"`;
+      chatInput.focus();
+    });
+  }
+</script>
+
 <style>
-  .search-page {
-    max-width: 900px;
+  /* Chat Page Layout */
+  .chat-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: var(--space-6);
+    max-width: 1400px;
     margin: 0 auto;
-    padding: var(--space-8) var(--space-6);
-    min-height: calc(100vh - 200px);
+    padding: var(--space-6);
+    min-height: calc(100vh - 80px); /* Adjust based on navbar height */
+  }
+
+  /* Sidebar */
+  .chat-sidebar {
+    height: calc(100vh - 120px);
+    position: sticky;
+    top: 100px;
+    padding: var(--space-6);
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-default);
+    padding-bottom: var(--space-4);
+  }
+
+  .sidebar-header h2 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    color: var(--text-heading);
+    margin: 0;
+  }
+
+  .random-btn {
+    background: var(--surface-2);
+    border: 1px solid var(--border-default);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    font-size: var(--text-xs);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .random-btn:hover {
+    background: var(--surface-3);
+    border-color: var(--copper);
+  }
+
+  .categories-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .category-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    transition: background var(--transition-fast);
+  }
+
+  .category-item:hover {
+    background: var(--surface-2);
+  }
+
+  .category-btn {
+    background: none;
+    border: none;
+    color: var(--text-body);
+    font-size: var(--text-sm);
+    text-align: left;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .category-btn:hover {
+    color: var(--copper);
+  }
+
+  .count {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    background: var(--surface-3);
+    padding: 2px 6px;
+    border-radius: var(--radius-full);
+  }
+
+  /* Main Chat Area */
+  .chat-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
   }
 
   .page-header {
     text-align: center;
-    margin-bottom: var(--space-8);
+    margin-bottom: var(--space-4);
   }
 
   .page-title {
     font-size: var(--text-4xl);
     font-weight: var(--font-bold);
-    margin-bottom: var(--space-3);
-    color: var(--text-main);
+    color: var(--text-heading);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-4);
   }
 
   .page-subtitle {
     font-size: var(--text-lg);
     color: var(--text-muted);
-    max-width: 500px;
+    max-width: 60ch;
     margin: 0 auto;
   }
 
-  /* Chat container */
   .chat-container {
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-height: 500px;
-    max-height: 70vh;
+    height: 700px;
+    max-height: calc(100vh - 250px);
     overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border-default);
+    background: var(--surface-1);
+    box-shadow: var(--shadow-xl);
   }
 
-  /* Messages area */
-  .messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: var(--space-6);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-    scroll-behavior: smooth;
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .chat-layout {
+      grid-template-columns: 1fr;
+    }
+    
+    .chat-sidebar {
+      display: none; /* Hide sidebar on smaller screens */
+    }
+
+    .chat-container {
+      height: calc(100vh - 300px);
+    }
   }
 
   /* Individual message */
