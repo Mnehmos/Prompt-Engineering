@@ -5,7 +5,7 @@ import tailwind from '@astrojs/tailwind';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://mnehmos.github.io',
-  base: '/mnehmos.prompts.research/',
+  base: process.env.NODE_ENV === 'production' ? '/mnehmos.prompts.research/' : '/',
   output: 'static',
   integrations: [
     react(),
