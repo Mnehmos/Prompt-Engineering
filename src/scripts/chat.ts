@@ -56,6 +56,22 @@ class ChatController {
       : { demoMode: true };
 
     this.attachListeners();
+    this.warmup();
+  }
+
+  private async warmup(): Promise<void> {
+    if (this.config.demoMode || !this.config.apiEndpoint) return;
+    
+    try {
+      // Use the base URL (derive from apiEndpoint) + /health
+      // Endpoint is usually .../chat, so replace it
+      const healthUrl = this.config.apiEndpoint.replace(/\/chat$/, '/health');
+      console.log("Warming up server...", healthUrl);
+      await fetch(healthUrl, { method: "GET" });
+      console.log("Server warmed up");
+    } catch (e) {
+      console.warn("Warmup failed:", e);
+    }
   }
 
   private attachListeners(): void {
