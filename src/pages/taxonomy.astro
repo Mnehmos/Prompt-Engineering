@@ -46,14 +46,12 @@ const totalCount = getTechniqueCount(data);
             <svg class="select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M6 9l6 6 6-6" />
             </svg>
+            <button id="clear-filter-inline" class="clear-filter-inline" data-testid="clear-filter-inline" hidden aria-label="Clear category filter">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
           </div>
-          
-          <button id="clear-filter" class="clear-filter-btn" data-testid="clear-filter" hidden>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-            Clear Filter
-          </button>
         </div>
       </div>
     </header>
@@ -266,16 +264,16 @@ const totalCount = getTechniqueCount(data);
       
       // Update heading based on filter state
       const heading = document.getElementById('techniques-heading');
-      const clearBtn = document.getElementById('clear-filter');
+      const clearBtnInline = document.getElementById('clear-filter-inline');
       const selectedOption = categorySelect?.options[categorySelect.selectedIndex];
       
       if (heading) {
         if (currentCategory && selectedOption) {
           heading.textContent = selectedOption.text; // "Category Name (N)"
-          if (clearBtn) clearBtn.hidden = false;
+          if (clearBtnInline) clearBtnInline.hidden = false;
         } else {
           heading.textContent = `All Techniques (${totalCount})`;
-          if (clearBtn) clearBtn.hidden = true;
+          if (clearBtnInline) clearBtnInline.hidden = true;
         }
       }
     }
@@ -307,9 +305,9 @@ const totalCount = getTechniqueCount(data);
       });
     });
     
-    // Clear filter button handler
-    const clearFilterBtn = document.getElementById('clear-filter');
-    clearFilterBtn?.addEventListener('click', () => {
+    // Clear filter button handler (inline)
+    const clearFilterBtnInline = document.getElementById('clear-filter-inline');
+    clearFilterBtnInline?.addEventListener('click', () => {
       if (categorySelect) {
         categorySelect.value = '';
         currentCategory = '';
@@ -988,37 +986,48 @@ const totalCount = getTechniqueCount(data);
     }
   }
 
-  /* Clear Filter Button */
-  .clear-filter-btn {
-    display: inline-flex;
+  /* Inline Clear Filter Button (×) */
+  .clear-filter-inline {
+    position: absolute;
+    right: var(--space-8);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    display: flex;
     align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
-    background: var(--bg-accent);
-    border: 1px solid var(--copper);
-    border-radius: var(--radius-lg);
-    color: var(--copper);
-    font-size: var(--text-sm);
+    justify-content: center;
+    background: var(--copper);
+    border: none;
+    border-radius: var(--radius-full);
+    color: white;
     cursor: pointer;
     transition: all var(--transition-fast);
+    z-index: 1;
   }
 
-  .clear-filter-btn:hover {
-    background: var(--copper);
-    color: white;
+  .clear-filter-inline:hover {
+    background: var(--copper-dark, #A06228);
+    transform: translateY(-50%) scale(1.1);
   }
 
-  .clear-filter-btn:focus-visible {
+  .clear-filter-inline:focus-visible {
     outline: 2px solid var(--interactive-focus);
     outline-offset: 2px;
   }
 
-  .clear-filter-btn svg {
-    width: 16px;
-    height: 16px;
+  .clear-filter-inline svg {
+    width: 12px;
+    height: 12px;
   }
 
-  .clear-filter-btn[hidden] {
+  .clear-filter-inline[hidden] {
     display: none;
+  }
+
+  /* Adjust select padding when clear button is visible */
+  .filter-select-wrapper:has(.clear-filter-inline:not([hidden])) .category-select {
+    padding-right: calc(var(--space-10) + var(--space-6));
   }
 </style>
