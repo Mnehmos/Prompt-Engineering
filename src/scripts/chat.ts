@@ -154,20 +154,25 @@ class ChatController {
 
             try {
               const data = JSON.parse(jsonStr);
+              // console.log("Received chunk:", data.type); // Debug log
 
               if (data.type === "sources") {
                 sources = data.sources || [];
+                // console.log("Sources received:", sources.length);
               } else if (data.type === "delta") {
-                fullContent += data.text;
-                contentEl.innerHTML = this.formatMarkdown(fullContent);
-                this.scrollToBottom();
+                if (data.text) {
+                  fullContent += data.text;
+                  contentEl.innerHTML = this.formatMarkdown(fullContent);
+                  this.scrollToBottom();
+                }
               } else if (data.type === "done") {
+                // console.log("Stream done. Full content length:", fullContent.length);
                 this.conversationId =
                   data.conversation_id || this.conversationId;
                 
                 // Check for empty response
                 if (data.empty_response && retryCount < MAX_RETRIES) {
-                  console.warn(`Empty response, retrying (${retryCount + 1}/${MAX_RETRIES})`);
+                  console.warn(`Empty response flag set, retrying (${retryCount + 1}/${MAX_RETRIES})`);
                   return this.chat(question, retryCount + 1);
                 }
                 
@@ -175,10 +180,11 @@ class ChatController {
                   this.messages.push({ role: "assistant", content: fullContent });
                 }
               } else if (data.type === "error") {
+                console.error("Server reported error:", data.error);
                 throw new Error(data.error || "Unknown error");
               }
             } catch (parseErr) {
-              // Skip unparseable lines
+              console.warn("Failed to parse chunk:", jsonStr.substring(0, 50), parseErr);
             }
           }
         }
