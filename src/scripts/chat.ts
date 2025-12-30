@@ -85,7 +85,9 @@ class ChatController {
     });
   }
 
-  private async chat(question: string): Promise<void> {
+  private async chat(question: string, retryCount = 0): Promise<void> {
+    const MAX_RETRIES = 2;
+    
     if (this.config.demoMode || !this.config.apiEndpoint) {
       // Demo mode - show placeholder
       this.addMessage(
@@ -96,11 +98,20 @@ class ChatController {
       return;
     }
 
-    // Create streaming message element
-    const messageEl = this.createStreamingMessage();
-    const contentEl = messageEl.querySelector(
-      ".message-content"
-    ) as HTMLElement;
+    // Create streaming message element (only on first try)
+    let messageEl: HTMLElement;
+    let contentEl: HTMLElement;
+    
+    if (retryCount === 0) {
+      messageEl = this.createStreamingMessage();
+      contentEl = messageEl.querySelector(".message-content") as HTMLElement;
+    } else {
+      // On retry, reuse the existing message element
+      const messages = this.messagesContainer.querySelectorAll('.message.assistant');
+      messageEl = messages[messages.length - 1] as HTMLElement;
+      contentEl = messageEl.querySelector(".message-content") as HTMLElement;
+      contentEl.innerHTML = '<span class="retry-indicator">⏳ Retrying...</span>';
+    }
 
     try {
       const response = await fetch(this.config.apiEndpoint, {
@@ -153,7 +164,16 @@ class ChatController {
               } else if (data.type === "done") {
                 this.conversationId =
                   data.conversation_id || this.conversationId;
-                this.messages.push({ role: "assistant", content: fullContent });
+                
+                // Check for empty response
+                if (data.empty_response && retryCount < MAX_RETRIES) {
+                  console.warn(`Empty response, retrying (${retryCount + 1}/${MAX_RETRIES})`);
+                  return this.chat(question, retryCount + 1);
+                }
+                
+                if (fullContent) {
+                  this.messages.push({ role: "assistant", content: fullContent });
+                }
               } else if (data.type === "error") {
                 throw new Error(data.error || "Unknown error");
               }
@@ -164,13 +184,31 @@ class ChatController {
         }
       }
 
+      // If we got here with no content, try again
+      if (!fullContent && retryCount < MAX_RETRIES) {
+        console.warn(`No content received, retrying (${retryCount + 1}/${MAX_RETRIES})`);
+        return this.chat(question, retryCount + 1);
+      }
+      
+      // If still no content after retries, show error
+      if (!fullContent) {
+        contentEl.innerHTML = `<p>⚠️ The AI service is warming up. Please try again in a moment.</p>`;
+      }
+
       // Add sources after streaming completes
-      if (sources.length > 0) {
+      if (sources.length > 0 && fullContent) {
         this.appendSources(contentEl, sources);
       }
     } catch (error) {
       console.error("Chat error:", error);
-      contentEl.innerHTML = `<p>⚠️ ${error instanceof Error ? error.message : "Failed to get response"}</p>`;
+      
+      // Retry on error if we haven't exceeded max retries
+      if (retryCount < MAX_RETRIES) {
+        console.warn(`Error occurred, retrying (${retryCount + 1}/${MAX_RETRIES})`);
+        return this.chat(question, retryCount + 1);
+      }
+      
+      contentEl.innerHTML = `<p>⚠️ ${error instanceof Error ? error.message : "Failed to get response"}. Please try again.</p>`;
     } finally {
       this.setLoading(false);
     }
