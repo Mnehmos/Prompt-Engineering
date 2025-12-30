@@ -45,7 +45,7 @@ const base = import.meta.env.BASE_URL;
         <!-- Yellow center pulse point -->
         <circle cx="16" cy="16" r="1.5" fill="#FCD34D" opacity="0.8" class="logo-center"/>
       </svg>
-      <span class="logo-text">Prompt<span class="logo-text--accent">Research</span></span>
+      <span class="logo-text"><span class="logo-text--prefix">mnehmos</span><span class="logo-text--accent">.prompt.research</span></span>
     </a>
 
     <!-- Desktop Navigation -->
@@ -184,8 +184,17 @@ const base = import.meta.env.BASE_URL;
   .logo-text {
     font-size: var(--text-lg);
     font-weight: var(--font-bold);
-    color: var(--text-main);
     letter-spacing: -0.02em;
+  }
+
+  .logo-text--prefix {
+    color: var(--text-main);
+    transition: color 0.3s ease;
+  }
+
+  .logo:hover .logo-text--prefix,
+  .group:hover .logo-text--prefix {
+    color: var(--copper, #B87333);
   }
 
   .logo-text--accent {

@@ -5,13 +5,20 @@
  */
 
 const currentYear = new Date().getFullYear();
+const base = import.meta.env.BASE_URL;
+
+// Utility to join base with path
+function withBase(path: string): string {
+  if (path === '/') return base;
+  return `${base.replace(/\/$/, '')}${path}`;
+}
 ---
 
 <footer class="footer">
   <div class="footer-container">
     <!-- Left section: Logo and description -->
     <div class="footer-brand">
-      <a href="/" class="footer-logo">
+      <a href={base} class="footer-logo">
         <svg class="footer-logo-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
           <defs>
             <linearGradient id="footerCopperGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -45,16 +52,17 @@ const currentYear = new Date().getFullYear();
       <div class="footer-nav-group">
         <h3 class="footer-nav-title">Resources</h3>
         <ul class="footer-nav-list" role="list">
-          <li><a href="/taxonomy">Technique Taxonomy</a></li>
-          <li><a href="/relationships">Relationships Graph</a></li>
-          <li><a href="/prompt-builder">Prompt Builder</a></li>
+          <li><a href={withBase('/taxonomy')}>Technique Taxonomy</a></li>
+          <li><a href={withBase('/relationships')}>Relationships Graph</a></li>
+          <li><a href={withBase('/builder')}>Prompt Builder</a></li>
         </ul>
       </div>
       <div class="footer-nav-group">
         <h3 class="footer-nav-title">Ecosystem</h3>
         <ul class="footer-nav-list" role="list">
-          <li><a href="https://github.com/mnehmos" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-          <li><a href="https://vario.dev" target="_blank" rel="noopener noreferrer">Vario.dev</a></li>
+          <li><a href="https://mnehmos.github.io/mnehmos.multi-agent.framework/" target="_blank" rel="noopener noreferrer">Multi-Agent Framework</a></li>
+          <li><a href="https://mnehmos.github.io/vario.automation.website/" target="_blank" rel="noopener noreferrer">Vario Automation</a></li>
+          <li><a href="https://github.com/Mnehmos" target="_blank" rel="noopener noreferrer">GitHub</a></li>
         </ul>
       </div>
     </nav>
