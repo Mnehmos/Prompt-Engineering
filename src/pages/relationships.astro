@@ -40,101 +40,112 @@ const categoryColorsJson = JSON.stringify(categoryColors);
       </div>
     </header>
 
-    <div class="graph-layout container">
-      <!-- Sidebar -->
-      <aside class="graph-sidebar glass-card">
-        <!-- Category Filter -->
-        <section class="sidebar-section">
-          <h3 class="sidebar-title">Filter by Category</h3>
-          <div class="filter-select-wrapper">
-            <label for="graph-category-filter" class="sr-only">Select category</label>
-            <select 
-              id="graph-category-filter" 
-              data-testid="graph-category-filter" 
-              class="category-select"
-            >
-              <option value="">All Categories</option>
-              {categories.map(cat => (
-                <option value={cat.id}>{cat.name}</option>
-              ))}
-            </select>
-            <svg class="select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M6 9l6 6 6-6" />
-            </svg>
-          </div>
-        </section>
-
-        <!-- Legend -->
-        <section class="sidebar-section">
-          <h3 class="sidebar-title">Legend</h3>
-          <div data-testid="graph-legend" class="graph-legend">
-            {categories.map(cat => (
-              <button 
-                class="legend-item"
-                data-category={cat.id}
-                title={`Filter to ${cat.name}`}
+    <div class="graph-fullscreen">
+      <!-- Floating Controls Panel (collapsed by default) -->
+      <aside class="floating-panel glass-card" data-collapsed="true">
+        <button class="panel-toggle" aria-label="Toggle sidebar" aria-expanded="false">
+          <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 6h18M3 18h18" />
+          </svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+        
+        <div class="panel-content">
+          <!-- Category Filter -->
+          <section class="panel-section">
+            <h3 class="panel-title">Filter by Category</h3>
+            <div class="filter-select-wrapper">
+              <label for="graph-category-filter" class="sr-only">Select category</label>
+              <select
+                id="graph-category-filter"
+                data-testid="graph-category-filter"
+                class="category-select"
               >
-                <span 
-                  class="color-dot" 
-                  style={`background: ${categoryColors[cat.id]}`}
-                ></span>
-                <span class="legend-name">{cat.name}</span>
-              </button>
-            ))}
-          </div>
-        </section>
+                <option value="">All Categories</option>
+                {categories.map(cat => (
+                  <option value={cat.id}>{cat.name}</option>
+                ))}
+              </select>
+              <svg class="select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </div>
+          </section>
 
-        <!-- Statistics -->
-        <section class="sidebar-section">
-          <h3 class="sidebar-title">Statistics</h3>
-          <div data-testid="graph-stats" class="graph-stats">
-            <div class="stat-row">
-              <span class="stat-label">Total Nodes</span>
-              <span class="stat-value">{stats.totalNodes}</span>
+          <!-- Legend -->
+          <section class="panel-section">
+            <h3 class="panel-title">Legend</h3>
+            <div data-testid="graph-legend" class="graph-legend">
+              {categories.map(cat => (
+                <button
+                  class="legend-item"
+                  data-category={cat.id}
+                  title={`Filter to ${cat.name}`}
+                >
+                  <span
+                    class="color-dot"
+                    style={`background: ${categoryColors[cat.id]}`}
+                  ></span>
+                  <span class="legend-name">{cat.name}</span>
+                </button>
+              ))}
             </div>
-            <div class="stat-row">
-              <span class="stat-label">Total Links</span>
-              <span class="stat-value">{stats.totalLinks}</span>
-            </div>
-            <div class="stat-row">
-              <span class="stat-label">Avg. Connections</span>
-              <span class="stat-value">{stats.avgConnections.toFixed(1)}</span>
-            </div>
-            {stats.mostConnected && (
-              <div class="stat-row highlight">
-                <span class="stat-label">Most Connected</span>
-                <span class="stat-value" title={stats.mostConnected.name}>
-                  {stats.mostConnected.name.length > 20 
-                    ? stats.mostConnected.name.slice(0, 20) + '...'
-                    : stats.mostConnected.name
-                  }
-                  <small>({stats.mostConnected.connections})</small>
-                </span>
+          </section>
+
+          <!-- Statistics -->
+          <section class="panel-section">
+            <h3 class="panel-title">Statistics</h3>
+            <div data-testid="graph-stats" class="graph-stats">
+              <div class="stat-row">
+                <span class="stat-label">Total Nodes</span>
+                <span class="stat-value">{stats.totalNodes}</span>
               </div>
-            )}
-            <div class="stat-row">
-              <span class="stat-label">Isolated Nodes</span>
-              <span class="stat-value">{stats.isolatedNodes}</span>
+              <div class="stat-row">
+                <span class="stat-label">Total Links</span>
+                <span class="stat-value">{stats.totalLinks}</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label">Avg. Connections</span>
+                <span class="stat-value">{stats.avgConnections.toFixed(1)}</span>
+              </div>
+              {stats.mostConnected && (
+                <div class="stat-row highlight">
+                  <span class="stat-label">Most Connected</span>
+                  <span class="stat-value" title={stats.mostConnected.name}>
+                    {stats.mostConnected.name.length > 20
+                      ? stats.mostConnected.name.slice(0, 20) + '...'
+                      : stats.mostConnected.name
+                    }
+                    <small>({stats.mostConnected.connections})</small>
+                  </span>
+                </div>
+              )}
+              <div class="stat-row">
+                <span class="stat-label">Isolated Nodes</span>
+                <span class="stat-value">{stats.isolatedNodes}</span>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <!-- Selected Node Info -->
-        <section class="sidebar-section" id="selected-node-section" hidden>
-          <h3 class="sidebar-title">Selected Technique</h3>
-          <div class="selected-node-info">
-            <h4 id="selected-node-name" class="selected-name"></h4>
-            <p id="selected-node-category" class="selected-category"></p>
-            <p id="selected-node-connections" class="selected-connections"></p>
-            <button id="center-on-node" class="btn btn-secondary btn-sm">
-              Center on Node
-            </button>
-          </div>
-        </section>
+          <!-- Selected Node Info -->
+          <section class="panel-section" id="selected-node-section" hidden>
+            <h3 class="panel-title">Selected Technique</h3>
+            <div class="selected-node-info">
+              <h4 id="selected-node-name" class="selected-name"></h4>
+              <p id="selected-node-category" class="selected-category"></p>
+              <p id="selected-node-connections" class="selected-connections"></p>
+              <button id="center-on-node" class="btn btn-secondary btn-sm">
+                Center on Node
+              </button>
+            </div>
+          </section>
+        </div>
       </aside>
 
-      <!-- Graph Container -->
-      <div class="graph-main">
+      <!-- Full-width Graph -->
+      <div class="graph-viewport">
         <RelationshipGraph />
       </div>
     </div>
@@ -142,8 +153,8 @@ const categoryColorsJson = JSON.stringify(categoryColors);
     <!-- Help Tip -->
     <div class="help-tip container">
       <p>
-        <strong>Tip:</strong> Drag nodes to rearrange. Scroll to zoom. Click nodes to select and see details. 
-        Use the sidebar filter to focus on specific categories.
+        <strong>Tip:</strong> Drag nodes to rearrange. Scroll to zoom. Click nodes to select and see details.
+        Click the menu icon to access filters and statistics.
       </p>
     </div>
   </div>
@@ -278,6 +289,16 @@ const categoryColorsJson = JSON.stringify(categoryColors);
         graphController.resize();
       }, 250);
     });
+
+    // Panel toggle
+    const floatingPanel = document.querySelector('.floating-panel');
+    const panelToggle = document.querySelector('.panel-toggle');
+
+    panelToggle?.addEventListener('click', () => {
+      const isCollapsed = floatingPanel?.getAttribute('data-collapsed') === 'true';
+      floatingPanel?.setAttribute('data-collapsed', isCollapsed ? 'false' : 'true');
+      panelToggle.setAttribute('aria-expanded', isCollapsed ? 'true' : 'false');
+    });
   });
 </script>
 
@@ -286,61 +307,141 @@ const categoryColorsJson = JSON.stringify(categoryColors);
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding-bottom: var(--space-8);
+    padding-bottom: var(--space-4);
   }
 
   /* Page Header */
   .page-header {
     background: var(--bg-muted);
-    padding: var(--space-10) 0 var(--space-6);
+    padding: var(--space-6) 0 var(--space-4);
     border-bottom: 1px solid var(--border-default);
     text-align: center;
   }
 
   .page-title {
-    font-size: var(--text-4xl);
+    font-size: var(--text-3xl);
     font-weight: var(--font-bold);
     margin: 0 0 var(--space-2);
   }
 
   .page-subtitle {
-    font-size: var(--text-lg);
+    font-size: var(--text-base);
     color: var(--text-muted);
     margin: 0;
   }
 
-  /* Graph Layout */
-  .graph-layout {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: var(--space-6);
-    padding-top: var(--space-6);
+  /* Full-screen Graph Layout */
+  .graph-fullscreen {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 160px);
+    min-height: 600px;
     flex: 1;
   }
 
-  /* Sidebar */
-  .graph-sidebar {
-    padding: var(--space-5);
-    height: fit-content;
-    position: sticky;
-    top: calc(72px + var(--space-6));
-    max-height: calc(100vh - 72px - var(--space-12));
-    overflow-y: auto;
+  .graph-viewport {
+    width: 100%;
+    height: 100%;
   }
 
-  .sidebar-section {
-    padding-bottom: var(--space-5);
+  /* Floating Panel */
+  .floating-panel {
+    position: absolute;
+    top: var(--space-4);
+    left: var(--space-4);
+    z-index: var(--z-dropdown);
+    width: 300px;
+    max-height: calc(100% - var(--space-8));
+    overflow: hidden;
+    transition: transform var(--transition-normal), opacity var(--transition-normal);
+  }
+
+  .floating-panel[data-collapsed="true"] {
+    transform: translateX(calc(-100% + 48px));
+  }
+
+  .floating-panel[data-collapsed="true"] .panel-content {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .panel-toggle {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    z-index: 1;
+    transition: all var(--transition-fast);
+  }
+
+  .panel-toggle:hover {
+    border-color: var(--copper);
+    color: var(--copper);
+  }
+
+  .panel-toggle:focus-visible {
+    outline: 2px solid var(--interactive-focus);
+    outline-offset: 2px;
+  }
+
+  .panel-toggle svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .floating-panel[data-collapsed="true"] .panel-toggle {
+    right: auto;
+    left: calc(100% - 48px + var(--space-2));
+  }
+
+  /* Default (expanded): show close icon, hide open icon */
+  .floating-panel .icon-open {
+    display: none;
+  }
+
+  .floating-panel .icon-close {
+    display: block;
+  }
+
+  /* Collapsed: show open icon (hamburger), hide close icon */
+  .floating-panel[data-collapsed="true"] .icon-open {
+    display: block;
+  }
+
+  .floating-panel[data-collapsed="true"] .icon-close {
+    display: none;
+  }
+
+  /* Panel content when expanded */
+  .panel-content {
+    padding: var(--space-5);
+    padding-top: calc(var(--space-5) + 48px);
+    overflow-y: auto;
+    max-height: calc(100vh - 200px);
+    transition: opacity var(--transition-normal);
+  }
+
+  .panel-section {
     margin-bottom: var(--space-5);
+    padding-bottom: var(--space-5);
     border-bottom: 1px solid var(--border-muted);
   }
 
-  .sidebar-section:last-child {
+  .panel-section:last-child {
     border-bottom: none;
     margin-bottom: 0;
     padding-bottom: 0;
   }
 
-  .sidebar-title {
+  .panel-title {
     font-size: var(--text-xs);
     font-weight: var(--font-semibold);
     text-transform: uppercase;
@@ -377,7 +478,7 @@ const categoryColorsJson = JSON.stringify(categoryColors);
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
-    max-height: 200px;
+    max-height: 180px;
     overflow-y: auto;
   }
 
@@ -483,12 +584,6 @@ const categoryColorsJson = JSON.stringify(categoryColors);
     font-size: var(--text-xs);
   }
 
-  /* Graph Main */
-  .graph-main {
-    min-height: 600px;
-    height: calc(100vh - 280px);
-  }
-
   /* Help Tip */
   .help-tip {
     margin-top: var(--space-4);
@@ -507,66 +602,52 @@ const categoryColorsJson = JSON.stringify(categoryColors);
 
   /* Responsive */
   @media (max-width: 1024px) {
-    .graph-layout {
-      grid-template-columns: 1fr;
-    }
-
-    .graph-sidebar {
-      position: static;
-      max-height: none;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--space-4);
-    }
-
-    .sidebar-section {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .graph-legend {
-      max-height: 150px;
-    }
-
-    .graph-main {
+    .graph-fullscreen {
+      height: calc(100vh - 140px);
       min-height: 500px;
-      height: 60vh;
+    }
+
+    .floating-panel {
+      width: 280px;
+    }
+
+    .panel-content {
+      max-height: calc(100vh - 180px);
     }
   }
 
   @media (max-width: 768px) {
     .page-header {
-      padding: var(--space-8) 0 var(--space-4);
+      padding: var(--space-4) 0 var(--space-3);
     }
 
     .page-title {
-      font-size: var(--text-3xl);
+      font-size: var(--text-2xl);
     }
 
-    .graph-sidebar {
-      grid-template-columns: 1fr;
-      gap: var(--space-3);
+    .graph-fullscreen {
+      height: calc(100vh - 120px);
+      min-height: 400px;
+    }
+
+    .floating-panel {
+      width: 260px;
+      left: var(--space-2);
+      top: var(--space-2);
+    }
+
+    .floating-panel[data-collapsed="true"] {
+      transform: translateX(calc(-100% + 44px));
+    }
+
+    .panel-content {
       padding: var(--space-4);
-    }
-
-    .sidebar-section:first-child {
-      order: -1;
+      padding-top: calc(var(--space-4) + 44px);
+      max-height: calc(100vh - 160px);
     }
 
     .graph-legend {
-      flex-direction: row;
-      flex-wrap: wrap;
-      max-height: none;
-    }
-
-    .legend-item {
-      padding: var(--space-1) var(--space-2);
-    }
-
-    .graph-main {
-      min-height: 400px;
-      height: 50vh;
+      max-height: 120px;
     }
 
     .help-tip {

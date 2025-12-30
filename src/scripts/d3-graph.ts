@@ -155,10 +155,15 @@ export class GraphController {
         .distanceMax(500))
       .force('center', d3.forceCenter(this.width / 2, this.height / 2))
       .force('collision', d3.forceCollide<SimulationNode>()
-        .radius(d => d.size + 5)
-        .strength(0.7));
+        .radius(d => Math.max(d.size * 1.5, 8) + 8)  // Larger collision radius
+        .strength(0.8));
 
     this.simulation.on('tick', () => this.tick());
+    
+    // Zoom to fit when simulation stabilizes
+    this.simulation.on('end', () => {
+      setTimeout(() => this.zoomToFit(), 100);
+    });
   }
 
   /**
@@ -194,16 +199,16 @@ export class GraphController {
       .attr('data-testid', 'graph-node')
       .attr('data-technique-id', d => d.id)
       .attr('class', 'node')
-      .attr('r', d => d.size)
+      .attr('r', d => Math.max(d.size * 1.5, 8))
       .attr('fill', d => getCategoryColor(d.categoryId))
       .attr('stroke', '#fff')
-      .attr('stroke-width', 2)
+      .attr('stroke-width', 2.5)
       .style('cursor', 'pointer')
       .call(this.drag());
 
     nodeEnter.merge(nodeSelection)
       .attr('fill', d => getCategoryColor(d.categoryId))
-      .attr('r', d => d.size);
+      .attr('r', d => Math.max(d.size * 1.5, 8));
 
     // Add event listeners
     this.graphContent.select('.nodes')
@@ -374,6 +379,106 @@ export class GraphController {
   }
 
   /**
+   * Calculate bounds of all nodes
+   */
+  private calculateBounds(): { minX: number; maxX: number; minY: number; maxY: number } | null {
+    if (this.nodes.length === 0) return null;
+    
+    let minX = Infinity, maxX = -Infinity;
+    let minY = Infinity, maxY = -Infinity;
+    
+    this.nodes.forEach(n => {
+      if (n.x !== undefined && n.y !== undefined) {
+        minX = Math.min(minX, n.x);
+        maxX = Math.max(maxX, n.x);
+        minY = Math.min(minY, n.y);
+        maxY = Math.max(maxY, n.y);
+      }
+    });
+    
+    if (minX === Infinity) return null;
+    return { minX, maxX, minY, maxY };
+  }
+
+  /**
+   * Zoom to fit all nodes in view
+   */
+  zoomToFit(): void {
+    const bounds = this.calculateBounds();
+    if (!bounds) return;
+    
+    const { minX, maxX, minY, maxY } = bounds;
+    const graphWidth = maxX - minX || 100;
+    const graphHeight = maxY - minY || 100;
+    
+    // Calculate scale to fit with padding
+    const padding = 40;
+    const scale = Math.min(
+      (this.width - padding * 2) / graphWidth,
+      (this.height - padding * 2) / graphHeight,
+      1.2  // Don't zoom in too much
+    ) * 0.9;  // 90% to leave margin
+    
+    // Center point
+    const centerX = (minX + maxX) / 2;
+    const centerY = (minY + maxY) / 2;
+    
+    // Apply transform
+    const transform = d3.zoomIdentity
+      .translate(this.width / 2, this.height / 2)
+      .scale(scale)
+      .translate(-centerX, -centerY);
+    
+    this.svg.transition()
+      .duration(750)
+      .call(this.zoom.transform, transform);
+  }
+
+  /**
+   * Zoom to fit only filtered nodes in a category
+   */
+  private zoomToFilteredNodes(categoryId: string): void {
+    const filteredNodes = this.nodes.filter(n => n.categoryId === categoryId);
+    if (filteredNodes.length === 0) return;
+    
+    let minX = Infinity, maxX = -Infinity;
+    let minY = Infinity, maxY = -Infinity;
+    
+    filteredNodes.forEach(n => {
+      if (n.x !== undefined && n.y !== undefined) {
+        minX = Math.min(minX, n.x);
+        maxX = Math.max(maxX, n.x);
+        minY = Math.min(minY, n.y);
+        maxY = Math.max(maxY, n.y);
+      }
+    });
+    
+    if (minX === Infinity) return;
+    
+    const graphWidth = maxX - minX || 100;
+    const graphHeight = maxY - minY || 100;
+    const padding = 60;
+    
+    const scale = Math.min(
+      (this.width - padding * 2) / graphWidth,
+      (this.height - padding * 2) / graphHeight,
+      2  // Max zoom for focus
+    ) * 0.85;
+    
+    const centerX = (minX + maxX) / 2;
+    const centerY = (minY + maxY) / 2;
+    
+    const transform = d3.zoomIdentity
+      .translate(this.width / 2, this.height / 2)
+      .scale(scale)
+      .translate(-centerX, -centerY);
+    
+    this.svg.transition()
+      .duration(500)
+      .call(this.zoom.transform, transform);
+  }
+
+  /**
    * Center the view on a specific node
    */
   centerOnNode(nodeId: string): void {
@@ -402,6 +507,9 @@ export class GraphController {
       this.graphContent.select('.links')
         .selectAll<SVGLineElement, SimulationLink>('line')
         .style('display', null);
+      
+      // Reset zoom to fit all
+      this.zoomToFit();
     } else {
       // Filter to category
       this.graphContent.select('.nodes')
@@ -410,11 +518,14 @@ export class GraphController {
 
       this.graphContent.select('.links')
         .selectAll<SVGLineElement, SimulationLink>('line')
-        .style('display', d => 
-          d.source.categoryId === categoryId && d.target.categoryId === categoryId 
-            ? null 
+        .style('display', d =>
+          d.source.categoryId === categoryId && d.target.categoryId === categoryId
+            ? null
             : 'none'
         );
+      
+      // Zoom to fit filtered nodes
+      this.zoomToFilteredNodes(categoryId);
     }
 
     // Reheat simulation for better layout

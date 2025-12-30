@@ -47,6 +47,13 @@ const totalCount = getTechniqueCount(data);
               <path d="M6 9l6 6 6-6" />
             </svg>
           </div>
+          
+          <button id="clear-filter" class="clear-filter-btn" data-testid="clear-filter" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+            Clear Filter
+          </button>
         </div>
       </div>
     </header>
@@ -89,7 +96,7 @@ const totalCount = getTechniqueCount(data);
     <section class="techniques-section">
       <div class="container">
         <div class="techniques-header">
-          <h2 class="section-title">All Techniques</h2>
+          <h2 class="section-title" id="techniques-heading">All Techniques ({totalCount})</h2>
           <span class="results-count" id="results-count">{totalCount} techniques</span>
         </div>
         
@@ -107,16 +114,35 @@ const totalCount = getTechniqueCount(data);
   </div>
 
   <!-- Technique Detail Modal -->
-  <div 
-    class="modal-backdrop" 
+  <div
+    class="modal-backdrop"
     id="modal-backdrop"
     data-testid="technique-modal"
     hidden
     aria-hidden="true"
   >
     <div class="modal glass-card" role="dialog" aria-labelledby="modal-title" aria-modal="true">
-      <button 
-        class="modal-close" 
+      <!-- Navigation Header -->
+      <div class="modal-nav-header">
+        <button class="nav-btn nav-prev" data-testid="modal-prev" aria-label="Previous technique">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+          Prev
+        </button>
+        
+        <span class="nav-position" id="modal-position">1 of 192</span>
+        
+        <button class="nav-btn nav-next" data-testid="modal-next" aria-label="Next technique">
+          Next
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
+      </div>
+      
+      <button
+        class="modal-close"
         data-testid="modal-close"
         aria-label="Close modal"
       >
@@ -199,17 +225,22 @@ const totalCount = getTechniqueCount(data);
     // State
     let currentSearch = '';
     let currentCategory = '';
+    let currentModalIndex = -1;  // Track modal position in visible list
+    let visibleTechniques: string[] = [];  // Filtered technique IDs for navigation
     
     // Filter techniques
     function filterTechniques() {
       let visibleCount = 0;
       const query = currentSearch.toLowerCase();
+      const totalCount = techniqueCards.length;
+      visibleTechniques = [];  // Reset visible techniques list
       
       techniqueCards.forEach(card => {
         const cardEl = card as HTMLElement;
         const name = card.querySelector('[data-testid="technique-name"]')?.textContent?.toLowerCase() || '';
         const desc = card.querySelector('[data-testid="technique-description"]')?.textContent?.toLowerCase() || '';
         const categoryId = cardEl.dataset.categoryId || '';
+        const techniqueId = cardEl.dataset.techniqueId || '';
         
         const matchesSearch = !query || name.includes(query) || desc.includes(query);
         const matchesCategory = !currentCategory || categoryId === currentCategory;
@@ -217,7 +248,10 @@ const totalCount = getTechniqueCount(data);
         const isVisible = matchesSearch && matchesCategory;
         cardEl.style.display = isVisible ? '' : 'none';
         
-        if (isVisible) visibleCount++;
+        if (isVisible) {
+          visibleTechniques.push(techniqueId);
+          visibleCount++;
+        }
       });
       
       // Update results count
@@ -228,6 +262,21 @@ const totalCount = getTechniqueCount(data);
       // Show/hide no results message
       if (noResults) {
         noResults.hidden = visibleCount > 0;
+      }
+      
+      // Update heading based on filter state
+      const heading = document.getElementById('techniques-heading');
+      const clearBtn = document.getElementById('clear-filter');
+      const selectedOption = categorySelect?.options[categorySelect.selectedIndex];
+      
+      if (heading) {
+        if (currentCategory && selectedOption) {
+          heading.textContent = selectedOption.text; // "Category Name (N)"
+          if (clearBtn) clearBtn.hidden = false;
+        } else {
+          heading.textContent = `All Techniques (${totalCount})`;
+          if (clearBtn) clearBtn.hidden = true;
+        }
       }
     }
     
@@ -258,10 +307,55 @@ const totalCount = getTechniqueCount(data);
       });
     });
     
+    // Clear filter button handler
+    const clearFilterBtn = document.getElementById('clear-filter');
+    clearFilterBtn?.addEventListener('click', () => {
+      if (categorySelect) {
+        categorySelect.value = '';
+        currentCategory = '';
+        filterTechniques();
+      }
+    });
+    
+    // Update modal position indicator
+    function updateModalPosition() {
+      const positionEl = document.getElementById('modal-position');
+      
+      if (positionEl && visibleTechniques.length > 0) {
+        positionEl.textContent = `${currentModalIndex + 1} of ${visibleTechniques.length}`;
+      }
+    }
+    
+    // Navigate modal to next/previous technique
+    function navigateModal(direction: number) {
+      if (visibleTechniques.length === 0) return;
+      
+      let newIndex = currentModalIndex + direction;
+      
+      // Wrap around
+      if (newIndex < 0) {
+        newIndex = visibleTechniques.length - 1;
+      } else if (newIndex >= visibleTechniques.length) {
+        newIndex = 0;
+      }
+      
+      currentModalIndex = newIndex;
+      openModal(visibleTechniques[currentModalIndex]);
+    }
+    
     // Modal functions
     function openModal(techniqueId: string) {
       const technique = techniques.find((t: any) => t.id === techniqueId);
       if (!technique || !modalBackdrop) return;
+      
+      // Find index in visible techniques for navigation
+      const indexInVisible = visibleTechniques.indexOf(techniqueId);
+      if (indexInVisible !== -1) {
+        currentModalIndex = indexInVisible;
+      } else if (visibleTechniques.length > 0) {
+        // If technique not in filtered list, default to 0
+        currentModalIndex = 0;
+      }
       
       // Populate modal
       const title = modalBackdrop.querySelector('.modal-title');
@@ -357,6 +451,9 @@ const totalCount = getTechniqueCount(data);
       const modal = modalBackdrop.querySelector('.modal');
       modal?.setAttribute('tabindex', '-1');
       (modal as HTMLElement)?.focus();
+      
+      // Update position indicator
+      updateModalPosition();
     }
     
     function closeModal() {
@@ -390,10 +487,52 @@ const totalCount = getTechniqueCount(data);
     });
     
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modalBackdrop && !modalBackdrop.hidden) {
-        closeModal();
+      if (modalBackdrop && !modalBackdrop.hidden) {
+        if (e.key === 'Escape') {
+          closeModal();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          navigateModal(-1);
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          navigateModal(1);
+        }
       }
     });
+    
+    // Navigation button handlers
+    const navPrevBtn = document.querySelector('.nav-prev');
+    const navNextBtn = document.querySelector('.nav-next');
+    
+    navPrevBtn?.addEventListener('click', () => navigateModal(-1));
+    navNextBtn?.addEventListener('click', () => navigateModal(1));
+    
+    // Touch/swipe support for mobile navigation
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    modalBackdrop?.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    modalBackdrop?.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const swipeThreshold = 50;
+      const diff = touchStartX - touchEndX;
+      
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          // Swipe left = next
+          navigateModal(1);
+        } else {
+          // Swipe right = prev
+          navigateModal(-1);
+        }
+      }
+    }, { passive: true });
+    
+    // Initialize visible techniques on page load
+    filterTechniques();
   });
 </script>
 
@@ -600,6 +739,61 @@ const totalCount = getTechniqueCount(data);
     max-height: 90vh;
     overflow-y: auto;
     padding: var(--space-8);
+    padding-top: var(--space-4);
+  }
+
+  /* Modal Navigation Header */
+  .modal-nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+    padding-right: var(--space-14);
+    border-bottom: 1px solid var(--border-muted);
+    margin: calc(-1 * var(--space-4)) calc(-1 * var(--space-8)) var(--space-4);
+    margin-top: 0;
+    background: var(--bg-muted);
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  }
+
+  .nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: transparent;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    border-color: var(--interactive-default);
+    color: var(--interactive-default);
+  }
+
+  .nav-btn:focus-visible {
+    outline: 2px solid var(--interactive-focus);
+    outline-offset: 2px;
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .nav-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .nav-position {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    font-weight: var(--font-medium);
   }
 
   .modal-close {
@@ -769,8 +963,62 @@ const totalCount = getTechniqueCount(data);
 
     .modal {
       padding: var(--space-6);
+      padding-top: var(--space-4);
       max-height: 100vh;
       border-radius: 0;
     }
+
+    .modal-nav-header {
+      margin: calc(-1 * var(--space-4)) calc(-1 * var(--space-6)) var(--space-4);
+      border-radius: 0;
+    }
+
+    .nav-btn {
+      padding: var(--space-2);
+      font-size: var(--text-xs);
+    }
+
+    .nav-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .nav-position {
+      font-size: var(--text-xs);
+    }
+  }
+
+  /* Clear Filter Button */
+  .clear-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg-accent);
+    border: 1px solid var(--copper);
+    border-radius: var(--radius-lg);
+    color: var(--copper);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .clear-filter-btn:hover {
+    background: var(--copper);
+    color: white;
+  }
+
+  .clear-filter-btn:focus-visible {
+    outline: 2px solid var(--interactive-focus);
+    outline-offset: 2px;
+  }
+
+  .clear-filter-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .clear-filter-btn[hidden] {
+    display: none;
   }
 </style>

@@ -1,6 +1,12 @@
 /**
  * Prompt Builder Client-Side Controller
  * Handles all interactive functionality for the prompt builder page
+ * 
+ * Updated for new two-column layout with:
+ * - Category radio buttons (instead of pill buttons)
+ * - Technique card grid with "+ ADD" buttons
+ * - Selected techniques chips panel
+ * - Visible count display
  */
 
 import type { TechniquesData } from '@/types/techniques';
@@ -38,16 +44,21 @@ class PromptBuilderController {
   private copyButton!: HTMLButtonElement;
   private exportButton!: HTMLButtonElement;
   private clearButton!: HTMLButtonElement;
+  private visibleCount!: HTMLElement;
+  private selectedCount!: HTMLElement;
+  private clearSelectedBtn!: HTMLButtonElement;
 
   // State
   private selectedTechniques: string[] = [];
   private techniquesData: TechniquesData | null = null;
+  private currentCategory: string = '';
 
   constructor() {
     this.initializeElements();
     this.loadTechniquesData();
     this.attachEventListeners();
     this.updatePreview();
+    this.updateVisibleCount();
   }
 
   /**
@@ -70,6 +81,9 @@ class PromptBuilderController {
     this.techniqueSearch = document.querySelector('[data-testid="technique-search"]') as HTMLInputElement;
     this.techniqueList = document.querySelector('[data-testid="technique-list"]') as HTMLElement;
     this.noResults = document.querySelector('.no-results') as HTMLElement;
+    this.visibleCount = document.querySelector('[data-testid="visible-count"]') as HTMLElement;
+    this.selectedCount = document.querySelector('[data-testid="selected-count"]') as HTMLElement;
+    this.clearSelectedBtn = document.querySelector('[data-testid="clear-selected"]') as HTMLButtonElement;
 
     // Action buttons
     this.copyButton = document.querySelector('[data-testid="copy-button"]') as HTMLButtonElement;
@@ -118,19 +132,16 @@ class PromptBuilderController {
       }
     }
 
-    // Category filter buttons
-    document.querySelectorAll('.category-btn').forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        const target = e.currentTarget as HTMLButtonElement;
-        this.handleCategoryFilter(target.dataset.category || 'all');
-        
-        // Update active state
-        document.querySelectorAll('.category-btn').forEach((b) => b.classList.remove('active'));
-        target.classList.add('active');
+    // Category radio buttons (new structure)
+    document.querySelectorAll('.category-radio input[type="radio"]').forEach((radio) => {
+      radio.addEventListener('change', (e) => {
+        const target = e.target as HTMLInputElement;
+        this.currentCategory = target.value;
+        this.handleCategoryFilter(target.value);
       });
     });
 
-    // Technique selection
+    // Technique selection (card clicks)
     document.querySelectorAll('[data-testid="technique-select-card"]').forEach((card) => {
       card.addEventListener('click', () => {
         const techniqueId = (card as HTMLElement).dataset.techniqueId;
@@ -144,6 +155,11 @@ class PromptBuilderController {
     document.querySelectorAll('[data-testid="template-card"]').forEach((card) => {
       card.addEventListener('click', () => this.loadTemplate(card as HTMLElement));
     });
+
+    // Clear selected techniques button
+    if (this.clearSelectedBtn) {
+      this.clearSelectedBtn.addEventListener('click', () => this.clearSelectedTechniques());
+    }
 
     // Action buttons
     if (this.copyButton) {
@@ -178,7 +194,9 @@ class PromptBuilderController {
     const data = this.getPromptData();
 
     if (!this.techniquesData) {
-      this.previewContent.innerHTML = '<p class="preview-placeholder">Loading techniques data...</p>';
+      if (this.previewContent) {
+        this.previewContent.innerHTML = '<p class="preview-placeholder">Loading techniques data...</p>';
+      }
       return;
     }
 
@@ -186,15 +204,17 @@ class PromptBuilderController {
     const result: GeneratedPrompt = generatePrompt(data, this.selectedTechniques, this.techniquesData);
 
     // Update preview content with syntax highlighting
-    if (result.text.trim()) {
-      this.previewContent.innerHTML = this.formatPreviewHTML(result);
-    } else {
-      this.previewContent.innerHTML = `
-        <p class="preview-placeholder">
-          Start building your prompt by filling in the form fields and selecting techniques.
-          Your generated prompt will appear here in real-time.
-        </p>
-      `;
+    if (this.previewContent) {
+      if (result.text.trim()) {
+        this.previewContent.innerHTML = this.formatPreviewHTML(result);
+      } else {
+        this.previewContent.innerHTML = `
+          <p class="preview-placeholder">
+            Start building your prompt by filling in the form fields and selecting techniques.
+            Your generated prompt will appear here in real-time.
+          </p>
+        `;
+      }
     }
 
     // Update token count
@@ -288,6 +308,29 @@ class PromptBuilderController {
   }
 
   /**
+   * Update the visible count display
+   */
+  private updateVisibleCount(): void {
+    if (!this.visibleCount) return;
+
+    const cards = document.querySelectorAll('[data-testid="technique-select-card"]');
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      if (!card.classList.contains('hidden')) {
+        visibleCount++;
+      }
+    });
+
+    const strong = this.visibleCount.querySelector('strong');
+    if (strong) {
+      strong.textContent = visibleCount.toString();
+    } else {
+      this.visibleCount.innerHTML = `<strong>${visibleCount}</strong> techniques`;
+    }
+  }
+
+  /**
    * Handle technique search input
    */
   private handleTechniqueSearch(): void {
@@ -299,8 +342,15 @@ class PromptBuilderController {
       const element = card as HTMLElement;
       const name = element.dataset.techniqueName?.toLowerCase() || '';
       const description = element.dataset.techniqueDescription?.toLowerCase() || '';
+      const categoryId = element.dataset.categoryId || '';
 
-      if (!query || name.includes(query) || description.includes(query)) {
+      // Check category filter
+      const categoryMatch = !this.currentCategory || categoryId === this.currentCategory;
+      
+      // Check search filter
+      const searchMatch = !query || name.includes(query) || description.includes(query);
+
+      if (categoryMatch && searchMatch) {
         element.classList.remove('hidden');
         visibleCount++;
       } else {
@@ -314,31 +364,53 @@ class PromptBuilderController {
     }
 
     if (this.techniqueList) {
-      this.techniqueList.style.display = visibleCount === 0 ? 'none' : 'flex';
+      this.techniqueList.style.display = visibleCount === 0 ? 'none' : 'grid';
     }
+
+    // Update visible count
+    this.updateVisibleCount();
   }
 
   /**
-   * Handle category filter
+   * Handle category filter (radio buttons)
    */
   private handleCategoryFilter(categoryId: string): void {
+    this.currentCategory = categoryId;
     const cards = document.querySelectorAll('[data-testid="technique-select-card"]');
+    const query = this.techniqueSearch?.value.toLowerCase().trim() || '';
+    let visibleCount = 0;
 
     cards.forEach((card) => {
       const element = card as HTMLElement;
       const cardCategory = element.dataset.categoryId;
+      const name = element.dataset.techniqueName?.toLowerCase() || '';
+      const description = element.dataset.techniqueDescription?.toLowerCase() || '';
 
-      if (categoryId === 'all' || cardCategory === categoryId) {
+      // Check category filter
+      const categoryMatch = !categoryId || cardCategory === categoryId;
+      
+      // Check search filter
+      const searchMatch = !query || name.includes(query) || description.includes(query);
+
+      if (categoryMatch && searchMatch) {
         element.classList.remove('hidden');
+        visibleCount++;
       } else {
         element.classList.add('hidden');
       }
     });
 
-    // Clear search when changing category
-    if (this.techniqueSearch) {
-      this.techniqueSearch.value = '';
+    // Show/hide no results message
+    if (this.noResults) {
+      this.noResults.style.display = visibleCount === 0 ? 'block' : 'none';
     }
+
+    if (this.techniqueList) {
+      this.techniqueList.style.display = visibleCount === 0 ? 'none' : 'grid';
+    }
+
+    // Update visible count
+    this.updateVisibleCount();
   }
 
   /**
@@ -360,41 +432,70 @@ class PromptBuilderController {
 
     this.renderSelectedTechniques();
     this.updatePreview();
+    this.updateSelectedCount();
   }
 
   /**
-   * Render selected techniques tags
+   * Update the selected count display
+   */
+  private updateSelectedCount(): void {
+    if (this.selectedCount) {
+      this.selectedCount.textContent = `(${this.selectedTechniques.length})`;
+    }
+
+    // Show/hide clear selected button
+    if (this.clearSelectedBtn) {
+      this.clearSelectedBtn.style.display = this.selectedTechniques.length > 0 ? 'block' : 'none';
+    }
+  }
+
+  /**
+   * Clear all selected techniques
+   */
+  private clearSelectedTechniques(): void {
+    this.selectedTechniques = [];
+    document.querySelectorAll('[data-testid="technique-select-card"].selected').forEach((card) => {
+      card.classList.remove('selected');
+    });
+
+    this.renderSelectedTechniques();
+    this.updatePreview();
+    this.updateSelectedCount();
+  }
+
+  /**
+   * Render selected techniques as chips
    */
   private renderSelectedTechniques(): void {
     if (!this.selectedTechniquesContainer) return;
 
     if (this.selectedTechniques.length === 0) {
       this.selectedTechniquesContainer.innerHTML = `
-        <p class="empty-state">No techniques selected. Click techniques from the left panel to add them.</p>
+        <p class="empty-state">Click techniques above to add them to your prompt.</p>
       `;
       return;
     }
 
-    const tags = this.selectedTechniques.map((id) => {
+    const chips = this.selectedTechniques.map((id) => {
       const card = document.querySelector(`[data-testid="technique-select-card"][data-technique-id="${id}"]`) as HTMLElement;
       const name = card?.dataset.techniqueName || id;
 
       return `
-        <span class="selected-technique-tag" data-testid="selected-technique-tag" data-technique-id="${id}">
+        <span class="technique-chip" data-testid="selected-technique-tag" data-technique-id="${id}">
           ${this.escapeHTML(name)}
           <button type="button" class="remove-btn" aria-label="Remove ${name}">×</button>
         </span>
       `;
     }).join('');
 
-    this.selectedTechniquesContainer.innerHTML = tags;
+    this.selectedTechniquesContainer.innerHTML = chips;
 
     // Add remove listeners
     this.selectedTechniquesContainer.querySelectorAll('.remove-btn').forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const tag = (btn as HTMLElement).closest('[data-technique-id]') as HTMLElement;
-        const techniqueId = tag?.dataset.techniqueId;
+        const chip = (btn as HTMLElement).closest('[data-technique-id]') as HTMLElement;
+        const techniqueId = chip?.dataset.techniqueId;
         if (techniqueId) {
           this.toggleTechnique(techniqueId);
         }
@@ -434,6 +535,7 @@ class PromptBuilderController {
 
     this.renderSelectedTechniques();
     this.updatePreview();
+    this.updateSelectedCount();
   }
 
   /**
@@ -516,13 +618,8 @@ class PromptBuilderController {
     if (this.outputInput) this.outputInput.value = '';
 
     // Clear techniques
-    this.selectedTechniques = [];
-    document.querySelectorAll('[data-testid="technique-select-card"].selected').forEach((card) => {
-      card.classList.remove('selected');
-    });
+    this.clearSelectedTechniques();
 
-    this.renderSelectedTechniques();
-    this.updatePreview();
     this.showToast('All fields cleared', 'info');
   }
 
