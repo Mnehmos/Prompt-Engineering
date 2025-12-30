@@ -239,6 +239,14 @@ class ChatController {
   }
 
   private appendSources(contentEl: HTMLElement, sources: SearchResult[]): void {
+    // Extract a searchable term from source text (first few meaningful words)
+    const getSearchTerm = (s: SearchResult): string => {
+      const text = s.source_name || s.text;
+      // Extract first 3-4 words as a search term
+      const words = text.split(/\s+/).slice(0, 4).join(' ');
+      return encodeURIComponent(words);
+    };
+
     const sourcesHtml = `
       <details class="sources">
         <summary>📚 Sources (${sources.length})</summary>
@@ -249,7 +257,9 @@ class ChatController {
               (s) => `
             <li>
               <span class="score">${Math.round(s.score * 100)}%</span>
-              <span class="text">${this.escapeHtml((s.source_name || s.text).slice(0, 100))}...</span>
+              <a href="/taxonomy?q=${getSearchTerm(s)}" class="source-link" target="_blank" rel="noopener">
+                ${this.escapeHtml((s.source_name || s.text).slice(0, 100))}...
+              </a>
             </li>
           `
             )

@@ -302,6 +302,18 @@ import Layout from '@/layouts/Layout.astro';
     line-height: var(--leading-snug);
   }
 
+  .sources .source-link {
+    color: var(--text-accent);
+    text-decoration: none;
+    line-height: var(--leading-snug);
+    transition: color var(--transition-fast);
+  }
+
+  .sources .source-link:hover {
+    color: var(--copper);
+    text-decoration: underline;
+  }
+
   /* Typing indicator */
   .message.typing .message-content {
     display: flex;
