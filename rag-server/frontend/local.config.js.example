@@ -1,0 +1,6 @@
+// Local development configuration
+// Copy this file to local.config.js and edit the RAG_SERVER URL
+
+window.LOCAL_CONFIG = {
+  RAG_SERVER: 'http://localhost:8080'
+};
