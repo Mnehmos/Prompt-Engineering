@@ -5,12 +5,14 @@
  */
 import Navigation from './Navigation.astro';
 import ThemeToggle from './ThemeToggle.astro';
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <header class="header">
   <div class="header-container">
     <!-- Logo with animated SVG -->
-    <a href="/" class="logo group" aria-label="Mnehmos Prompt Research - Home">
+    <a href={base} class="logo group" aria-label="Mnehmos Prompt Research - Home">
       <svg class="logo-icon header-logo" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
         <defs>
           <linearGradient id="headerCopperGrad" x1="0%" y1="0%" x2="100%" y2="100%">

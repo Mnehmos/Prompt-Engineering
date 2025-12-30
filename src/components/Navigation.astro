@@ -11,6 +11,13 @@ interface Props {
 
 const { class: className = '', mobile = false } = Astro.props;
 const currentPath = Astro.url.pathname;
+const base = import.meta.env.BASE_URL;
+
+// Utility to join base with path
+function withBase(path: string): string {
+  if (path === '/') return base;
+  return `${base.replace(/\/$/, '')}${path}`;
+}
 
 const navItems = [
   { href: '/', label: 'Home' },
@@ -21,10 +28,11 @@ const navItems = [
 ];
 
 function isActive(href: string): boolean {
+  const fullPath = withBase(href);
   if (href === '/') {
-    return currentPath === '/';
+    return currentPath === base || currentPath === base.replace(/\/$/, '');
   }
-  return currentPath.startsWith(href);
+  return currentPath.startsWith(fullPath);
 }
 ---
 
@@ -32,8 +40,8 @@ function isActive(href: string): boolean {
   <ul class="nav-list" role="list">
     {navItems.map((item) => (
       <li>
-        <a 
-          href={item.href} 
+        <a
+          href={withBase(item.href)}
           class:list={['nav-link', { 'nav-link--active': isActive(item.href) }]}
           aria-current={isActive(item.href) ? 'page' : undefined}
         >
