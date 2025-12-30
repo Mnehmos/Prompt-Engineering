@@ -19,7 +19,6 @@ class ChatController {
   private messagesContainer!: HTMLElement;
   private form!: HTMLFormElement;
   private input!: HTMLInputElement;
-  private submitBtn!: HTMLButtonElement;
   private statusHint!: HTMLElement | null;
   private config!: ChatConfig;
   private conversationId: string | null = null;
@@ -31,9 +30,8 @@ class ChatController {
     );
     const form = document.querySelector('[data-testid="chat-form"]');
     const input = document.querySelector('[data-testid="chat-input"]');
-    const submitBtn = document.querySelector('[data-testid="chat-submit"]');
 
-    if (!messagesContainer || !form || !input || !submitBtn) {
+    if (!messagesContainer || !form || !input) {
       console.error("Chat: Required elements not found");
       return;
     }
@@ -41,7 +39,6 @@ class ChatController {
     this.messagesContainer = messagesContainer as HTMLElement;
     this.form = form as HTMLFormElement;
     this.input = input as HTMLInputElement;
-    this.submitBtn = submitBtn as HTMLButtonElement;
     this.statusHint = document.getElementById("status-hint");
 
     // Check for API endpoint from page config
@@ -240,7 +237,12 @@ class ChatController {
 
     const contentEl = document.createElement("div");
     contentEl.className = "message-content";
-    contentEl.innerHTML = '<span class="streaming-cursor">▌</span>';
+    // Initial typing indicator
+    contentEl.innerHTML = `
+      <div class="typing-indicator">
+        <span></span><span></span><span></span>
+      </div>
+    `;
 
     messageEl.appendChild(avatarEl);
     messageEl.appendChild(contentEl);
@@ -297,12 +299,25 @@ class ChatController {
   }
 
   private setLoading(loading: boolean): void {
-    this.submitBtn.disabled = loading;
-    this.input.disabled = loading;
-    if (this.statusHint) {
-      this.statusHint.textContent = loading
-        ? "Thinking..."
-        : "Powered by RAG • Responses stream in real-time";
+    const submitBtn = this.form.querySelector(".submit-btn") as HTMLButtonElement;
+    const input = this.input;
+    const hint = this.statusHint;
+    
+    if (loading) {
+      submitBtn.disabled = true;
+      input.disabled = true;
+      if (hint) {
+        hint.innerHTML = `Thinking<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>`;
+        hint.classList.add('animate-pulse');
+      }
+    } else {
+      submitBtn.disabled = false;
+      input.disabled = false;
+      if (hint) {
+        hint.textContent = "Powered by RAG • Responses stream in real-time";
+        hint.classList.remove('animate-pulse');
+      }
+      input.focus();
     }
   }
 }
