@@ -250,6 +250,17 @@ const techniqueNames = allTechniques.map((t) => t.name);
     padding-bottom: var(--space-4);
   }
 
+  /* Messages Area */
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    scroll-behavior: smooth;
+  }
+
   .sidebar-header h2 {
     font-size: var(--text-lg);
     font-weight: var(--font-bold);
