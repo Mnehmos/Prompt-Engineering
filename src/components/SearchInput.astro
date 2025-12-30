@@ -1,0 +1,109 @@
+---
+/**
+ * SearchInput Component
+ * Search input for filtering techniques
+ * data-testid="technique-search" for E2E tests
+ */
+interface Props {
+  placeholder?: string;
+  className?: string;
+}
+
+const { 
+  placeholder = 'Search techniques...', 
+  className = '' 
+} = Astro.props;
+---
+
+<div class={`search-wrapper ${className}`}>
+  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="11" cy="11" r="8" />
+    <path d="M21 21l-4.35-4.35" />
+  </svg>
+  <input
+    type="text"
+    data-testid="technique-search"
+    placeholder={placeholder}
+    class="search-input"
+    aria-label="Search techniques"
+  />
+  <button class="clear-btn" type="button" aria-label="Clear search" hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 6L6 18M6 6l12 12" />
+    </svg>
+  </button>
+</div>
+
+<style>
+  .search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: var(--space-4);
+    width: 20px;
+    height: 20px;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    padding-left: calc(var(--space-4) + 28px);
+    padding-right: calc(var(--space-4) + 28px);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-full);
+    background: var(--bg-card);
+    color: var(--text-main);
+    font-size: var(--text-base);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--copper);
+    box-shadow: 0 0 0 3px var(--bg-accent);
+  }
+
+  .search-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .clear-btn {
+    position: absolute;
+    right: var(--space-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: var(--radius-full);
+    transition: color var(--transition-fast), background var(--transition-fast);
+  }
+
+  .clear-btn:hover {
+    background: var(--bg-muted);
+    color: var(--text-main);
+  }
+
+  .clear-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .clear-btn:focus-visible {
+    outline: 2px solid var(--interactive-focus);
+    outline-offset: 2px;
+  }
+</style>

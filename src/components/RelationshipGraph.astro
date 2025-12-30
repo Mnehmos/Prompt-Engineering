@@ -1,0 +1,217 @@
+---
+/**
+ * RelationshipGraph Component
+ * 
+ * Container for D3 force-directed graph visualization
+ * Includes zoom controls and tooltip display
+ */
+---
+
+<div class="relationship-graph">
+  <div data-testid="graph-container" class="graph-container">
+    <svg data-testid="graph-svg" class="graph-svg" aria-label="Technique relationship graph">
+      <g class="graph-content">
+        <g class="links"></g>
+        <g class="nodes"></g>
+      </g>
+    </svg>
+
+    <!-- Zoom Controls -->
+    <div data-testid="zoom-controls" class="zoom-controls glass-card">
+      <button 
+        data-testid="zoom-in" 
+        class="zoom-btn" 
+        aria-label="Zoom in"
+        title="Zoom in"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <path d="M21 21l-4.35-4.35M11 8v6M8 11h6" />
+        </svg>
+      </button>
+      <button 
+        data-testid="zoom-out" 
+        class="zoom-btn" 
+        aria-label="Zoom out"
+        title="Zoom out"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <path d="M21 21l-4.35-4.35M8 11h6" />
+        </svg>
+      </button>
+      <button 
+        data-testid="zoom-reset" 
+        class="zoom-btn" 
+        aria-label="Reset zoom"
+        title="Reset view"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+          <path d="M3 3v5h5" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Tooltip -->
+    <div data-testid="graph-tooltip" class="tooltip glass-card hidden" role="tooltip">
+      <h4 data-testid="tooltip-name" class="tooltip-name"></h4>
+      <p data-testid="tooltip-category" class="tooltip-category"></p>
+      <p data-testid="tooltip-connections" class="tooltip-connections"></p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .relationship-graph {
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+    position: relative;
+  }
+
+  .graph-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+
+  .graph-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Node styles */
+  .graph-svg :global(.node) {
+    transition: opacity var(--transition-fast);
+  }
+
+  .graph-svg :global(.node:hover) {
+    filter: brightness(1.1);
+  }
+
+  /* Link styles */
+  .graph-svg :global(.link) {
+    transition: stroke-opacity var(--transition-fast), stroke var(--transition-fast);
+  }
+
+  /* Zoom Controls */
+  .zoom-controls {
+    position: absolute;
+    bottom: var(--space-4);
+    right: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-2);
+  }
+
+  .zoom-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .zoom-btn:hover {
+    background: var(--bg-muted);
+    border-color: var(--copper);
+    color: var(--copper);
+  }
+
+  .zoom-btn:focus-visible {
+    outline: 2px solid var(--interactive-focus);
+    outline-offset: 2px;
+  }
+
+  .zoom-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Tooltip */
+  .tooltip {
+    position: absolute;
+    top: var(--space-4);
+    left: var(--space-4);
+    padding: var(--space-4);
+    min-width: 200px;
+    max-width: 300px;
+    pointer-events: none;
+    z-index: var(--z-tooltip);
+    transition: opacity var(--transition-fast);
+  }
+
+  .tooltip.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .tooltip-name {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-main);
+    margin: 0 0 var(--space-2);
+  }
+
+  .tooltip-category {
+    font-size: var(--text-sm);
+    color: var(--copper);
+    margin: 0 0 var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    background: var(--bg-accent);
+    border-radius: var(--radius-md);
+    display: inline-block;
+  }
+
+  .tooltip-connections {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin: var(--space-2) 0 0;
+  }
+
+  /* Loading state */
+  .graph-container.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .graph-container.loading::after {
+    content: 'Loading graph...';
+    color: var(--text-muted);
+    font-size: var(--text-lg);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .relationship-graph {
+      min-height: 400px;
+    }
+
+    .zoom-controls {
+      bottom: var(--space-2);
+      right: var(--space-2);
+      flex-direction: row;
+    }
+
+    .tooltip {
+      top: var(--space-2);
+      left: var(--space-2);
+      right: var(--space-2);
+      max-width: none;
+    }
+  }
+</style>

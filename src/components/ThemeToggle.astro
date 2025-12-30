@@ -1,0 +1,188 @@
+---
+/**
+ * ThemeToggle component - Dark/Light mode toggle
+ * Client-side JavaScript handles theme persistence and toggle
+ * Respects prefers-color-scheme initially
+ */
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<button 
+  type="button" 
+  class:list={['theme-toggle', className]}
+  aria-label="Toggle dark mode"
+  data-theme-toggle
+>
+  <!-- Sun icon (shown in dark mode) -->
+  <svg 
+    class="theme-toggle__icon theme-toggle__icon--sun" 
+    width="20" 
+    height="20" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    stroke-width="2" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="3"></line>
+    <line x1="12" y1="21" x2="12" y2="23"></line>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+    <line x1="1" y1="12" x2="3" y2="12"></line>
+    <line x1="21" y1="12" x2="23" y2="12"></line>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+  </svg>
+  
+  <!-- Moon icon (shown in light mode) -->
+  <svg 
+    class="theme-toggle__icon theme-toggle__icon--moon" 
+    width="20" 
+    height="20" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    stroke-width="2" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
+
+<script>
+  /**
+   * Theme toggle functionality
+   * - Checks localStorage for saved preference
+   * - Falls back to prefers-color-scheme
+   * - Persists choice to localStorage
+   */
+  function initTheme() {
+    const STORAGE_KEY = 'theme-preference';
+    
+    // Get stored preference or system preference
+    function getThemePreference(): 'light' | 'dark' {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored === 'light' || stored === 'dark') {
+        return stored;
+      }
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    
+    // Apply theme to document
+    function setTheme(theme: 'light' | 'dark') {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem(STORAGE_KEY, theme);
+      
+      // Update aria-pressed for toggle buttons
+      document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+        btn.setAttribute('aria-pressed', String(theme === 'dark'));
+      });
+    }
+    
+    // Toggle between themes
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || getThemePreference();
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    }
+    
+    // Initialize on load
+    setTheme(getThemePreference());
+    
+    // Listen for toggle button clicks
+    document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+      btn.addEventListener('click', toggleTheme);
+    });
+    
+    // Listen for system preference changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      // Only update if no manual preference is stored
+      if (!localStorage.getItem(STORAGE_KEY)) {
+        setTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+  }
+  
+  // Run on initial load
+  initTheme();
+  
+  // Re-run on Astro view transitions
+  document.addEventListener('astro:after-swap', initTheme);
+</script>
+
+<style>
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: var(--space-2);
+    background: transparent;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .theme-toggle:hover {
+    background-color: var(--bg-muted);
+    color: var(--text-main);
+    border-color: var(--border-default);
+  }
+
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--interactive-focus);
+    outline-offset: 2px;
+  }
+
+  .theme-toggle__icon {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  /* Sun icon - visible in dark mode */
+  .theme-toggle__icon--sun {
+    display: none;
+  }
+
+  /* Moon icon - visible in light mode */
+  .theme-toggle__icon--moon {
+    display: block;
+  }
+
+  /* Dark mode: show sun, hide moon */
+  :global([data-theme="dark"]) .theme-toggle__icon--sun {
+    display: block;
+  }
+
+  :global([data-theme="dark"]) .theme-toggle__icon--moon {
+    display: none;
+  }
+
+  /* Hover animation */
+  .theme-toggle:hover .theme-toggle__icon {
+    transform: rotate(15deg);
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .theme-toggle,
+    .theme-toggle__icon {
+      transition: none;
+    }
+    
+    .theme-toggle:hover .theme-toggle__icon {
+      transform: none;
+    }
+  }
+</style>

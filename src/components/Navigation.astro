@@ -1,0 +1,115 @@
+---
+/**
+ * Navigation component - Shared navigation links
+ * Used in Header for both desktop and mobile views
+ */
+
+interface Props {
+  class?: string;
+  mobile?: boolean;
+}
+
+const { class: className = '', mobile = false } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/taxonomy', label: 'Taxonomy' },
+  { href: '/relationships', label: 'Relationships' },
+  { href: '/builder', label: 'Prompt Builder' },
+  { href: '/search', label: 'Search' },
+];
+
+function isActive(href: string): boolean {
+  if (href === '/') {
+    return currentPath === '/';
+  }
+  return currentPath.startsWith(href);
+}
+---
+
+<nav class:list={['navigation', { 'navigation--mobile': mobile }, className]}>
+  <ul class="nav-list" role="list">
+    {navItems.map((item) => (
+      <li>
+        <a 
+          href={item.href} 
+          class:list={['nav-link', { 'nav-link--active': isActive(item.href) }]}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .navigation {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-list {
+    display: flex;
+    gap: var(--space-6);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    color: var(--text-muted);
+    font-weight: var(--font-medium);
+    font-size: var(--text-sm);
+    text-decoration: none;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .nav-link:hover {
+    color: var(--text-accent);
+    background-color: var(--bg-muted);
+  }
+
+  .nav-link--active {
+    color: var(--interactive-default);
+    background-color: var(--bg-accent);
+  }
+
+  /* Mobile navigation styles */
+  .navigation--mobile {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-default);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .navigation--mobile.is-open {
+    display: block;
+  }
+
+  .navigation--mobile .nav-list {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .navigation--mobile .nav-link {
+    display: block;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-base);
+  }
+
+  /* Hide desktop nav on mobile, show mobile nav */
+  @media (max-width: 767px) {
+    .navigation:not(.navigation--mobile) {
+      display: none;
+    }
+  }
+</style>

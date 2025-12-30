@@ -1,0 +1,544 @@
+---
+/**
+ * Prompt Builder Page
+ * Interactive tool for constructing prompts with techniques
+ * Route: /builder
+ */
+import Layout from '@/layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { getAllTechniques, getCategories } from '@/lib/techniques';
+import { getDefaultTemplates } from '@/lib/prompt-builder';
+import type { TechniquesData } from '@/types/techniques';
+import TechniqueSelector from '@/components/TechniqueSelector.astro';
+import PromptPreview from '@/components/PromptPreview.astro';
+
+// Load techniques data
+const techniquesCollection = await getCollection('techniques');
+const techniquesData = techniquesCollection[0]?.data as TechniquesData;
+const allTechniques = getAllTechniques(techniquesData);
+const categories = getCategories(techniquesData);
+const templates = getDefaultTemplates();
+---
+
+<Layout title="Prompt Builder | Mnehmos Prompt Research" description="Build optimized prompts using proven techniques">
+  <div class="builder-page" data-testid="prompt-builder">
+    <header class="page-header">
+      <h1>Prompt Builder</h1>
+      <p class="lead">Construct optimized prompts using proven techniques</p>
+    </header>
+
+    <div class="builder-layout">
+      <!-- Left Panel: Technique Selection -->
+      <section class="technique-panel glass-card" data-testid="technique-panel">
+        <h2>
+          <span class="icon">🧩</span>
+          Select Techniques
+        </h2>
+        
+        <TechniqueSelector 
+          techniques={allTechniques} 
+          categories={categories}
+        />
+      </section>
+
+      <!-- Center Panel: Prompt Editor -->
+      <section class="editor-panel glass-card" data-testid="prompt-editor">
+        <h2>
+          <span class="icon">✏️</span>
+          Build Your Prompt
+        </h2>
+
+        <form id="prompt-form" class="prompt-form">
+          <!-- Role Input -->
+          <div class="form-group">
+            <label for="role-input">Role / Persona</label>
+            <input 
+              type="text" 
+              id="role-input"
+              data-testid="role-input"
+              placeholder="You are an expert..."
+              autocomplete="off"
+            />
+            <span class="help-text">Define who the AI should be</span>
+          </div>
+
+          <!-- Task Input -->
+          <div class="form-group">
+            <label for="task-input">Task Description</label>
+            <textarea 
+              id="task-input"
+              data-testid="task-input"
+              rows="4"
+              placeholder="Your task is to..."
+            ></textarea>
+            <span class="help-text">Describe what the AI should do</span>
+          </div>
+
+          <!-- Context Input -->
+          <div class="form-group">
+            <label for="context-input">Context / Examples</label>
+            <textarea 
+              id="context-input"
+              data-testid="context-input"
+              rows="3"
+              placeholder="Additional context or examples..."
+            ></textarea>
+            <span class="help-text">Provide background information</span>
+          </div>
+
+          <!-- Output Format -->
+          <div class="form-group">
+            <label for="output-input">Output Format</label>
+            <textarea 
+              id="output-input"
+              data-testid="output-input"
+              rows="2"
+              placeholder="Format your response as..."
+            ></textarea>
+            <span class="help-text">Specify the desired output format</span>
+          </div>
+
+          <!-- Selected Techniques Display -->
+          <div class="form-group">
+            <label>Selected Techniques</label>
+            <div class="selected-techniques-wrapper" data-testid="selected-techniques">
+              <p class="empty-state">No techniques selected. Click techniques from the left panel to add them.</p>
+            </div>
+          </div>
+        </form>
+
+        <!-- Templates Section -->
+        <div class="templates-section">
+          <h3>Quick Templates</h3>
+          <div class="template-grid">
+            {templates.map((template) => (
+              <button 
+                type="button"
+                class="template-card"
+                data-testid="template-card"
+                data-template-id={template.id}
+                data-template-role={template.role}
+                data-template-task={template.task}
+                data-template-context={template.context}
+                data-template-output={template.output}
+                data-template-techniques={JSON.stringify(template.techniques)}
+              >
+                <span class="template-name">{template.name}</span>
+                <span class="template-desc">{template.description}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Panel: Preview -->
+      <section class="preview-panel glass-card" data-testid="prompt-preview">
+        <div class="preview-header">
+          <h2>
+            <span class="icon">👁️</span>
+            Preview
+          </h2>
+          <div class="stats">
+            <span class="stat" data-testid="token-count" title="Estimated token count">
+              <span class="stat-icon">📊</span>
+              <span class="stat-value">0</span> tokens
+            </span>
+            <span class="stat quality-indicator" data-testid="quality-score" title="Prompt quality score">
+              <span class="stat-icon">⭐</span>
+              <span class="stat-value">0</span>/100
+            </span>
+          </div>
+        </div>
+
+        <PromptPreview />
+
+        <div class="action-buttons">
+          <button type="button" class="btn btn-primary" data-testid="copy-button">
+            <span class="btn-icon">📋</span>
+            Copy to Clipboard
+          </button>
+          <button type="button" class="btn btn-secondary" data-testid="export-button">
+            <span class="btn-icon">📥</span>
+            Export
+          </button>
+          <button type="button" class="btn btn-ghost" data-testid="clear-button">
+            <span class="btn-icon">🗑️</span>
+            Clear All
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Pass data to client-side script -->
+  <script 
+    id="techniques-data" 
+    type="application/json"
+    set:html={JSON.stringify(techniquesData)}
+  />
+</Layout>
+
+<script>
+  import { initPromptBuilder } from '@/scripts/prompt-builder';
+  
+  // Initialize when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    initPromptBuilder();
+  });
+</script>
+
+<style>
+  .builder-page {
+    padding: var(--space-6) var(--space-4);
+    max-width: 1800px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
+
+  .page-header h1 {
+    font-size: var(--font-4xl);
+    font-weight: var(--font-bold);
+    background: linear-gradient(135deg, var(--interactive-default), var(--interactive-hover));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--space-2);
+  }
+
+  .lead {
+    font-size: var(--font-lg);
+    color: var(--text-secondary);
+  }
+
+  .builder-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr 400px;
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  @media (max-width: 1400px) {
+    .builder-layout {
+      grid-template-columns: 280px 1fr 350px;
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .builder-layout {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+
+    .technique-panel {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .builder-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .glass-card {
+    background: var(--surface-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .glass-card h2 {
+    font-size: var(--font-xl);
+    font-weight: var(--font-semibold);
+    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .icon {
+    font-size: var(--font-lg);
+  }
+
+  /* Technique Panel */
+  .technique-panel {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+  }
+
+  /* Editor Panel */
+  .prompt-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .form-group label {
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+    font-size: var(--font-sm);
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: var(--space-3);
+    background: var(--surface-overlay);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: var(--font-base);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--interactive-default);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--interactive-default) 25%, transparent);
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  .help-text {
+    font-size: var(--font-xs);
+    color: var(--text-tertiary);
+  }
+
+  .selected-techniques-wrapper {
+    min-height: 60px;
+    padding: var(--space-3);
+    background: var(--surface-overlay);
+    border: 1px dashed var(--border-default);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: flex-start;
+  }
+
+  .empty-state {
+    color: var(--text-tertiary);
+    font-size: var(--font-sm);
+    font-style: italic;
+    width: 100%;
+  }
+
+  /* Templates Section */
+  .templates-section {
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-default);
+  }
+
+  .templates-section h3 {
+    font-size: var(--font-base);
+    font-weight: var(--font-medium);
+    margin-bottom: var(--space-3);
+    color: var(--text-secondary);
+  }
+
+  .template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-3);
+  }
+
+  .template-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    background: var(--surface-overlay);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+
+  .template-card:hover {
+    border-color: var(--interactive-default);
+    background: var(--surface-hover);
+    transform: translateY(-2px);
+  }
+
+  .template-name {
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+  }
+
+  .template-desc {
+    font-size: var(--font-xs);
+    color: var(--text-tertiary);
+    line-height: 1.4;
+  }
+
+  /* Preview Panel */
+  .preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-4);
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .preview-header h2 {
+    margin-bottom: 0;
+  }
+
+  .stats {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    padding: var(--space-1) var(--space-2);
+    background: var(--surface-overlay);
+    border-radius: var(--radius-md);
+  }
+
+  .stat-icon {
+    font-size: var(--font-base);
+  }
+
+  .quality-indicator {
+    transition: background-color 0.3s;
+  }
+
+  .quality-indicator.poor {
+    background: color-mix(in srgb, var(--color-error) 20%, transparent);
+    color: var(--color-error);
+  }
+
+  .quality-indicator.fair {
+    background: color-mix(in srgb, var(--color-warning) 20%, transparent);
+    color: var(--color-warning);
+  }
+
+  .quality-indicator.good {
+    background: color-mix(in srgb, var(--color-success) 20%, transparent);
+    color: var(--color-success);
+  }
+
+  .quality-indicator.excellent {
+    background: color-mix(in srgb, var(--interactive-default) 20%, transparent);
+    color: var(--interactive-default);
+  }
+
+  /* Action Buttons */
+  .action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-default);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
+    font-weight: var(--font-medium);
+    font-size: var(--font-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+
+  .btn-icon {
+    font-size: var(--font-base);
+  }
+
+  .btn-primary {
+    background: var(--interactive-default);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: var(--interactive-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-secondary {
+    background: var(--surface-overlay);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+  }
+
+  .btn-secondary:hover {
+    background: var(--surface-hover);
+    border-color: var(--interactive-default);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+  }
+
+  .btn-ghost:hover {
+    background: var(--surface-overlay);
+    color: var(--color-error);
+  }
+
+  /* Selected Technique Tags */
+  :global(.selected-technique-tag) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2);
+    background: color-mix(in srgb, var(--interactive-default) 15%, transparent);
+    border: 1px solid var(--interactive-default);
+    border-radius: var(--radius-full);
+    font-size: var(--font-xs);
+    color: var(--interactive-default);
+  }
+
+  :global(.selected-technique-tag .remove-btn) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    line-height: 1;
+    transition: all 0.2s;
+  }
+
+  :global(.selected-technique-tag .remove-btn:hover) {
+    background: var(--interactive-default);
+    color: white;
+  }
+</style>

@@ -1,0 +1,411 @@
+---
+/**
+ * Homepage - Prompt Engineering Taxonomy
+ * Displays hero section and technique overview
+ */
+import Layout from '@/layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// Load technique data from content collection
+let techniqueCount = 182; // Default fallback
+
+try {
+  const techniquesCollection = await getCollection('techniques');
+  if (techniquesCollection.length > 0 && techniquesCollection[0].data) {
+    const data = techniquesCollection[0].data;
+    // Count all techniques across all categories
+    techniqueCount = data.categories?.reduce((total, cat) => total + (cat.techniques?.length || 0), 0) || 182;
+  }
+} catch (e) {
+  // Use default if collection not available
+  console.warn('Could not load techniques collection, using default count');
+}
+---
+
+<Layout title="Prompt Engineering Taxonomy | Mnehmos Research">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-content">
+        <span class="hero-badge">
+          Research Database
+        </span>
+        <h1 class="hero-title">
+          Prompt Engineering <span class="text-gradient">Taxonomy</span>
+        </h1>
+        <p class="hero-description">
+          A comprehensive collection of <span class="hero-count">{techniqueCount}</span> prompt 
+          engineering techniques, systematically categorized and documented for AI practitioners.
+        </p>
+        <div class="hero-actions">
+          <a href="/taxonomy" class="btn btn-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="10 8 16 12 10 16 10 8"></polygon>
+            </svg>
+            Explore Techniques
+          </a>
+          <a href="/prompt-builder" class="btn btn-secondary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            Prompt Builder
+          </a>
+        </div>
+      </div>
+      
+      <!-- Hero visual element -->
+      <div class="hero-visual">
+        <div class="hero-glow"></div>
+        <div class="hero-nodes">
+          <div class="hero-node hero-node--1"></div>
+          <div class="hero-node hero-node--2"></div>
+          <div class="hero-node hero-node--3"></div>
+          <div class="hero-node hero-node--4"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <h2 class="features-title">Explore the Ecosystem</h2>
+      <div class="features-grid">
+        <!-- Feature: Taxonomy -->
+        <a href="/taxonomy" class="feature-card card">
+          <div class="feature-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          </div>
+          <h3 class="feature-title">Technique Taxonomy</h3>
+          <p class="feature-description">Browse {techniqueCount} techniques organized into logical categories</p>
+        </a>
+
+        <!-- Feature: Relationships -->
+        <a href="/relationships" class="feature-card card">
+          <div class="feature-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">Relationships Graph</h3>
+          <p class="feature-description">Visualize connections between techniques interactively</p>
+        </a>
+
+        <!-- Feature: Prompt Builder -->
+        <a href="/prompt-builder" class="feature-card card">
+          <div class="feature-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">Prompt Builder</h3>
+          <p class="feature-description">Compose prompts using multiple techniques</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Status Section -->
+  <section class="status">
+    <div class="container">
+      <div class="status-card glass-card">
+        <h2 class="status-title">🚧 Migration in Progress</h2>
+        <p class="status-description">
+          This site is being migrated to Astro with enhanced features. Content collections are configured with <strong>{techniqueCount} techniques</strong> loaded.
+        </p>
+        <div class="status-checks">
+          <div class="status-check">
+            <span class="status-check-icon">✅</span>
+            <span>Astro scaffolding complete</span>
+          </div>
+          <div class="status-check">
+            <span class="status-check-icon">✅</span>
+            <span>Content collections configured</span>
+          </div>
+          <div class="status-check">
+            <span class="status-check-icon">✅</span>
+            <span>Base layout with Header/Footer</span>
+          </div>
+          <div class="status-check">
+            <span class="status-check-icon">✅</span>
+            <span>Design system tokens applied</span>
+          </div>
+          <div class="status-check">
+            <span class="status-check-icon">✅</span>
+            <span>Dark mode toggle working</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Hero Section */
+  .hero {
+    position: relative;
+    min-height: calc(100vh - 72px);
+    display: flex;
+    align-items: center;
+    padding: var(--space-12) var(--space-6);
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--bg-main) 0%, var(--bg-muted) 100%);
+  }
+
+  .hero-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-container {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    background: var(--bg-accent);
+    color: var(--copper);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    margin-bottom: var(--space-4);
+    border: 1px solid var(--copper);
+  }
+
+  .hero-title {
+    font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
+    font-weight: var(--font-bold);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-6);
+    color: var(--text-main);
+  }
+
+  .hero-description {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--text-muted);
+    margin-bottom: var(--space-8);
+    max-width: 540px;
+  }
+
+  .hero-count {
+    color: var(--copper);
+    font-weight: var(--font-bold);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  /* Hero Visual */
+  .hero-visual {
+    position: relative;
+    height: 400px;
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-visual {
+      display: block;
+    }
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--copper-glow) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: glow-pulse 4s ease-in-out infinite;
+  }
+
+  .hero-nodes {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-node {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-light) 100%);
+    box-shadow: 0 4px 20px var(--copper-glow);
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .hero-node--1 { top: 20%; left: 20%; animation-delay: 0s; }
+  .hero-node--2 { top: 60%; left: 70%; animation-delay: 1s; }
+  .hero-node--3 { top: 30%; right: 20%; animation-delay: 2s; width: 40px; height: 40px; }
+  .hero-node--4 { bottom: 20%; left: 40%; animation-delay: 3s; width: 50px; height: 50px; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  /* Features Section */
+  .features {
+    padding: var(--space-20) var(--space-6);
+    background: var(--bg-main);
+  }
+
+  .features-title {
+    text-align: center;
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-12);
+    color: var(--text-main);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: var(--space-6);
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 768px) {
+    .features-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .feature-card {
+    text-decoration: none;
+    text-align: center;
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .feature-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-xl);
+    background: var(--bg-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--copper);
+    margin-bottom: var(--space-4);
+    transition: transform var(--transition-normal);
+  }
+
+  .feature-card:hover .feature-icon {
+    transform: scale(1.1);
+  }
+
+  .feature-title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    margin-bottom: var(--space-2);
+    color: var(--text-main);
+  }
+
+  .feature-description {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+
+  /* Status Section */
+  .status {
+    padding: var(--space-16) var(--space-6);
+    background: var(--bg-muted);
+  }
+
+  .status-card {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: var(--space-8);
+    text-align: center;
+  }
+
+  .status-title {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-4);
+    color: var(--text-main);
+  }
+
+  .status-description {
+    color: var(--text-muted);
+    margin-bottom: var(--space-6);
+  }
+
+  .status-description strong {
+    color: var(--copper);
+  }
+
+  .status-checks {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: center;
+  }
+
+  .status-check {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+
+  .status-check-icon {
+    flex-shrink: 0;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-node,
+    .hero-glow {
+      animation: none;
+    }
+    
+    .feature-card:hover {
+      transform: none;
+    }
+    
+    .feature-card:hover .feature-icon {
+      transform: none;
+    }
+  }
+</style>

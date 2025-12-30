@@ -1,0 +1,181 @@
+---
+/**
+ * TechniqueCard Component
+ * Displays a single technique with glassmorphism styling
+ * data-testid="technique-card" for E2E tests
+ */
+import type { TechniqueWithCategory } from '@/types/techniques';
+
+interface Props {
+  technique: TechniqueWithCategory;
+}
+
+const { technique } = Astro.props;
+---
+
+<article 
+  class="technique-card glass-card"
+  data-testid="technique-card"
+  data-technique-id={technique.id}
+  data-category-id={technique.categoryId}
+  tabindex="0"
+  role="button"
+  aria-label={`View details for ${technique.name}`}
+>
+  <div class="card-content">
+    <h3 class="technique-name" data-testid="technique-name">
+      {technique.name}
+    </h3>
+    
+    <span class="category-tag">
+      {technique.categoryName}
+    </span>
+    
+    <p class="technique-description" data-testid="technique-description">
+      {technique.description}
+    </p>
+    
+    {technique.aliases && technique.aliases.length > 0 && (
+      <div class="aliases">
+        <span class="aliases-label">Also known as:</span>
+        {technique.aliases.join(', ')}
+      </div>
+    )}
+    
+    <div class="card-footer">
+      {technique.relatedTechniques && technique.relatedTechniques.length > 0 && (
+        <span class="related-count">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+          </svg>
+          {technique.relatedTechniques.length} related
+        </span>
+      )}
+      
+      <span class="view-details">
+        View details
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </span>
+    </div>
+  </div>
+</article>
+
+<style>
+  .technique-card {
+    padding: var(--space-5);
+    cursor: pointer;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .technique-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--copper);
+  }
+
+  .technique-card:focus-visible {
+    outline: 2px solid var(--interactive-focus);
+    outline-offset: 2px;
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    height: 100%;
+  }
+
+  .technique-name {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-main);
+    line-height: var(--leading-snug);
+    margin: 0;
+  }
+
+  .category-tag {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: var(--space-1) var(--space-3);
+    background: var(--bg-accent);
+    color: var(--copper);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--font-medium);
+  }
+
+  .technique-description {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: var(--leading-relaxed);
+    flex: 1;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .aliases {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .aliases-label {
+    font-weight: var(--font-medium);
+    font-style: normal;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-muted);
+  }
+
+  .related-count {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+
+  .related-count svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .view-details {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--copper);
+    transition: gap var(--transition-fast);
+  }
+
+  .technique-card:hover .view-details {
+    gap: var(--space-2);
+  }
+
+  .view-details svg {
+    width: 16px;
+    height: 16px;
+    transition: transform var(--transition-fast);
+  }
+
+  .technique-card:hover .view-details svg {
+    transform: translateX(2px);
+  }
+</style>

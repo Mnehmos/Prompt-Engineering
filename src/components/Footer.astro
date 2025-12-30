@@ -1,0 +1,305 @@
+---
+/**
+ * Footer component - Site footer with ecosystem branding
+ * Includes copyright, links, and Buy Me a Coffee button
+ */
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Left section: Logo and description -->
+    <div class="footer-brand">
+      <a href="/" class="footer-logo">
+        <svg class="footer-logo-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+          <defs>
+            <linearGradient id="footerCopperGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#D4956A"/>
+              <stop offset="100%" style="stop-color:#B87333"/>
+            </linearGradient>
+          </defs>
+          <rect width="32" height="32" rx="6" fill="#0C0A09"/>
+          <g stroke="#B87333" stroke-width="2" stroke-linecap="round">
+            <line x1="16" y1="11" x2="10" y2="18"/>
+            <line x1="16" y1="11" x2="22" y2="18"/>
+            <line x1="11" y1="20" x2="21" y2="20"/>
+          </g>
+          <g>
+            <circle cx="16" cy="8" r="3.5" fill="url(#footerCopperGrad)"/>
+            <circle cx="8" cy="20" r="3" fill="url(#footerCopperGrad)"/>
+            <circle cx="24" cy="20" r="3" fill="url(#footerCopperGrad)"/>
+            <circle cx="16" cy="26" r="2.5" fill="#D4956A"/>
+          </g>
+          <circle cx="16" cy="16" r="1.5" fill="#FCD34D" opacity="0.8"/>
+        </svg>
+        <span class="footer-logo-text">Mnehmos <span class="footer-logo-accent">Ecosystem</span></span>
+      </a>
+      <p class="footer-description">
+        Open-source prompt engineering research and tools for building better AI systems.
+      </p>
+    </div>
+
+    <!-- Middle section: Quick links -->
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <div class="footer-nav-group">
+        <h3 class="footer-nav-title">Resources</h3>
+        <ul class="footer-nav-list" role="list">
+          <li><a href="/taxonomy">Technique Taxonomy</a></li>
+          <li><a href="/relationships">Relationships Graph</a></li>
+          <li><a href="/prompt-builder">Prompt Builder</a></li>
+        </ul>
+      </div>
+      <div class="footer-nav-group">
+        <h3 class="footer-nav-title">Ecosystem</h3>
+        <ul class="footer-nav-list" role="list">
+          <li><a href="https://github.com/mnehmos" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="https://vario.dev" target="_blank" rel="noopener noreferrer">Vario.dev</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Right section: Support -->
+    <div class="footer-support">
+      <h3 class="footer-nav-title">Support the Project</h3>
+      <a 
+        href="https://www.buymeacoffee.com/mnehmos" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="bmc-button"
+        aria-label="Buy me a coffee (opens in new tab)"
+      >
+        <svg class="bmc-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M20.216 6.415l-.132-.666c-.119-.598-.388-1.163-1.001-1.379-.197-.069-.42-.098-.57-.241-.152-.143-.196-.366-.231-.572-.065-.378-.125-.756-.192-1.133-.057-.325-.102-.69-.25-.987-.195-.4-.597-.634-.996-.788a5.723 5.723 0 00-.626-.194c-1-.263-2.05-.36-3.077-.416a25.834 25.834 0 00-3.7.062c-.915.083-1.88.184-2.75.5-.318.116-.646.256-.888.501-.297.302-.393.77-.177 1.146.154.267.415.456.692.58.36.162.737.284 1.123.366 1.075.238 2.189.331 3.287.37 1.218.05 2.437.01 3.65-.118.299-.033.598-.073.896-.119.352-.054.578-.513.474-.834-.124-.383-.457-.531-.834-.473-.466.074-.96.108-1.382.146-1.177.08-2.358.082-3.536.006a22.228 22.228 0 01-1.157-.107c-.086-.01-.18-.025-.258-.036-.243-.036-.484-.08-.724-.13-.111-.027-.111-.185 0-.212h.005c.277-.06.557-.108.838-.147h.002c.131-.009.263-.032.394-.048a25.076 25.076 0 013.426-.12c.674.019 1.347.067 2.017.144l.228.031c.267.04.533.088.798.145.392.085.895.113 1.07.542.055.137.08.288.111.431l.319 1.484a.237.237 0 01-.199.284h-.003c-.037.006-.075.01-.112.015a36.704 36.704 0 01-4.743.295 37.059 37.059 0 01-4.699-.304c-.14-.017-.293-.042-.417-.06-.326-.048-.649-.108-.973-.161-.393-.065-.768-.032-1.123.161-.29.16-.527.404-.675.701-.154.316-.199.66-.267 1-.069.34-.176.707-.135 1.056.087.753.613 1.365 1.37 1.502a39.69 39.69 0 0011.343.376.483.483 0 01.535.53l-.071.697-1.018 9.907c-.041.41-.047.832-.125 1.237-.122.637-.553 1.028-1.182 1.171-.577.131-1.165.2-1.756.205-.656.004-1.31-.025-1.966-.022-.699.004-1.556-.06-2.095-.58-.475-.458-.54-1.174-.605-1.793l-.731-7.013-.322-3.094c-.037-.351-.286-.695-.678-.678-.336.015-.718.3-.678.679l.228 2.185.949 9.112c.147 1.344 1.174 2.068 2.446 2.272.742.12 1.503.144 2.257.156.966.016 1.942.053 2.892-.122 1.408-.258 2.465-1.198 2.616-2.657.34-3.332.683-6.663 1.024-9.995l.215-2.087a.484.484 0 01.39-.426c.402-.078.787-.212 1.074-.518.455-.488.546-1.124.385-1.766zm-1.478.772c-.145.137-.363.201-.578.233-2.416.359-4.866.54-7.308.46-1.748-.06-3.477-.254-5.207-.498-.17-.024-.353-.055-.47-.18-.22-.236-.111-.71-.054-.995.052-.26.152-.609.463-.646.484-.057 1.046.148 1.526.22.577.088 1.156.159 1.737.212 2.48.226 5.002.19 7.472-.14.45-.06.899-.13 1.345-.21.399-.072.84-.206 1.08.206.166.281.188.657.162.974a.544.544 0 01-.169.364zm-6.159 3.9c-.862.37-1.84.788-3.109.788a5.884 5.884 0 01-1.569-.217l.877 9.004c.065.78.717 1.38 1.5 1.38 0 0 1.243.065 1.658.065.447 0 1.786-.065 1.786-.065.783 0 1.434-.6 1.499-1.38l.94-9.95a3.996 3.996 0 00-1.322-.238c-.826 0-1.491.284-2.26.613z"/>
+        </svg>
+        <span>Buy me a coffee</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Bottom bar: Copyright -->
+  <div class="footer-bottom">
+    <p class="footer-copyright">
+      © {currentYear} Mnehmos. Open source under MIT License.
+    </p>
+    <p class="footer-built">
+      Built with <span class="footer-heart" aria-label="love">♥</span> using Astro
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border-default);
+    margin-top: auto;
+  }
+
+  .footer-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--space-12) var(--space-6);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  @media (min-width: 768px) {
+    .footer-container {
+      grid-template-columns: 1.5fr 2fr 1fr;
+      gap: var(--space-12);
+    }
+  }
+
+  /* Brand section */
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    text-decoration: none;
+    width: fit-content;
+  }
+
+  .footer-logo:hover .footer-logo-text {
+    color: var(--text-accent);
+  }
+
+  .footer-logo:focus-visible {
+    outline: 2px solid var(--interactive-focus);
+    outline-offset: 4px;
+    border-radius: var(--radius-md);
+  }
+
+  .footer-logo-icon {
+    flex-shrink: 0;
+  }
+
+  .footer-logo-text {
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    color: var(--text-main);
+    transition: color 0.15s ease;
+  }
+
+  .footer-logo-accent {
+    color: var(--copper, #B87333);
+  }
+
+  .footer-description {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: var(--leading-relaxed);
+    max-width: 280px;
+  }
+
+  /* Navigation section */
+  .footer-nav {
+    display: flex;
+    gap: var(--space-8);
+    flex-wrap: wrap;
+  }
+
+  .footer-nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    min-width: 140px;
+  }
+
+  .footer-nav-title {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+  }
+
+  .footer-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .footer-nav-list a {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .footer-nav-list a:hover {
+    color: var(--text-accent);
+  }
+
+  .footer-nav-list a:focus-visible {
+    outline: 2px solid var(--interactive-focus);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Support section */
+  .footer-support {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  /* Buy Me a Coffee button */
+  .bmc-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-lg);
+    font-weight: var(--font-semibold);
+    font-size: var(--text-sm);
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #1C1917 0%, #292524 100%);
+    color: #FAFAF9;
+    border: 1px solid #44403C;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+  }
+
+  .bmc-button:hover {
+    background: linear-gradient(135deg, #292524 0%, #3D3834 100%);
+    border-color: var(--copper, #B87333);
+    box-shadow: 0 4px 12px rgba(184, 115, 51, 0.3);
+    transform: translateY(-1px);
+  }
+
+  .bmc-button:focus-visible {
+    outline: 2px solid var(--interactive-focus);
+    outline-offset: 2px;
+  }
+
+  .bmc-icon {
+    animation: coffee-steam 2s ease-in-out infinite;
+  }
+
+  @keyframes coffee-steam {
+    0%, 100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+  }
+
+  /* Bottom bar */
+  .footer-bottom {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--space-4) var(--space-6);
+    border-top: 1px solid var(--border-muted);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .footer-bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
+
+  .footer-copyright,
+  .footer-built {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .footer-heart {
+    color: var(--copper, #B87333);
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .bmc-button,
+    .bmc-icon {
+      transition: none;
+      animation: none;
+    }
+
+    .bmc-button:hover {
+      transform: none;
+    }
+  }
+</style>
