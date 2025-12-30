@@ -4,15 +4,19 @@
  * Displays all 182 techniques organized by category
  * Supports search filtering, category filtering, and technique detail modals
  */
-import Layout from '@/layouts/Layout.astro';
-import SearchInput from '@/components/SearchInput.astro';
-import TechniqueCard from '@/components/TechniqueCard.astro';
-import { getCollection } from 'astro:content';
-import { getAllTechniques, getCategories, getTechniqueCount } from '@/lib/techniques';
-import type { TechniquesData } from '@/types/techniques';
+import Layout from "@/layouts/Layout.astro";
+import SearchInput from "@/components/SearchInput.astro";
+import TechniqueCard from "@/components/TechniqueCard.astro";
+import { getCollection } from "astro:content";
+import {
+  getAllTechniques,
+  getCategories,
+  getTechniqueCount,
+} from "@/lib/techniques";
+import type { TechniquesData } from "@/types/techniques";
 
 // Load techniques data from content collection
-const techniquesCollection = await getCollection('techniques');
+const techniquesCollection = await getCollection("techniques");
 const data = techniquesCollection[0].data as TechniquesData;
 
 // Get all techniques and categories
@@ -31,24 +35,53 @@ const totalCount = getTechniqueCount(data);
         <p class="page-subtitle">
           {totalCount} techniques across {categories.length} categories
         </p>
-        
+
         <div class="header-controls">
-          <SearchInput placeholder="Search techniques by name or description..." />
-          
+          <SearchInput
+            placeholder="Search techniques by name or description..."
+          />
+
           <div class="filter-select-wrapper">
-            <label for="category-filter" class="sr-only">Filter by category</label>
-            <select id="category-filter" data-testid="category-filter" class="category-select">
+            <label for="category-filter" class="sr-only"
+              >Filter by category</label
+            >
+            <select
+              id="category-filter"
+              data-testid="category-filter"
+              class="category-select"
+            >
               <option value="">All Categories</option>
-              {categories.map(cat => (
-                <option value={cat.id}>{cat.name} ({cat.techniqueCount})</option>
-              ))}
+              {
+                categories.map((cat) => (
+                  <option value={cat.id}>
+                    {cat.name} ({cat.techniqueCount})
+                  </option>
+                ))
+              }
             </select>
-            <svg class="select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M6 9l6 6 6-6" />
+            <svg
+              class="select-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M6 9l6 6 6-6"></path>
             </svg>
-            <button id="clear-filter-inline" class="clear-filter-inline" data-testid="clear-filter-inline" hidden aria-label="Clear category filter">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 6L6 18M6 6l12 12" />
+            <button
+              id="clear-filter-inline"
+              class="clear-filter-inline"
+              data-testid="clear-filter-inline"
+              hidden
+              aria-label="Clear category filter"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M18 6L6 18M6 6l12 12"></path>
               </svg>
             </button>
           </div>
@@ -61,31 +94,38 @@ const totalCount = getTechniqueCount(data);
       <div class="container">
         <h2 class="section-title">Categories</h2>
         <div class="category-grid">
-          {categories.map(category => (
-            <article 
-              class="category-card glass-card"
-              data-testid="category-card"
-              data-category-id={category.id}
-            >
-              <h3 class="category-name">{category.name}</h3>
-              <p class="category-description">{category.description}</p>
-              <div class="category-meta">
-                <span class="technique-count" data-testid="technique-count">
-                  {category.techniqueCount} techniques
-                </span>
-                <button 
-                  class="category-btn"
-                  data-category={category.id}
-                  aria-label={`View ${category.name} techniques`}
-                >
-                  View all
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
-            </article>
-          ))}
+          {
+            categories.map((category) => (
+              <article
+                class="category-card glass-card"
+                data-testid="category-card"
+                data-category-id={category.id}
+              >
+                <h3 class="category-name">{category.name}</h3>
+                <p class="category-description">{category.description}</p>
+                <div class="category-meta">
+                  <span class="technique-count" data-testid="technique-count">
+                    {category.techniqueCount} techniques
+                  </span>
+                  <button
+                    class="category-btn"
+                    data-category={category.id}
+                    aria-label={`View ${category.name} techniques`}
+                  >
+                    View all
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+              </article>
+            ))
+          }
         </div>
       </div>
     </section>
@@ -94,22 +134,38 @@ const totalCount = getTechniqueCount(data);
     <section class="techniques-section">
       <div class="container">
         <div class="techniques-header">
-          <h2 class="section-title" id="techniques-heading">All Techniques ({totalCount})</h2>
-          <button id="clear-filter-section" class="clear-filter-btn" data-testid="clear-filter-section" hidden>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 6L6 18M6 6l12 12" />
+          <h2 class="section-title" id="techniques-heading">
+            All Techniques ({totalCount})
+          </h2>
+          <button
+            id="clear-filter-section"
+            class="clear-filter-btn"
+            data-testid="clear-filter-section"
+            hidden
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M18 6L6 18M6 6l12 12"></path>
             </svg>
             Clear Filter
           </button>
-          <span class="results-count" id="results-count">{totalCount} techniques</span>
+          <span class="results-count" id="results-count"
+            >{totalCount} techniques</span
+          >
         </div>
-        
+
         <div class="techniques-grid" id="techniques-grid">
-          {allTechniques.map(technique => (
-            <TechniqueCard technique={technique} />
-          ))}
+          {
+            allTechniques.map((technique) => (
+              <TechniqueCard technique={technique} />
+            ))
+          }
         </div>
-        
+
         <p class="no-results" id="no-results" hidden>
           No techniques found matching your search.
         </p>
@@ -126,153 +182,206 @@ const totalCount = getTechniqueCount(data);
     aria-hidden="true"
   >
     <!-- Left Navigation Arrow -->
-    <button class="nav-arrow nav-prev" data-testid="modal-prev" aria-label="Previous technique">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M15 18l-6-6 6-6" />
+    <button
+      class="nav-arrow nav-prev"
+      data-testid="modal-prev"
+      aria-label="Previous technique"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M15 18l-6-6 6-6"></path>
       </svg>
     </button>
-    
-    <div class="modal glass-card" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+
+    <div
+      class="modal glass-card"
+      role="dialog"
+      aria-labelledby="modal-title"
+      aria-modal="true"
+    >
       <!-- Close button -->
       <button
         class="modal-close"
         data-testid="modal-close"
         aria-label="Close modal"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12" />
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M18 6L6 18M6 6l12 12"></path>
         </svg>
       </button>
-      
+
       <!-- Position indicator -->
       <span class="nav-position" id="modal-position">1 of 192</span>
-      
+
       <div class="modal-content">
         <div class="modal-header">
           <h2 class="modal-title" id="modal-title"></h2>
           <span class="modal-category"></span>
         </div>
-        
+
         <div class="modal-body">
           <section class="modal-section">
             <h3>Description</h3>
             <p class="modal-description"></p>
           </section>
-          
+
           <section class="modal-section modal-example" hidden>
             <h3>Example</h3>
             <div class="example-content"></div>
           </section>
-          
+
           <section class="modal-section modal-usecase" hidden>
             <h3>Use Case</h3>
             <p class="usecase-content"></p>
           </section>
-          
+
           <section class="modal-section modal-tips" hidden>
             <h3>Tips</h3>
             <p class="tips-content"></p>
           </section>
-          
+
           <section class="modal-section modal-mistakes" hidden>
             <h3>Common Mistakes</h3>
             <p class="mistakes-content"></p>
           </section>
-          
+
           <section class="modal-section modal-sources" hidden>
             <h3>Sources</h3>
             <ul class="sources-list"></ul>
           </section>
-          
-          <section class="modal-section" data-testid="related-techniques" hidden>
+
+          <section
+            class="modal-section"
+            data-testid="related-techniques"
+            hidden
+          >
             <h3>Related Techniques</h3>
             <div class="related-list"></div>
           </section>
         </div>
       </div>
     </div>
-    
+
     <!-- Right Navigation Arrow -->
-    <button class="nav-arrow nav-next" data-testid="modal-next" aria-label="Next technique">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M9 18l6-6-6-6" />
+    <button
+      class="nav-arrow nav-next"
+      data-testid="modal-next"
+      aria-label="Next technique"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M9 18l6-6-6-6"></path>
       </svg>
     </button>
   </div>
 </Layout>
 
 <!-- Pass technique data to client-side script -->
-<script define:vars={{ techniquesJson: JSON.stringify(allTechniques), categoriesJson: JSON.stringify(categories) }}>
+<script
+  is:inline
+  define:vars={{
+    techniquesJson: JSON.stringify(allTechniques),
+    categoriesJson: JSON.stringify(categories),
+  }}
+>
   window.__TECHNIQUES__ = JSON.parse(techniquesJson);
   window.__CATEGORIES__ = JSON.parse(categoriesJson);
 </script>
 
 <script>
   // Client-side interactivity for taxonomy page
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener("DOMContentLoaded", () => {
     const techniques = (window as any).__TECHNIQUES__ || [];
     // Categories passed for potential future use
     const _categories = (window as any).__CATEGORIES__ || [];
     void _categories; // Suppress unused variable warning
-    
+
     // DOM elements
-    const searchInput = document.querySelector('[data-testid="technique-search"]') as HTMLInputElement;
-    const categorySelect = document.querySelector('[data-testid="category-filter"]') as HTMLSelectElement;
-    const techniqueCards = document.querySelectorAll('[data-testid="technique-card"]');
-    const resultsCount = document.getElementById('results-count');
-    const noResults = document.getElementById('no-results');
-    const modalBackdrop = document.getElementById('modal-backdrop');
+    const searchInput = document.querySelector(
+      '[data-testid="technique-search"]'
+    ) as HTMLInputElement;
+    const categorySelect = document.querySelector(
+      '[data-testid="category-filter"]'
+    ) as HTMLSelectElement;
+    const techniqueCards = document.querySelectorAll(
+      '[data-testid="technique-card"]'
+    );
+    const resultsCount = document.getElementById("results-count");
+    const noResults = document.getElementById("no-results");
+    const modalBackdrop = document.getElementById("modal-backdrop");
     const modalClose = document.querySelector('[data-testid="modal-close"]');
-    const categoryBtns = document.querySelectorAll('.category-btn');
-    
+    const categoryBtns = document.querySelectorAll(".category-btn");
+
     // State
-    let currentSearch = '';
-    let currentCategory = '';
-    let currentModalIndex = -1;  // Track modal position in visible list
-    let visibleTechniques: string[] = [];  // Filtered technique IDs for navigation
-    
+    let currentSearch = "";
+    let currentCategory = "";
+    let currentModalIndex = -1; // Track modal position in visible list
+    let visibleTechniques: string[] = []; // Filtered technique IDs for navigation
+
     // Filter techniques
     function filterTechniques() {
       let visibleCount = 0;
       const query = currentSearch.toLowerCase();
       const totalCount = techniqueCards.length;
-      visibleTechniques = [];  // Reset visible techniques list
-      
-      techniqueCards.forEach(card => {
+      visibleTechniques = []; // Reset visible techniques list
+
+      techniqueCards.forEach((card) => {
         const cardEl = card as HTMLElement;
-        const name = card.querySelector('[data-testid="technique-name"]')?.textContent?.toLowerCase() || '';
-        const desc = card.querySelector('[data-testid="technique-description"]')?.textContent?.toLowerCase() || '';
-        const categoryId = cardEl.dataset.categoryId || '';
-        const techniqueId = cardEl.dataset.techniqueId || '';
-        
-        const matchesSearch = !query || name.includes(query) || desc.includes(query);
-        const matchesCategory = !currentCategory || categoryId === currentCategory;
-        
+        const name =
+          card
+            .querySelector('[data-testid="technique-name"]')
+            ?.textContent?.toLowerCase() || "";
+        const desc =
+          card
+            .querySelector('[data-testid="technique-description"]')
+            ?.textContent?.toLowerCase() || "";
+        const categoryId = cardEl.dataset.categoryId || "";
+        const techniqueId = cardEl.dataset.techniqueId || "";
+
+        const matchesSearch =
+          !query || name.includes(query) || desc.includes(query);
+        const matchesCategory =
+          !currentCategory || categoryId === currentCategory;
+
         const isVisible = matchesSearch && matchesCategory;
-        cardEl.style.display = isVisible ? '' : 'none';
-        
+        cardEl.style.display = isVisible ? "" : "none";
+
         if (isVisible) {
           visibleTechniques.push(techniqueId);
           visibleCount++;
         }
       });
-      
+
       // Update results count
       if (resultsCount) {
-        resultsCount.textContent = `${visibleCount} technique${visibleCount !== 1 ? 's' : ''}`;
+        resultsCount.textContent = `${visibleCount} technique${visibleCount !== 1 ? "s" : ""}`;
       }
-      
+
       // Show/hide no results message
       if (noResults) {
         noResults.hidden = visibleCount > 0;
       }
-      
+
       // Update heading based on filter state
-      const heading = document.getElementById('techniques-heading');
-      const clearBtnInline = document.getElementById('clear-filter-inline');
-      const clearBtnSection = document.getElementById('clear-filter-section');
-      const selectedOption = categorySelect?.options[categorySelect.selectedIndex];
-      
+      const heading = document.getElementById("techniques-heading");
+      const clearBtnInline = document.getElementById("clear-filter-inline");
+      const clearBtnSection = document.getElementById("clear-filter-section");
+      const selectedOption =
+        categorySelect?.options[categorySelect.selectedIndex];
+
       if (heading) {
         if (currentCategory && selectedOption) {
           heading.textContent = selectedOption.text; // "Category Name (N)"
@@ -285,37 +394,39 @@ const totalCount = getTechniqueCount(data);
         }
       }
     }
-    
+
     // Search input handler
-    searchInput?.addEventListener('input', (e) => {
+    searchInput?.addEventListener("input", (e) => {
       currentSearch = (e.target as HTMLInputElement).value;
       filterTechniques();
     });
-    
+
     // Category select handler
-    categorySelect?.addEventListener('change', (e) => {
+    categorySelect?.addEventListener("change", (e) => {
       currentCategory = (e.target as HTMLSelectElement).value;
       filterTechniques();
     });
-    
+
     // Category button handlers
-    categoryBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const categoryId = (btn as HTMLElement).dataset.category || '';
+    categoryBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const categoryId = (btn as HTMLElement).dataset.category || "";
         if (categorySelect) {
           categorySelect.value = categoryId;
           currentCategory = categoryId;
           filterTechniques();
-          
+
           // Smart scroll - only scroll if techniques section isn't visible at all
-          const techniquesSection = document.querySelector('.techniques-section');
+          const techniquesSection = document.querySelector(
+            ".techniques-section"
+          );
           if (techniquesSection) {
             const rect = techniquesSection.getBoundingClientRect();
             const viewportHeight = window.innerHeight;
-            
+
             // Check if the section is already visible in the viewport
             const isVisible = rect.top < viewportHeight && rect.bottom > 0;
-            
+
             // Only scroll if the section is not visible at all
             if (!isVisible) {
               // Custom slow scroll (1200ms instead of default ~600ms)
@@ -324,79 +435,81 @@ const totalCount = getTechniqueCount(data);
               const distance = targetY - startY;
               const duration = 900;
               let startTime: number | null = null;
-              
+
               // Disable CSS smooth scroll temporarily
-              document.documentElement.style.scrollBehavior = 'auto';
-              
+              document.documentElement.style.scrollBehavior = "auto";
+
               function animateScroll(currentTime: number) {
                 if (startTime === null) startTime = currentTime;
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                
+
                 // Linear scroll - consistent speed throughout
                 window.scrollTo(0, startY + distance * progress);
-                
+
                 if (progress < 1) {
                   requestAnimationFrame(animateScroll);
                 } else {
                   // Re-enable CSS smooth scroll
-                  document.documentElement.style.scrollBehavior = '';
+                  document.documentElement.style.scrollBehavior = "";
                 }
               }
-              
+
               requestAnimationFrame(animateScroll);
             }
           }
         }
       });
     });
-    
+
     // Clear filter button handlers
-    const clearFilterBtnInline = document.getElementById('clear-filter-inline');
-    const clearFilterBtnSection = document.getElementById('clear-filter-section');
-    
+    const clearFilterBtnInline = document.getElementById("clear-filter-inline");
+    const clearFilterBtnSection = document.getElementById(
+      "clear-filter-section"
+    );
+
     function clearCategoryFilter() {
       if (categorySelect) {
-        categorySelect.value = '';
-        currentCategory = '';
+        categorySelect.value = "";
+        currentCategory = "";
         filterTechniques();
       }
     }
-    
-    clearFilterBtnInline?.addEventListener('click', clearCategoryFilter);
-    clearFilterBtnSection?.addEventListener('click', clearCategoryFilter);
-    
+
+    clearFilterBtnInline?.addEventListener("click", clearCategoryFilter);
+    clearFilterBtnSection?.addEventListener("click", clearCategoryFilter);
+
     // Update modal position indicator
     function updateModalPosition() {
-      const positionEl = document.getElementById('modal-position');
-      
+      const positionEl = document.getElementById("modal-position");
+
       if (positionEl && visibleTechniques.length > 0) {
         positionEl.textContent = `${currentModalIndex + 1} of ${visibleTechniques.length}`;
       }
     }
-    
+
     // Navigate modal to next/previous technique
     function navigateModal(direction: number) {
       if (visibleTechniques.length === 0) return;
-      
+
       let newIndex = currentModalIndex + direction;
-      
+
       // Wrap around
       if (newIndex < 0) {
         newIndex = visibleTechniques.length - 1;
       } else if (newIndex >= visibleTechniques.length) {
         newIndex = 0;
       }
-      
+
       currentModalIndex = newIndex;
       openModal(visibleTechniques[currentModalIndex]);
     }
-    
+
     // Modal functions
     function openModal(techniqueId: string) {
       const technique = techniques.find((t: any) => t.id === techniqueId);
       if (!technique || !modalBackdrop) return;
-      
+
       // Find index in visible techniques for navigation
       const indexInVisible = visibleTechniques.indexOf(techniqueId);
       if (indexInVisible !== -1) {
@@ -405,83 +518,109 @@ const totalCount = getTechniqueCount(data);
         // If technique not in filtered list, default to 0
         currentModalIndex = 0;
       }
-      
+
       // Populate modal
-      const title = modalBackdrop.querySelector('.modal-title');
-      const category = modalBackdrop.querySelector('.modal-category');
-      const description = modalBackdrop.querySelector('.modal-description');
-      
+      const title = modalBackdrop.querySelector(".modal-title");
+      const category = modalBackdrop.querySelector(".modal-category");
+      const description = modalBackdrop.querySelector(".modal-description");
+
       if (title) title.textContent = technique.name;
       if (category) category.textContent = technique.categoryName;
       if (description) description.textContent = technique.description;
-      
+
       // Example
-      const exampleSection = modalBackdrop.querySelector('.modal-example') as HTMLElement;
-      const exampleContent = modalBackdrop.querySelector('.example-content');
+      const exampleSection = modalBackdrop.querySelector(
+        ".modal-example"
+      ) as HTMLElement;
+      const exampleContent = modalBackdrop.querySelector(".example-content");
       if (technique.example && exampleSection && exampleContent) {
         exampleContent.textContent = technique.example;
         exampleSection.hidden = false;
       } else if (exampleSection) {
         exampleSection.hidden = true;
       }
-      
+
       // Use Case
-      const usecaseSection = modalBackdrop.querySelector('.modal-usecase') as HTMLElement;
-      const usecaseContent = modalBackdrop.querySelector('.usecase-content');
+      const usecaseSection = modalBackdrop.querySelector(
+        ".modal-usecase"
+      ) as HTMLElement;
+      const usecaseContent = modalBackdrop.querySelector(".usecase-content");
       if (technique.useCase && usecaseSection && usecaseContent) {
         usecaseContent.textContent = technique.useCase;
         usecaseSection.hidden = false;
       } else if (usecaseSection) {
         usecaseSection.hidden = true;
       }
-      
+
       // Tips
-      const tipsSection = modalBackdrop.querySelector('.modal-tips') as HTMLElement;
-      const tipsContent = modalBackdrop.querySelector('.tips-content');
+      const tipsSection = modalBackdrop.querySelector(
+        ".modal-tips"
+      ) as HTMLElement;
+      const tipsContent = modalBackdrop.querySelector(".tips-content");
       if (technique.tips && tipsSection && tipsContent) {
         tipsContent.textContent = technique.tips;
         tipsSection.hidden = false;
       } else if (tipsSection) {
         tipsSection.hidden = true;
       }
-      
+
       // Common Mistakes
-      const mistakesSection = modalBackdrop.querySelector('.modal-mistakes') as HTMLElement;
-      const mistakesContent = modalBackdrop.querySelector('.mistakes-content');
+      const mistakesSection = modalBackdrop.querySelector(
+        ".modal-mistakes"
+      ) as HTMLElement;
+      const mistakesContent = modalBackdrop.querySelector(".mistakes-content");
       if (technique.commonMistakes && mistakesSection && mistakesContent) {
         mistakesContent.textContent = technique.commonMistakes;
         mistakesSection.hidden = false;
       } else if (mistakesSection) {
         mistakesSection.hidden = true;
       }
-      
+
       // Sources
-      const sourcesSection = modalBackdrop.querySelector('.modal-sources') as HTMLElement;
-      const sourcesList = modalBackdrop.querySelector('.sources-list');
-      if (technique.sources && technique.sources.length > 0 && sourcesSection && sourcesList) {
-        sourcesList.innerHTML = technique.sources.map((s: string) => `<li>${s}</li>`).join('');
+      const sourcesSection = modalBackdrop.querySelector(
+        ".modal-sources"
+      ) as HTMLElement;
+      const sourcesList = modalBackdrop.querySelector(".sources-list");
+      if (
+        technique.sources &&
+        technique.sources.length > 0 &&
+        sourcesSection &&
+        sourcesList
+      ) {
+        sourcesList.innerHTML = technique.sources
+          .map((s: string) => `<li>${s}</li>`)
+          .join("");
         sourcesSection.hidden = false;
       } else if (sourcesSection) {
         sourcesSection.hidden = true;
       }
-      
+
       // Related Techniques
-      const relatedSection = modalBackdrop.querySelector('[data-testid="related-techniques"]') as HTMLElement;
-      const relatedList = modalBackdrop.querySelector('.related-list');
-      if (technique.relatedTechniques && technique.relatedTechniques.length > 0 && relatedSection && relatedList) {
-        const relatedHtml = technique.relatedTechniques.map((id: string) => {
-          const related = techniques.find((t: any) => t.id === id);
-          if (related) {
-            return `<a href="#" class="related-link" data-technique-id="${id}">${related.name}</a>`;
-          }
-          return `<span class="related-unknown">${id}</span>`;
-        }).join('');
+      const relatedSection = modalBackdrop.querySelector(
+        '[data-testid="related-techniques"]'
+      ) as HTMLElement;
+      const relatedList = modalBackdrop.querySelector(".related-list");
+      if (
+        technique.relatedTechniques &&
+        technique.relatedTechniques.length > 0 &&
+        relatedSection &&
+        relatedList
+      ) {
+        const relatedHtml = technique.relatedTechniques
+          .map((id: string) => {
+            const related = techniques.find((t: any) => t.id === id);
+            if (related) {
+              return `<a href="#" class="related-link" data-technique-id="${id}">${related.name}</a>`;
+            }
+            return `<span class="related-unknown">${id}</span>`;
+          })
+          .join("");
         relatedList.innerHTML = relatedHtml;
         relatedSection.hidden = false;
-        
+
         // Add click handlers to related links
-        relatedList.querySelectorAll('.related-link').forEach(link => {
-          link.addEventListener('click', (e) => {
+        relatedList.querySelectorAll(".related-link").forEach((link) => {
+          link.addEventListener("click", (e) => {
             e.preventDefault();
             const relatedId = (link as HTMLElement).dataset.techniqueId;
             if (relatedId) openModal(relatedId);
@@ -490,96 +629,107 @@ const totalCount = getTechniqueCount(data);
       } else if (relatedSection) {
         relatedSection.hidden = true;
       }
-      
+
       // Show modal
       modalBackdrop.hidden = false;
-      modalBackdrop.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      
+      modalBackdrop.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+
       // Focus trap
-      const modal = modalBackdrop.querySelector('.modal');
-      modal?.setAttribute('tabindex', '-1');
+      const modal = modalBackdrop.querySelector(".modal");
+      modal?.setAttribute("tabindex", "-1");
       (modal as HTMLElement)?.focus();
-      
+
       // Update position indicator
       updateModalPosition();
     }
-    
+
     function closeModal() {
       if (!modalBackdrop) return;
       modalBackdrop.hidden = true;
-      modalBackdrop.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
+      modalBackdrop.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
     }
-    
+
     // Technique card click handlers
-    techniqueCards.forEach(card => {
-      card.addEventListener('click', () => {
+    techniqueCards.forEach((card) => {
+      card.addEventListener("click", () => {
         const techniqueId = (card as HTMLElement).dataset.techniqueId;
         if (techniqueId) openModal(techniqueId);
       });
-      
-      card.addEventListener('keydown', (e) => {
-        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+
+      card.addEventListener("keydown", (e) => {
+        if (
+          (e as KeyboardEvent).key === "Enter" ||
+          (e as KeyboardEvent).key === " "
+        ) {
           e.preventDefault();
           const techniqueId = (card as HTMLElement).dataset.techniqueId;
           if (techniqueId) openModal(techniqueId);
         }
       });
     });
-    
+
     // Modal close handlers
-    modalClose?.addEventListener('click', closeModal);
-    
-    modalBackdrop?.addEventListener('click', (e) => {
+    modalClose?.addEventListener("click", closeModal);
+
+    modalBackdrop?.addEventListener("click", (e) => {
       if (e.target === modalBackdrop) closeModal();
     });
-    
-    document.addEventListener('keydown', (e) => {
+
+    document.addEventListener("keydown", (e) => {
       if (modalBackdrop && !modalBackdrop.hidden) {
-        if (e.key === 'Escape') {
+        if (e.key === "Escape") {
           closeModal();
-        } else if (e.key === 'ArrowLeft') {
+        } else if (e.key === "ArrowLeft") {
           e.preventDefault();
           navigateModal(-1);
-        } else if (e.key === 'ArrowRight') {
+        } else if (e.key === "ArrowRight") {
           e.preventDefault();
           navigateModal(1);
         }
       }
     });
-    
+
     // Navigation button handlers
-    const navPrevBtn = document.querySelector('.nav-prev');
-    const navNextBtn = document.querySelector('.nav-next');
-    
-    navPrevBtn?.addEventListener('click', () => navigateModal(-1));
-    navNextBtn?.addEventListener('click', () => navigateModal(1));
-    
+    const navPrevBtn = document.querySelector(".nav-prev");
+    const navNextBtn = document.querySelector(".nav-next");
+
+    navPrevBtn?.addEventListener("click", () => navigateModal(-1));
+    navNextBtn?.addEventListener("click", () => navigateModal(1));
+
     // Touch/swipe support for mobile navigation
     let touchStartX = 0;
     let touchEndX = 0;
-    
-    modalBackdrop?.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-    
-    modalBackdrop?.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      const swipeThreshold = 50;
-      const diff = touchStartX - touchEndX;
-      
-      if (Math.abs(diff) > swipeThreshold) {
-        if (diff > 0) {
-          // Swipe left = next
-          navigateModal(1);
-        } else {
-          // Swipe right = prev
-          navigateModal(-1);
+
+    modalBackdrop?.addEventListener(
+      "touchstart",
+      (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      },
+      { passive: true }
+    );
+
+    modalBackdrop?.addEventListener(
+      "touchend",
+      (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+          if (diff > 0) {
+            // Swipe left = next
+            navigateModal(1);
+          } else {
+            // Swipe right = prev
+            navigateModal(-1);
+          }
         }
-      }
-    }, { passive: true });
-    
+      },
+      { passive: true }
+    );
+
     // Initialize visible techniques on page load
     filterTechniques();
   });
@@ -662,7 +812,9 @@ const totalCount = getTechniqueCount(data);
 
   .category-card {
     padding: var(--space-6);
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition:
+      transform var(--transition-fast),
+      box-shadow var(--transition-fast);
   }
 
   .category-card:hover {
@@ -767,7 +919,7 @@ const totalCount = getTechniqueCount(data);
   }
 
   .clear-filter-btn:hover {
-    background: var(--copper-dark, #A06228);
+    background: var(--copper-dark, #a06228);
     transform: scale(1.02);
   }
 
@@ -1008,7 +1160,9 @@ const totalCount = getTechniqueCount(data);
     font-size: var(--text-sm);
     color: var(--interactive-default);
     text-decoration: none;
-    transition: background var(--transition-fast), color var(--transition-fast);
+    transition:
+      background var(--transition-fast),
+      color var(--transition-fast);
   }
 
   .related-link:hover {
@@ -1116,7 +1270,7 @@ const totalCount = getTechniqueCount(data);
   }
 
   .clear-filter-inline:hover {
-    background: var(--copper-dark, #A06228);
+    background: var(--copper-dark, #a06228);
     transform: translateY(-50%) scale(1.1);
   }
 
@@ -1135,7 +1289,8 @@ const totalCount = getTechniqueCount(data);
   }
 
   /* Adjust select padding when clear button is visible */
-  .filter-select-wrapper:has(.clear-filter-inline:not([hidden])) .category-select {
+  .filter-select-wrapper:has(.clear-filter-inline:not([hidden]))
+    .category-select {
     padding-right: calc(var(--space-10) + var(--space-6));
   }
 </style>

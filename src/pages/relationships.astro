@@ -161,7 +161,7 @@ const categoryColorsJson = JSON.stringify(categoryColors);
 </Layout>
 
 <!-- Pass data to client-side script -->
-<script define:vars={{ graphDataJson, categoryColorsJson }}>
+<script is:inline define:vars={{ graphDataJson, categoryColorsJson }}>
   window.__GRAPH_DATA__ = JSON.parse(graphDataJson);
   window.__CATEGORY_COLORS__ = JSON.parse(categoryColorsJson);
 </script>

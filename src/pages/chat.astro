@@ -13,6 +13,8 @@ import type { TechniquesData } from '@/types/techniques';
 const techniquesCollection = await getCollection('techniques');
 const data = techniquesCollection[0].data as TechniquesData;
 const categories = getCategories(data);
+const allTechniques = getAllTechniques(data);
+const techniqueNames = allTechniques.map(t => t.name);
 ---
 
 <Layout 
@@ -35,7 +37,7 @@ const categories = getCategories(data);
             <button class="category-btn" data-suggestion={`Tell me about ${cat.name} techniques`}>
               {cat.name}
             </button>
-            <span class="count">{cat.count}</span>
+            <span class="count">{cat.techniqueCount}</span>
           </div>
         ))}
       </div>
@@ -116,7 +118,7 @@ const categories = getCategories(data);
   </div>
   
   <!-- Chat configuration (can be overridden by backend) -->
-  <script id="chat-config" type="application/json">
+  <script id="chat-config" type="application/json" is:inline>
     {
       "demoMode": false,
       "apiEndpoint": "https://rag-server-production-376d.up.railway.app/chat"
@@ -128,7 +130,7 @@ const categories = getCategories(data);
   import '../scripts/chat';
 </script>
 
-<script define:vars={{ techniqueNames: allTechniques.map(t => t.name) }}>
+<script is:inline define:vars={{ techniqueNames }}>
   const randomBtn = document.getElementById('random-technique-btn');
   const chatInput = document.querySelector('.chat-input');
   
