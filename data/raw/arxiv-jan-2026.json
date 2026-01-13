@@ -1,0 +1,182 @@
+{
+  "version": "1.0",
+  "source": "arXiv papers (December 2025 - January 2026)",
+  "lastUpdated": "2026-01-12",
+  "metadata": {
+    "paperCount": 35,
+    "techniquesExtracted": 12
+  },
+  "categories": [
+    {
+      "id": "reasoning-frameworks",
+      "name": "Reasoning Frameworks",
+      "description": "Advanced techniques for structured reasoning in LLMs",
+      "techniques": [
+        {
+          "id": "molecular-cot-structure",
+          "name": "Molecular CoT Structure",
+          "description": "Treats long chain-of-thought reasoning as having molecular-like structures with three interaction types: Deep-Reasoning (covalent-like bonds for core logical steps), Self-Reflection (hydrogen-bond-like connections for verification), and Self-Exploration (van der Waals-like weak interactions for hypothesis testing). Analysis shows effective CoT trajectories develop these structures organically rather than through keyword imitation.",
+          "example": "Structuring a complex math proof where: covalent bonds = main logical derivations, hydrogen bonds = 'let me verify this step', van der Waals = 'alternatively, we could try...'",
+          "sources": ["arXiv:2601.06002 - The Molecular Structure of Thought (Jan 2026)"],
+          "useCase": "Long-horizon reasoning. Mathematical proofs. Complex problem decomposition. Training data synthesis for reasoning models.",
+          "tips": "Focus on entropy convergence during reasoning - bonds that promote fast entropy convergence support stable CoT learning. Use Mole-Syn distribution-transfer-graph method to synthesize effective structures.",
+          "commonMistakes": "Imitating surface-level CoT keywords without developing underlying structural bonds. Structural competition between bond types can impair training.",
+          "relatedTechniques": ["chain-of-thought", "self-reflection", "tree-of-thought"]
+        },
+        {
+          "id": "diffusion-cot",
+          "name": "Diffusion-styled Chain-of-Thought (DiffCoT)",
+          "description": "Reformulates CoT reasoning as an iterative denoising process inspired by diffusion models. Uses a sliding-window mechanism at the reasoning-step level to enable both generation and retrospective correction of intermediate steps while preserving token-level autoregression. Includes a causal diffusion noise schedule that respects temporal structure of reasoning chains.",
+          "example": "For a multi-step math problem: generate initial noisy reasoning chain → iteratively denoise by revising intermediate steps → correct early errors without regenerating entire sequence",
+          "sources": ["arXiv:2601.03559 - DiffCoT: Diffusion-styled Chain-of-Thought Reasoning (Jan 2026)"],
+          "useCase": "Multi-step mathematical reasoning. Error correction in reasoning chains. Robust inference for complex problems.",
+          "tips": "Apply diffusion principles at reasoning-step level, not token level. The sliding-window mechanism allows looking back at previous steps for correction while maintaining causal consistency.",
+          "commonMistakes": "Applying diffusion at wrong granularity (token vs. step level). Breaking causal consistency in reasoning chains.",
+          "relatedTechniques": ["chain-of-thought", "iterative-refinement", "self-correction"]
+        },
+        {
+          "id": "cot-compression",
+          "name": "Confidence-Maximizing CoT Compression (ConMax)",
+          "description": "Uses reinforcement learning to automatically compress reasoning traces while preserving essential patterns. Trains a policy to prune redundancy by maximizing weighted combination of answer confidence (predictive fidelity) and thinking confidence (reasoning validity). Addresses 'overthinking' where models generate redundant reasoning paths.",
+          "example": "Original: 'First I'll consider X. Actually let me think about Y. Going back to X, I realize... Let me also check Z which relates to X...' → Compressed: 'Considering X and its relation to Z...'",
+          "sources": ["arXiv:2601.04973 - ConMax: Confidence-Maximizing Compression (Jan 2026)"],
+          "useCase": "Reducing inference costs. Efficient training data for reasoning models. Preventing overthinking in reasoning models.",
+          "tips": "Use a frozen auxiliary LRM for validation. Balance answer confidence vs. thinking confidence based on task requirements. Target 43% length reduction as a reasonable starting point.",
+          "commonMistakes": "Over-compressing and losing essential reasoning steps. Compressing without validating that reasoning validity is preserved.",
+          "relatedTechniques": ["chain-of-thought", "context-compression", "reasoning-distillation"]
+        },
+        {
+          "id": "streaming-hallucination-detection",
+          "name": "Streaming Hallucination Detection",
+          "description": "Treats hallucination in long CoT reasoning as an evolving latent state rather than a one-off error. Uses step-level hallucination judgments as local observations and introduces cumulative prefix-level hallucination signal to track global evolution of reasoning state over the entire trajectory. Enables real-time detection during generation.",
+          "example": "Monitor reasoning: Step 1 ✓ (confidence 0.95) → Step 2 ✓ (0.90) → Step 3 ⚠ (0.65, cumulative risk rising) → Step 4 ✗ (0.40, trigger intervention)",
+          "sources": ["arXiv:2601.02170 - Streaming Hallucination Detection in Long CoT (Jan 2026)"],
+          "useCase": "Real-time reasoning validation. Early stopping for failing reasoning chains. Production deployment of reasoning models.",
+          "tips": "Track both local (step-level) and global (prefix-level) hallucination signals. Use cumulative signal to catch gradual drift that individual steps miss.",
+          "commonMistakes": "Only checking final answer without monitoring intermediate steps. Treating hallucination as binary rather than evolving state.",
+          "relatedTechniques": ["chain-of-thought", "self-verification", "confidence-calibration"]
+        }
+      ]
+    },
+    {
+      "id": "in-context-learning",
+      "name": "In-Context Learning",
+      "description": "Techniques for learning from examples provided in the prompt",
+      "techniques": [
+        {
+          "id": "icl-dual-mechanism",
+          "name": "ICL Task Schema and Binding Separation",
+          "description": "Research showing in-context learning decomposes into two separable mechanisms: Task Schema (abstract task type recognition, transfers via late MLP patching) and Binding (specific input-output associations, transfers via residual stream patching). Schema reliance inversely correlates with prior knowledge - models rely on Task Schema when prior knowledge is absent.",
+          "example": "For a novel task format: Schema mechanism recognizes 'this is a classification task' while Binding mechanism learns 'A→1, B→2' mappings from examples",
+          "sources": ["arXiv:2512.17325 - Task Schema and Binding: Double Dissociation (Dec 2025)"],
+          "useCase": "Prompt engineering optimization. Understanding ICL failures. Designing few-shot examples. Novel task adaptation.",
+          "tips": "For novel tasks with zero prior knowledge, maximize Schema recognition via clear task framing. For familiar domains, focus on Binding through diverse examples. The true bottleneck is attentional (72.7% recency bias), not output-level.",
+          "commonMistakes": "Treating ICL as monolithic mechanism. Not accounting for prior knowledge interference (38% binding failure rate in high-prior scenarios).",
+          "relatedTechniques": ["few-shot-learning", "demonstration-selection", "task-description"]
+        },
+        {
+          "id": "rationale-grounded-icl",
+          "name": "Rationale-Grounded In-Context Learning",
+          "description": "Uses rationales as guiding reasoning units rather than post-hoc explanations. Induces label-conditioned rationales composed of reasoning paths from observable evidence to potential outcomes. Employs hybrid retrieval balancing temporal patterns and semantic contexts to retrieve correlated rationale priors for inference.",
+          "example": "Instead of: 'Input: X, Output: Y' → Use: 'Input: X, Rationale: Because X shows pattern P which indicates Q, therefore Output: Y'",
+          "sources": ["arXiv:2601.02968 - Rationale-Grounded ICL for Time Series (Jan 2026)"],
+          "useCase": "Time series reasoning. Complex prediction tasks. Tasks requiring explicit reasoning chains.",
+          "tips": "Rationales should connect observable evidence to outcomes, not just explain labels. Use hybrid retrieval to find examples with relevant rationale patterns.",
+          "commonMistakes": "Using rationales as post-hoc explanations rather than prospective reasoning guides. Retrieving examples by surface similarity without considering rationale relevance.",
+          "relatedTechniques": ["chain-of-thought", "few-shot-learning", "demonstration-selection"]
+        },
+        {
+          "id": "label-consistency-icl",
+          "name": "Label Consistency in Demonstration Selection",
+          "description": "Treats ICL as transductive learning and establishes label propagation framework linking label consistency to propagation error bounds. Uses data synthesis leveraging both semantic and label information (TopK-SD) to acquire demonstrations with consistent labels, outperforming pure semantic similarity selection.",
+          "example": "Instead of selecting 5 most semantically similar examples (which might have inconsistent labels), synthesize additional examples ensuring label consistency across the demonstration set",
+          "sources": ["arXiv:2512.12175 - Rethinking Label Consistency in ICL (Dec 2025)"],
+          "useCase": "Classification tasks. Few-shot learning optimization. Demonstration selection for production systems.",
+          "tips": "Model label consistency explicitly during demonstration selection. Use TopK-SD sampling to balance semantic relevance with label coherence.",
+          "commonMistakes": "Selecting demonstrations purely by semantic similarity without considering label distribution. Not accounting for how label noise in demonstrations propagates to predictions.",
+          "relatedTechniques": ["demonstration-selection", "few-shot-learning", "data-augmentation"]
+        }
+      ]
+    },
+    {
+      "id": "retrieval-augmented-generation",
+      "name": "Retrieval-Augmented Generation",
+      "description": "Techniques for enhancing LLM outputs with retrieved information",
+      "techniques": [
+        {
+          "id": "set-centric-rag",
+          "name": "Set-Centric RAG (OptiSet)",
+          "description": "Unifies set selection and set-level ranking for RAG using 'Expand-then-Refine' paradigm. Expands query into multiple perspectives for diverse candidate pool, then refines via re-selection. Uses self-synthesis strategy to derive preference labels from conditional utility changes, identifying complementary vs. redundant evidence.",
+          "example": "Query: 'What causes climate change?' → Expand to: [causes, effects, solutions, data sources] → Retrieve diverse candidates → Refine to compact, non-redundant evidence set",
+          "sources": ["arXiv:2601.05027 - OptiSet: Unified Optimizing Set Selection (Jan 2026)"],
+          "useCase": "Complex queries requiring multiple evidence pieces. Reducing redundancy in retrieved context. Efficient RAG for long-context questions.",
+          "tips": "Use self-synthesis without strong LLM supervision to identify complementary evidence. Apply set-list wise training to jointly optimize selection and ranking.",
+          "commonMistakes": "Selecting top-K individually relevant passages without considering combinatorial gains. Not detecting redundancy between retrieved passages.",
+          "relatedTechniques": ["query-expansion", "reranking", "context-optimization"]
+        },
+        {
+          "id": "self-reflective-rag",
+          "name": "Self-Reflective RAG (Self-MedRAG)",
+          "description": "Mimics iterative hypothesis-verification process of clinical reasoning. Integrates hybrid retrieval (sparse BM25 + dense Contriever via Reciprocal Rank Fusion). Generator produces answers with supporting rationales assessed by lightweight self-reflection module using NLI or LLM verification. Autonomously reformulates query and iterates if rationale lacks support.",
+          "example": "Query → Retrieve → Generate answer + rationale → NLI check: 'Is rationale supported?' → If no: reformulate query → Re-retrieve → Iterate until supported",
+          "sources": ["arXiv:2601.04531 - Self-MedRAG: Self-Reflective Hybrid RAG (Jan 2026)"],
+          "useCase": "High-stakes domains (medical, legal). Complex queries requiring multi-step inference. Quality-assured RAG deployments.",
+          "tips": "Use hybrid retrieval (RRF fusion) for maximum evidence coverage. Lightweight NLI-based verification is more efficient than full LLM checking for most cases.",
+          "commonMistakes": "Single-shot retrieval for complex queries. Not verifying that generated rationales are actually supported by retrieved evidence.",
+          "relatedTechniques": ["hybrid-retrieval", "self-verification", "iterative-refinement"]
+        },
+        {
+          "id": "discourse-aware-rag",
+          "name": "Discourse-Aware RAG (Disco-RAG)",
+          "description": "Explicitly injects discourse signals into RAG generation. Constructs intra-chunk discourse trees for local hierarchies and inter-chunk rhetorical graphs for cross-passage coherence. These structures are jointly integrated into a planning blueprint that conditions generation.",
+          "example": "Retrieved chunks → Build discourse tree (claim→evidence→elaboration) → Build rhetorical graph (contrast, causation, elaboration relations) → Use structure to plan coherent response",
+          "sources": ["arXiv:2601.04377 - Disco-RAG: Discourse-Aware RAG (Jan 2026)"],
+          "useCase": "Long-document summarization. Complex QA requiring synthesis across multiple sources. Coherent multi-document generation.",
+          "tips": "Build both local (intra-chunk) and global (inter-chunk) discourse structures. Use the planning blueprint to maintain coherence across synthesized information.",
+          "commonMistakes": "Treating retrieved passages as flat, unstructured text. Not modeling relationships between information from different sources.",
+          "relatedTechniques": ["document-structure", "coherence-planning", "multi-document-synthesis"]
+        },
+        {
+          "id": "stable-rag",
+          "name": "Permutation-Stable RAG (Stable-RAG)",
+          "description": "Addresses retrieval-permutation-induced hallucinations where LLM answers vary substantially across permutations of retrieved documents. Runs generator under multiple retrieval orders, clusters hidden states, and decodes from cluster-center representation capturing dominant reasoning pattern. Uses reasoning results to align hallucinated outputs.",
+          "example": "Same 5 documents in different orders → Generate 5 answers → Cluster hidden states → Decode from cluster center → Align outlier answers toward consensus",
+          "sources": ["arXiv:2601.02993 - Stable-RAG: Mitigating Permutation-Induced Hallucinations (Jan 2026)"],
+          "useCase": "Production RAG systems requiring consistency. High-stakes applications where answer variation is unacceptable. RAG quality assurance.",
+          "tips": "Test your RAG system with permuted retrieval orders to detect sensitivity. Use clustering to identify the dominant reasoning pattern across permutations.",
+          "commonMistakes": "Assuming RAG answers are stable regardless of document order. Not testing for permutation sensitivity in production systems.",
+          "relatedTechniques": ["ensemble-generation", "consistency-checking", "hallucination-mitigation"]
+        }
+      ]
+    },
+    {
+      "id": "agent-patterns",
+      "name": "Agentic Patterns",
+      "description": "Techniques for building and managing LLM-based agents",
+      "techniques": [
+        {
+          "id": "agent-drift-mitigation",
+          "name": "Agent Drift Detection and Mitigation",
+          "description": "Addresses progressive degradation of agent behavior over extended interactions. Defines three drift types: semantic drift (deviation from intent), coordination drift (breakdown in multi-agent consensus), behavioral drift (unintended strategy emergence). Proposes Agent Stability Index (ASI) measuring 12 dimensions including response consistency, tool usage patterns, and reasoning pathway stability.",
+          "example": "Monitor agent over 100 turns: Track response consistency (0.95→0.80), tool usage pattern drift, inter-agent agreement rates. Trigger intervention when ASI drops below threshold.",
+          "sources": ["arXiv:2601.04170 - Agent Drift: Quantifying Behavioral Degradation (Jan 2026)"],
+          "useCase": "Long-running agent deployments. Multi-agent systems. Production AI agent monitoring.",
+          "tips": "Implement episodic memory consolidation, drift-aware routing protocols, and adaptive behavioral anchoring. Monitor ASI across all 12 dimensions.",
+          "commonMistakes": "Assuming agent behavior is stable over long interaction sequences. Not monitoring for gradual drift that accumulates over time.",
+          "relatedTechniques": ["agent-memory", "behavioral-monitoring", "multi-agent-coordination"]
+        },
+        {
+          "id": "multi-agent-voting",
+          "name": "Multi-Agent Committee Voting",
+          "description": "Uses diverse vision-enabled LLMs collaborating through three-round voting protocol to reach consensus. Combines model diversity with persona-driven behavioral variation. Achieves 89.5% task success vs 78% single-agent baseline, with configurations of 2-4 agents reaching 91.7-100% success.",
+          "example": "Task: Test web application → Agent 1 (cautious persona) proposes action → Agent 2 (thorough persona) evaluates → Agent 3 (efficiency persona) optimizes → Three-round vote → Consensus action",
+          "sources": ["arXiv:2512.21352 - Multi-Agent LLM Committees for Beta Testing (Dec 2025)"],
+          "useCase": "Software testing automation. High-reliability decision making. Tasks requiring diverse perspectives.",
+          "tips": "Use 2-4 agents for optimal performance. Combine model diversity (different LLMs) with persona diversity (different behavioral roles). Three-round voting provides good balance of speed and consensus.",
+          "commonMistakes": "Using too many agents (diminishing returns after 4). Not diversifying both models and personas.",
+          "relatedTechniques": ["ensemble-methods", "persona-prompting", "consensus-building"]
+        }
+      ]
+    }
+  ]
+}
